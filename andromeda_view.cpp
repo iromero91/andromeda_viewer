@@ -1,4 +1,6 @@
 #include "andromeda_view.h"
+#include "andromeda_grid.h"
+
 #include <QScrollBar>
 
 #include <QDebug>
@@ -15,6 +17,13 @@ AndromedaView::AndromedaView(QWidget *parent) :
     setRenderHint(QPainter::Antialiasing);
     setRenderHint(QPainter::HighQualityAntialiasing);
     setRenderHint(QPainter::TextAntialiasing);
+}
+
+void AndromedaView::setScene(AndromedaScene *scene)
+{
+    scene_ = scene;
+
+    QGraphicsView::setScene(scene);
 }
 
 /**
@@ -54,13 +63,17 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
     static bool panning = false;
     static QPoint lastMousePos;
 
-    if (scene() == NULL || event == NULL) return;
+    if (getScene() == NULL || event == NULL) return;
 
     // Grab the mouse position
     QPoint mousePos = event->pos();
 
     // Convert to scene coordinates
     QPointF scenePos = mapToScene(mousePos);
+
+    double tick = getScene()->getGrid().getMajorTick();
+
+    scenePos = AndromedaGrid::mapToGrid(scenePos, QPointF(tick,tick));
 
     emit cursorPositionChanged(scenePos);
 
@@ -134,6 +147,17 @@ QRectF AndromedaView::getViewport()
                 mapToScene(0,0),
                 mapToScene(width()-1, height()-1)
                 );
+}
+
+/**
+ * @brief AndromedaView::unitsPerPixel
+ * @return <x,y> mapping of how many internal units correspond to each visible pixel
+ */
+QPointF AndromedaView::unitsPerPixel()
+{
+    QRectF scene = getViewport();
+
+    return QPointF(scene.width() / width(), scene.height() / height());
 }
 
 /**

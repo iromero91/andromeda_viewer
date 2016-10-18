@@ -7,6 +7,8 @@
 #include <QKeyEvent>
 #include <QPaintEvent>
 
+#include "andromeda_scene.h"
+
 #define ANDROMEDA_VIEW_MAX_SCALING 100.0f
 #define ANDROMEDA_VIEW_MIN_SCALING 0.001f
 
@@ -17,6 +19,9 @@ class AndromedaView : public QGraphicsView
 public:
     AndromedaView(QWidget *parent = 0);
 
+    void setScene(AndromedaScene *scene);
+    AndromedaScene* getScene() { return scene_; }
+
     // Configuration flags
     void setOverlayEnabled(bool en) { draw_overlay_ = en; }
     bool getOverlayEnabled() { return draw_overlay_; }
@@ -26,6 +31,7 @@ public:
     // Viewport functions
     QPointF getCenterLocation();
     QRectF getViewport();
+    QPointF unitsPerPixel();
 
     // View scaling functions
     double getScalingFactor() { return transform().m11(); }
@@ -53,6 +59,8 @@ protected:
 
     bool draw_overlay_;
     bool draw_cursor_;
+
+    AndromedaScene *scene_;
 
 private:
 };
