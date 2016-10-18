@@ -33,10 +33,14 @@ public:
     QRectF getViewport();
     QPointF unitsPerPixel();
 
+    // Cursor functions
     QPointF getCursorPos() { return cursorPos_; }
     void setCursorPos(QPointF pos);
     void moveCursor(QPointF offset);
     void moveCursor(double dx, double dy);
+
+    void scroll(QPoint offset);
+    void scroll(int dx, int dy);
 
     // View scaling functions
     double getScalingFactor() { return transform().m11(); }
@@ -56,6 +60,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
+    void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
 
     // Overlay functions

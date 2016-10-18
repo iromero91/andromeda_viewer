@@ -37,14 +37,28 @@ void AndromedaView::setCursorPos(QPointF pos)
 
     pos = AndromedaGrid::mapToGrid(pos, QPointF(grid,grid));
 
-    if ((pos.x() != cursorPos_.x()) || (pos.y() != cursorPos_.y()))
-    {
-        emit cursorPositionChanged(pos);
+    if ((pos.x() == cursorPos_.x()) && (pos.y() == cursorPos_.y())) return;
 
-        getScene()->update();
-    }
+    // Check if the cursor has moved outside the screen bounds
+    QRectF view = getViewport();
+
+    double dx, dy = 0;
+
+    if (pos.x() < view.left())
+        dx = view.left() - pos.x();
+    else if (pos.x() > view.right())
+        dx = view.right() - pos.x();
+
+    if (pos.y() < view.top())
+        dy = view.top() - pos.y();
+    else if (pos.y() > view.bottom())
+        dy = view.bottom() - pos.y();
+
+    scroll(dx,dy);
 
     cursorPos_ = pos;
+    emit cursorPositionChanged(cursorPos_);
+    getScene()->update();
 }
 
 void AndromedaView::moveCursor(QPointF offset)
@@ -55,6 +69,75 @@ void AndromedaView::moveCursor(QPointF offset)
 void AndromedaView::moveCursor(double dx, double dy)
 {
     moveCursor(QPointF(dx,dy));
+}
+
+void AndromedaView::scroll(QPoint offset)
+{
+    scroll(offset.x(), offset.y());
+}
+
+/**
+ * @brief AndromedaView::scroll
+ * Adjust the scroll bar position by a given amount
+ * @param dx
+ * @param dy
+ */
+void AndromedaView::scroll(int dx, int dy)
+{
+    bool update = false;
+
+    if (dx != 0)
+    {
+        update = true;
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - dx);
+    }
+    if (dy != 0)
+    {
+        update = true;
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - dy);
+    }
+
+    if (update)
+        scene()->update();
+
+
+}
+
+void AndromedaView::keyPressEvent(QKeyEvent *event)
+{
+    if (event == NULL) return;
+
+    bool accepted = true;
+
+    double offset = getScene()->getGrid().getMajorTick();
+
+    switch (event->key())
+    {
+    case Qt::Key_Left:
+        moveCursor(-offset,0);
+        break;
+    case Qt::Key_Right:
+        moveCursor(offset,0);
+        break;
+    case Qt::Key_Up:
+        moveCursor(0,-offset);
+        break;
+    case Qt::Key_Down:
+        moveCursor(0,offset);
+        break;
+    default:
+        accepted = false;
+        break;
+    }
+
+    if (accepted)
+    {
+        event->accept();
+    }
+    else
+    {
+        QGraphicsView::keyPressEvent(event);
+    }
 }
 
 /**
@@ -119,10 +202,9 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
         {
             QPoint delta = mousePos - lastMousePos;
 
-            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
-            verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
+            scroll(delta);
 
-            scene()->update();
+
         }
 
         // Set the panning flag
@@ -206,7 +288,7 @@ QRectF AndromedaView::getViewport()
 {
     return QRectF(
                 mapToScene(0,0),
-                mapToScene(width()-1, height()-1)
+                mapToScene(width()-verticalScrollBar()->width()-1, height()-horizontalScrollBar()->height()-1)
                 );
 }
 
