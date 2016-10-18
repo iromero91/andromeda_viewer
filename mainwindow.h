@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "andromeda_view.h"
 
 namespace Ui {
 class MainWindow;
@@ -14,6 +15,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+public slots:
+    void cursorPosChanged(QPointF pos);
 
 private:
     Ui::MainWindow *ui;

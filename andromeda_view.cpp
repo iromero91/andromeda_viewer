@@ -53,6 +53,11 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
     // Grab the mouse position
     QPoint mousePos = event->pos();
 
+    // Convert to scene coordinates
+    QPointF scenePos = mapToScene(mousePos);
+
+    emit cursorPositionChanged(scenePos);
+
     // Check for panning event
     if (event->buttons() & Qt::MiddleButton)
     {

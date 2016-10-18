@@ -17,6 +17,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     scene->addEllipse(0,0,20,10);
     scene->addEllipse(-50,-50,100,10);
+
+    connect(ui->graphicsView,SIGNAL(cursorPositionChanged(QPointF)),this,SLOT(cursorPosChanged(QPointF)));
+}
+
+void MainWindow::cursorPosChanged(QPointF pos)
+{
+    ui->statusBar->showMessage("x: " + QString::number(pos.x(),'f',2) + ", y: " + QString::number(pos.y(),'f',2));
 }
 
 MainWindow::~MainWindow()
