@@ -17,6 +17,9 @@ class AndromedaView : public QGraphicsView
 public:
     AndromedaView(QWidget *parent = 0);
 
+    // Viewport functions
+    QPointF getCenterLocation();
+
     // View scaling functions
     double getScalingFactor() { return transform().m11(); }
     void setScalingFactor(double scaling);
@@ -31,6 +34,11 @@ signals:
 protected:
     // UI event callbacks
     void wheelEvent(QWheelEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+
+    void paintEvent(QPaintEvent *event);
 
 private:
 };

@@ -1,4 +1,8 @@
 #include "andromeda_view.h"
+#include <QScrollBar>
+
+#include <QDebug>
+
 
 AndromedaView::AndromedaView(QWidget *parent) : QGraphicsView(parent)
 {
@@ -26,6 +30,68 @@ void AndromedaView::wheelEvent(QWheelEvent *event)
     scaleRelative(zoom);
 
     event->accept();
+}
+
+void AndromedaView::mousePressEvent(QMouseEvent *event)
+{
+
+}
+
+void AndromedaView::mouseReleaseEvent(QMouseEvent *event)
+{
+
+}
+
+
+void AndromedaView::mouseMoveEvent(QMouseEvent *event)
+{
+    static bool panning = false;
+    static QPoint lastMousePos;
+
+    if (scene() == NULL || event == NULL) return;
+
+    // Grab the mouse position
+    QPoint mousePos = event->pos();
+
+    // Check for panning event
+    if (event->buttons() & Qt::MiddleButton)
+    {
+
+        if (panning)
+        {
+            QPoint delta = mousePos - lastMousePos;
+
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
+
+            scene()->update();
+        }
+
+        // Set the panning flag
+        panning = true;
+        lastMousePos = mousePos;
+
+        event->accept();
+    }
+    else
+    {
+        panning = false;
+    }
+}
+
+void AndromedaView::paintEvent(QPaintEvent *event)
+{
+    // First perform scene painting
+    QGraphicsView::paintEvent(event);
+}
+
+/**
+ * @brief AndromedaView::getCenterLocation
+ * @return the center of the viewport (in scene coordinates)
+ */
+QPointF AndromedaView::getCenterLocation()
+{
+    return mapToScene(width()/2,height()/2);
 }
 
 /**
