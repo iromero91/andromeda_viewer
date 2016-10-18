@@ -34,13 +34,13 @@ void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
         // Draw vertical axis
         if ((rect.left() <= x) && (rect.right() >= x))
         {
-            painter->drawLine(x, rect.top(), x, rect.bottom());
+            painter->drawLine(x, rect.top()-1, x, rect.bottom()+1);
         }
 
         // Draw horizontal axis
         if ((rect.top() <= y) && (rect.right() >= y))
         {
-            painter->drawLine(rect.left(), y, rect.right(), y);
+            painter->drawLine(rect.left()-1, y, rect.right()+1, y);
         }
     }
 
