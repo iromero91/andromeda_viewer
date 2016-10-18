@@ -7,12 +7,20 @@
 #include <QKeyEvent>
 #include <QPaintEvent>
 
+#define ANDROMEDA_VIEW_MAX_SCALING 100.0f
+#define ANDROMEDA_VIEW_MIN_SCALING 0.001f
+
 class AndromedaView : public QGraphicsView
 {
     Q_OBJECT
 
 public:
     AndromedaView(QWidget *parent = 0);
+
+    // View scaling functions
+    double getScalingFactor() { return transform().m11(); }
+    void setScalingFactor(double scaling);
+    void scaleRelative(double scaling);
 
 public slots:
 
@@ -21,6 +29,8 @@ signals:
     void cursorPositionChanged(QPointF pos);
 
 protected:
+    // UI event callbacks
+    void wheelEvent(QWheelEvent *event);
 
 private:
 };
