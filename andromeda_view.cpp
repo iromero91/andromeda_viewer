@@ -150,13 +150,30 @@ void AndromedaView::wheelEvent(QWheelEvent *event)
 {
     if (event == NULL) return;
 
-    float zoom = (float) event->delta() * 0.01f;
+    // Zoom in/out with the CTRL modifier
 
-    // Account for 'negative' zoom
-    if (zoom < 0)
-        zoom = -1.0 / zoom;
+    if (event->modifiers() == Qt::ControlModifier)
+    {
 
-    scaleRelative(zoom);
+        float zoom = (float) event->delta() * 0.01f;
+
+        // Account for 'negative' zoom
+        if (zoom < 0)
+            zoom = -1.0 / zoom;
+
+        scaleRelative(zoom);
+    }
+
+    // Pan left/right with the SHIFT modifier
+    else if (event->modifiers() == Qt::ShiftModifier)
+    {
+        scroll(event->delta(), 0);
+    }
+
+    else
+    {
+        scroll(0, event->delta());
+    }
 
     event->accept();
 }
