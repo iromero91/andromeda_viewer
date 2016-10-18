@@ -11,9 +11,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     AndromedaScene *scene = new AndromedaScene();
 
-    scene->setBackgroundColor(QColor(100,25,45));
+    scene->setBackgroundColor(QColor(200,225,245));
+    scene->setSceneRect(-1000,-1000,2000,2000);
 
     ui->graphicsView->setScene(scene);
+
 
     scene->addEllipse(0,0,20,10);
     scene->addEllipse(-50,-50,100,10);

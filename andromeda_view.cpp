@@ -4,11 +4,18 @@
 #include <QDebug>
 
 
-AndromedaView::AndromedaView(QWidget *parent) : QGraphicsView(parent)
+AndromedaView::AndromedaView(QWidget *parent) :
+    QGraphicsView(parent),
+    draw_overlay_(false),
+    draw_cursor_(true)
 {
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    setRenderHint(QPainter::Antialiasing);
+    setRenderHint(QPainter::HighQualityAntialiasing);
+    setRenderHint(QPainter::TextAntialiasing);
 }
 
 /**
@@ -86,8 +93,27 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
 
 void AndromedaView::paintEvent(QPaintEvent *event)
 {
+    if (event == NULL) return;
+
     // First perform scene painting
     QGraphicsView::paintEvent(event);
+
+    // Grab the painter
+    QPainter painter(viewport());
+
+    // Draw the cursor
+    if (draw_cursor_) drawCursor(&painter, event->rect());
+
+    if (draw_overlay_) drawOverlay(&painter, event->rect());
+}
+
+void AndromedaView::drawOverlay(QPainter *painter, QRect rect)
+{
+}
+
+void AndromedaView::drawCursor(QPainter *painter, QRect rect)
+{
+
 }
 
 /**
