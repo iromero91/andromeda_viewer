@@ -14,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->setBackgroundColor(QColor(100,25,45));
 
     ui->graphicsView->setScene(scene);
+
+    scene->addEllipse(0,0,20,10);
+    scene->addEllipse(-50,-50,100,10);
 }
 
 MainWindow::~MainWindow()
