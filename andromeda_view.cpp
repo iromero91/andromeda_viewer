@@ -2,7 +2,7 @@
 #include "andromeda_grid.h"
 
 #include <QScrollBar>
-
+#include <QGraphicsItem>
 #include <QDebug>
 
 AndromedaView::AndromedaView(QWidget *parent) :
@@ -17,6 +17,9 @@ AndromedaView::AndromedaView(QWidget *parent) :
     setRenderHint(QPainter::Antialiasing);
     setRenderHint(QPainter::HighQualityAntialiasing);
     setRenderHint(QPainter::TextAntialiasing);
+
+    setDragMode(QGraphicsView::RubberBandDrag);
+    setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 }
 
 void AndromedaView::setScene(AndromedaScene *scene)
@@ -31,7 +34,7 @@ void AndromedaView::setScene(AndromedaScene *scene)
  * Set the position of the cursor (in scene coordinates)
  * @param pos
  */
-void AndromedaView::setCursorPos(QPointF pos)
+void AndromedaView::setCursorPos(QPointF pos, bool panPastEdges)
 {
     double grid = getScene()->getGrid().getMajorTick();
 
@@ -39,36 +42,39 @@ void AndromedaView::setCursorPos(QPointF pos)
 
     if ((pos.x() == cursorPos_.x()) && (pos.y() == cursorPos_.y())) return;
 
-    // Check if the cursor has moved outside the screen bounds
-    QRectF view = getViewport();
+    if (panPastEdges)
+    {
+        // Check if the cursor has moved outside the screen bounds
+        QRectF view = getViewport();
 
-    double dx, dy = 0;
+        double dx, dy = 0;
 
-    if (pos.x() < view.left())
-        dx = view.left() - pos.x();
-    else if (pos.x() > view.right())
-        dx = view.right() - pos.x();
+        if (pos.x() < view.left())
+            dx = view.left() - pos.x();
+        else if (pos.x() > view.right())
+            dx = view.right() - pos.x();
 
-    if (pos.y() < view.top())
-        dy = view.top() - pos.y();
-    else if (pos.y() > view.bottom())
-        dy = view.bottom() - pos.y();
+        if (pos.y() < view.top())
+            dy = view.top() - pos.y();
+        else if (pos.y() > view.bottom())
+            dy = view.bottom() - pos.y();
 
-    scroll(dx,dy);
+        scroll(dx,dy);
+    }
 
     cursorPos_ = pos;
     emit cursorPositionChanged(cursorPos_);
     getScene()->update();
 }
 
-void AndromedaView::moveCursor(QPointF offset)
+void AndromedaView::moveCursor(QPointF offset, bool panPastEdges)
 {
-    setCursorPos(cursorPos_ + offset);
+    setCursorPos(cursorPos_ + offset, panPastEdges);
 }
 
-void AndromedaView::moveCursor(double dx, double dy)
+void AndromedaView::moveCursor(double dx, double dy, bool panPastEdges)
 {
-    moveCursor(QPointF(dx,dy));
+    moveCursor(QPointF(dx,dy), panPastEdges);
 }
 
 void AndromedaView::scroll(QPoint offset)
@@ -114,16 +120,16 @@ void AndromedaView::keyPressEvent(QKeyEvent *event)
     switch (event->key())
     {
     case Qt::Key_Left:
-        moveCursor(-offset,0);
+        moveCursor(-offset,0,true);
         break;
     case Qt::Key_Right:
-        moveCursor(offset,0);
+        moveCursor(offset,0,true);
         break;
     case Qt::Key_Up:
-        moveCursor(0,-offset);
+        moveCursor(0,-offset,true);
         break;
     case Qt::Key_Down:
-        moveCursor(0,offset);
+        moveCursor(0,offset,true);
         break;
     default:
         accepted = false;
@@ -182,6 +188,32 @@ void AndromedaView::mousePressEvent(QMouseEvent *event)
 {
     if (event == NULL) return;
 
+    setCursorPos(mapToScene(event->pos()));
+
+    QGraphicsItem *item = getScene()->itemAt(cursorPos_, QTransform());
+
+    if (item != NULL)
+    {
+        if (event->modifiers() & Qt::ControlModifier)
+            item->setSelected(!item->isSelected());
+        else
+        {
+            // Deselect all selected items
+            foreach (QGraphicsItem *i, getScene()->selectedItems())
+            {
+                if (i == NULL) continue;
+
+                i->setSelected(false);
+            }
+
+            item->setSelected(true);
+        }
+    }
+    else // Deselect all items
+    {
+        getScene()->clearSelection();
+    }
+
     if (!event->isAccepted())
     {
         QGraphicsView::mousePressEvent(event);
@@ -220,8 +252,6 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
             QPoint delta = mousePos - lastMousePos;
 
             scroll(delta);
-
-
         }
 
         // Set the panning flag

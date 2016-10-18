@@ -35,9 +35,9 @@ public:
 
     // Cursor functions
     QPointF getCursorPos() { return cursorPos_; }
-    void setCursorPos(QPointF pos);
-    void moveCursor(QPointF offset);
-    void moveCursor(double dx, double dy);
+    void setCursorPos(QPointF pos, bool panPastEdges = false);
+    void moveCursor(QPointF offset, bool panPastEdges = false);
+    void moveCursor(double dx, double dy, bool panPastEdges = false);
 
     void scroll(QPoint offset);
     void scroll(int dx, int dy);

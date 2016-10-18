@@ -16,11 +16,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     andromeda_scene.cpp \
     andromeda_view.cpp \
-    andromeda_grid.cpp
+    andromeda_grid.cpp \
+    andromeda_drawable.cpp
 
 HEADERS  += mainwindow.h \
     andromeda_scene.h \
     andromeda_view.h \
-    andromeda_grid.h
+    andromeda_grid.h \
+    andromeda_drawable.h
 
 FORMS    += mainwindow.ui
