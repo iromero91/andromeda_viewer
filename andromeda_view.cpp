@@ -40,6 +40,8 @@ void AndromedaView::setCursorPos(QPointF pos)
     if ((pos.x() != cursorPos_.x()) || (pos.y() != cursorPos_.y()))
     {
         emit cursorPositionChanged(pos);
+
+        getScene()->update();
     }
 
     cursorPos_ = pos;
@@ -164,7 +166,27 @@ void AndromedaView::drawCursor(QPainter *painter, QRect rect)
 {
     if (painter == NULL) return;
 
+#define CURSOR 10
 
+    QPoint viewPos = mapFromScene(cursorPos_);
+
+    QPen p;
+    p.setWidth(1);
+
+    painter->setPen(p);
+
+    int x = viewPos.x();
+    int y = viewPos.y();
+
+    // Is the cursor position in view?
+    if ((viewPos.x() > -CURSOR) &&
+        (viewPos.x() < (width() + CURSOR)) &&
+        (viewPos.y() > -CURSOR) &&
+        (viewPos.y() < (height() + CURSOR)))
+    {
+        painter->drawLine(x-CURSOR,y,x+CURSOR,y);
+        painter->drawLine(x,y-CURSOR,x,y+CURSOR);
+    }
 }
 
 /**
