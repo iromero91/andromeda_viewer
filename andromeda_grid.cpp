@@ -1,7 +1,7 @@
 #include "andromeda_grid.h"
 
 AndromedaGrid::AndromedaGrid() :
-    majorTick_(10),
+    majorTick_(GRID_MAJOR_TICK_DEFAULT),
     minorTick_(0),
     origin_(0,0),
     drawStyle_(GRID_DRAW_ALL_DOTS | GRID_DRAW_MAJOR_LINES)

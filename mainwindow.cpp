@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addEllipse(0,0,20,10);
     scene->addEllipse(-50,-50,100,10);
 
+    scene->addRect(-1000,-1000,2000,2000);
+
     connect(ui->graphicsView,SIGNAL(cursorPositionChanged(QPointF)),this,SLOT(cursorPosChanged(QPointF)));
 
     setWindowTitle("AndromEDA Viewer");
