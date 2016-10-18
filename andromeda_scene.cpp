@@ -44,7 +44,7 @@ void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
         }
 
         // Draw horizontal axis
-        if ((rect.top() <= y) && (rect.right() >= y))
+        if ((rect.top() <= y) && (rect.bottom() >= y))
         {
             painter->drawLine(rect.left()-1, y, rect.right()+1, y);
         }
