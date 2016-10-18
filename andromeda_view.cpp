@@ -169,32 +169,35 @@ void AndromedaView::wheelEvent(QWheelEvent *event)
 
 void AndromedaView::mousePressEvent(QMouseEvent *event)
 {
-    if (event == NULL) return;
+    if (event == NULL || scene_ == NULL) return;
 
     setCursorPos(mapToScene(event->pos()));
 
-    QGraphicsItem *item = getScene()->itemAt(cursorPos_, QTransform());
+    QGraphicsItem *item;
 
-    if (item != NULL)
+    // Selection
+    if (event->button() == Qt::LeftButton)
     {
-        if (event->modifiers() & Qt::ControlModifier)
+        item = scene_->itemAt(cursorPos_, QTransform());
+
+        // NO item at location, de-select all items
+        if (item == NULL)
+        {
+            scene_->clearSelection();
+        }
+        // Toggle selection with control modifier
+        else if (event->modifiers() & Qt::ControlModifier)
+        {
             item->setSelected(!item->isSelected());
+        }
+        // Otherwise, clear selection and select this one item
         else
         {
-            // Deselect all selected items
-            foreach (QGraphicsItem *i, getScene()->selectedItems())
-            {
-                if (i == NULL) continue;
-
-                i->setSelected(false);
-            }
-
+            scene_->clearSelection();
             item->setSelected(true);
         }
-    }
-    else // Deselect all items
-    {
-        getScene()->clearSelection();
+
+        event->accept();
     }
 
     if (!event->isAccepted())
