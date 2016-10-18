@@ -241,6 +241,18 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
+/**
+ * @brief AndromedaView::drawForeground
+ * Custom foreground painting (AFTER the scene is painted)
+ * Painting is performed in scene coordinates
+ * @param painter
+ * @param rect
+ */
+void AndromedaView::drawForeground(QPainter *painter, const QRectF &rect)
+{
+    if (painter == NULL) return;
+}
+
 void AndromedaView::paintEvent(QPaintEvent *event)
 {
     if (event == NULL) return;

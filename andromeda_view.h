@@ -63,7 +63,10 @@ protected:
     void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
 
-    // Overlay functions
+    // Painting functions (drawn in scene coordinates)
+    void drawForeground(QPainter *painter, const QRectF &rect);
+
+    // Overlay functions (drawn in viewport coordinates)
     void drawOverlay(QPainter *painter, QRect rect);
     void drawCursor(QPainter *painter, QRect rect);
 
