@@ -23,15 +23,20 @@ public:
     AndromedaScene* getScene() { return scene_; }
 
     // Configuration flags
-    void setOverlayEnabled(bool en) { draw_overlay_ = en; }
-    bool getOverlayEnabled() { return draw_overlay_; }
-    void setCursorEnabled(bool en) { draw_cursor_ = en; }
-    bool getCursorEnabled() { return draw_cursor_; }
+    void setOverlayEnabled(bool en) { drawOverlay_ = en; }
+    bool getOverlayEnabled() { return drawOverlay_; }
+    void setCursorEnabled(bool en) { drawCursor_ = en; }
+    bool getCursorEnabled() { return drawCursor_; }
 
     // Viewport functions
     QPointF getCenterLocation();
     QRectF getViewport();
     QPointF unitsPerPixel();
+
+    QPointF getCursorPos() { return cursorPos_; }
+    void setCursorPos(QPointF pos);
+    void moveCursor(QPointF offset);
+    void moveCursor(double dx, double dy);
 
     // View scaling functions
     double getScalingFactor() { return transform().m11(); }
@@ -57,10 +62,12 @@ protected:
     void drawOverlay(QPainter *painter, QRect rect);
     void drawCursor(QPainter *painter, QRect rect);
 
-    bool draw_overlay_;
-    bool draw_cursor_;
+    bool drawOverlay_;
+    bool drawCursor_;
 
     AndromedaScene *scene_;
+
+    QPointF cursorPos_;
 
 private:
 };

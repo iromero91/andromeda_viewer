@@ -7,8 +7,8 @@
 
 AndromedaView::AndromedaView(QWidget *parent) :
     QGraphicsView(parent),
-    draw_overlay_(false),
-    draw_cursor_(true)
+    drawOverlay_(false),
+    drawCursor_(true)
 {
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -24,6 +24,35 @@ void AndromedaView::setScene(AndromedaScene *scene)
     scene_ = scene;
 
     QGraphicsView::setScene(scene);
+}
+
+/**
+ * @brief AndromedaView::setCursorPos
+ * Set the position of the cursor (in scene coordinates)
+ * @param pos
+ */
+void AndromedaView::setCursorPos(QPointF pos)
+{
+    double grid = getScene()->getGrid().getMajorTick();
+
+    pos = AndromedaGrid::mapToGrid(pos, QPointF(grid,grid));
+
+    if ((pos.x() != cursorPos_.x()) || (pos.y() != cursorPos_.y()))
+    {
+        emit cursorPositionChanged(pos);
+    }
+
+    cursorPos_ = pos;
+}
+
+void AndromedaView::moveCursor(QPointF offset)
+{
+    setCursorPos(cursorPos_ + offset);
+}
+
+void AndromedaView::moveCursor(double dx, double dy)
+{
+    moveCursor(QPointF(dx,dy));
 }
 
 /**
@@ -49,12 +78,22 @@ void AndromedaView::wheelEvent(QWheelEvent *event)
 
 void AndromedaView::mousePressEvent(QMouseEvent *event)
 {
+    if (event == NULL) return;
 
+    if (!event->isAccepted())
+    {
+        QGraphicsView::mousePressEvent(event);
+    }
 }
 
 void AndromedaView::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (event == NULL) return;
 
+    if (!event->isAccepted())
+    {
+        QGraphicsView::mouseReleaseEvent(event);
+    }
 }
 
 
@@ -68,14 +107,7 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
     // Grab the mouse position
     QPoint mousePos = event->pos();
 
-    // Convert to scene coordinates
-    QPointF scenePos = mapToScene(mousePos);
-
-    double tick = getScene()->getGrid().getMajorTick();
-
-    scenePos = AndromedaGrid::mapToGrid(scenePos, QPointF(tick,tick));
-
-    emit cursorPositionChanged(scenePos);
+    setCursorPos(mapToScene(mousePos));
 
     // Check for panning event
     if (event->buttons() & Qt::MiddleButton)
