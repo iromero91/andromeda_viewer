@@ -19,6 +19,7 @@ public:
 
     // Viewport functions
     QPointF getCenterLocation();
+    QRectF getViewport();
 
     // View scaling functions
     double getScalingFactor() { return transform().m11(); }

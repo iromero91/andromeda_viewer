@@ -95,6 +95,18 @@ QPointF AndromedaView::getCenterLocation()
 }
 
 /**
+ * @brief AndromedaView::getViewport
+ * @return the viewport rectangle in scene coordinates
+ */
+QRectF AndromedaView::getViewport()
+{
+    return QRectF(
+                mapToScene(0,0),
+                mapToScene(width()-1, height()-1)
+                );
+}
+
+/**
  * @brief AndromedaView::setScalingFactor
  * @param scaling is the desired scaling factor
  */
