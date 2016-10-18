@@ -3,7 +3,6 @@
 
 #include <QDebug>
 
-
 AndromedaView::AndromedaView(QWidget *parent) :
     QGraphicsView(parent),
     draw_overlay_(false),

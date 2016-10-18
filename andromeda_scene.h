@@ -7,6 +7,8 @@
 #include <QPainter>
 #include <QPen>
 
+#include "andromeda_grid.h"
+
 class AndromedaScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -20,8 +22,8 @@ public:
     void setAxesEnabled(bool draw) { draw_axes_ = draw; }
     bool getAxesEnabled() { return draw_axes_; }
 
-    void setOrigin(QPointF origin) { origin_ = origin; }
-    QPointF getOrigin() { return origin_; }
+    void setGrid(AndromedaGrid grid) { grid_ = grid; }
+    AndromedaGrid getGrid() { return grid_; }
 
     void drawBackground(QPainter *painter, const QRectF &rect);
 
@@ -30,9 +32,11 @@ protected:
 
     QColor bg_color_;   // Background color for the scene
     bool draw_axes_;    // Flag for displaying axes
-    QPointF origin_;    // Scene origin
 
     QPen axis_pen_;     // Pen object for drawing the axes
+    QPen grid_pen_;     // Pen object for drawing the grid
+
+    AndromedaGrid grid_;    // Grid object
 };
 
 

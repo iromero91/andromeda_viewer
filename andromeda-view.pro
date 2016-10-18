@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     andromeda_scene.cpp \
-    andromeda_view.cpp
+    andromeda_view.cpp \
+    andromeda_grid.cpp
 
 HEADERS  += mainwindow.h \
     andromeda_scene.h \
-    andromeda_view.h
+    andromeda_view.h \
+    andromeda_grid.h
 
 FORMS    += mainwindow.ui
