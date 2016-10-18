@@ -133,6 +133,11 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
     {
         panning = false;
     }
+
+    if (!event->isAccepted())
+    {
+        QGraphicsView::mouseMoveEvent(event);
+    }
 }
 
 void AndromedaView::paintEvent(QPaintEvent *event)
@@ -146,9 +151,9 @@ void AndromedaView::paintEvent(QPaintEvent *event)
     QPainter painter(viewport());
 
     // Draw the cursor
-    if (draw_cursor_) drawCursor(&painter, event->rect());
+    if (drawCursor_) drawCursor(&painter, event->rect());
 
-    if (draw_overlay_) drawOverlay(&painter, event->rect());
+    if (drawOverlay_) drawOverlay(&painter, event->rect());
 }
 
 void AndromedaView::drawOverlay(QPainter *painter, QRect rect)
@@ -157,6 +162,8 @@ void AndromedaView::drawOverlay(QPainter *painter, QRect rect)
 
 void AndromedaView::drawCursor(QPainter *painter, QRect rect)
 {
+    if (painter == NULL) return;
+
 
 }
 
