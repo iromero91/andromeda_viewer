@@ -8,7 +8,8 @@
 AndromedaView::AndromedaView(QWidget *parent) :
     QGraphicsView(parent),
     drawOverlay_(false),
-    drawCursor_(true)
+    drawCursor_(true),
+    selectionActive_(false)
 {
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -148,6 +149,13 @@ void AndromedaView::keyPressEvent(QKeyEvent *event)
         moveCursor(0,offset,true);
         snapMouseToCursor();
         break;
+    case Qt::Key_Escape:
+        if (selectionActive_)
+        {
+            selectionActive_ = false;   // Cancel any selection process
+            scene_->update();
+        }
+        break;
     default:
         accepted = false;
         break;
@@ -171,7 +179,7 @@ void AndromedaView::keyPressEvent(QKeyEvent *event)
  */
 void AndromedaView::wheelEvent(QWheelEvent *event)
 {
-    if (event == NULL) return;
+    if (scene_ == NULL || event == NULL) return;
 
     float zoom = (float) event->delta() * 0.01f;
 
@@ -181,6 +189,11 @@ void AndromedaView::wheelEvent(QWheelEvent *event)
 
     scaleRelative(zoom);
 
+    // Re-move the cursor to the mouse position
+    QPoint mousePos = mapFromGlobal(cursor().pos());
+
+    setCursorPos(mapToScene(mousePos));
+
     event->accept();
 }
 
@@ -188,13 +201,18 @@ void AndromedaView::mousePressEvent(QMouseEvent *event)
 {
     if (event == NULL || scene_ == NULL) return;
 
-    setCursorPos(mapToScene(event->pos()));
+    QPointF scenePos = mapToScene(event->pos());
+
+    setCursorPos(scenePos);
 
     QGraphicsItem *item;
 
     // Selection
     if (event->button() == Qt::LeftButton)
     {
+        selectionStartPos_ = cursorPos_;
+        selectionActive_ = true;
+
         item = scene_->itemAt(cursorPos_, QTransform());
 
         // NO item at location, de-select all items
@@ -214,22 +232,51 @@ void AndromedaView::mousePressEvent(QMouseEvent *event)
             item->setSelected(true);
         }
 
-        event->accept();
-    }
+        // How many items at the given position?
+        QList<QGraphicsItem*> items = scene_->items(cursorPos_);
 
-    if (!event->isAccepted())
-    {
-        QGraphicsView::mousePressEvent(event);
+        qDebug() << items.count() << "items at" << cursorPos_;
     }
 }
 
 void AndromedaView::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (event == NULL) return;
+    if (scene_ == NULL || event == NULL) return;
 
-    if (!event->isAccepted())
+    if (event->button() == Qt::LeftButton)
     {
-        QGraphicsView::mouseReleaseEvent(event);
+        if (selectionActive_)
+        {
+            QRectF selection = getSelectionRect();
+
+            QPointF pixels = unitsPerPixel();
+
+            // Ignore 'small' drag selections
+            if ((selection.width() / pixels.x()) > 5 && (selection.height() / pixels.y()) > 5)
+            {
+                QList<QGraphicsItem*> items = scene_->items(selection, Qt::ContainsItemShape);
+
+                bool select = true;
+
+                if (event->modifiers() & Qt::ControlModifier)
+                {
+                    select = (event->modifiers() & Qt::ShiftModifier) == 0;
+                }
+                else
+                {
+                    scene_->clearSelection();
+                }
+
+                foreach (QGraphicsItem *item, items)
+                {
+                    if (item == NULL) continue;
+
+                    item->setSelected(select);
+                }
+            }
+                selectionActive_ = false;
+                scene_->update();
+        }
     }
 }
 
@@ -268,10 +315,16 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
         panning = false;
     }
 
-    if (!event->isAccepted())
+    if (event->buttons() & Qt::LeftButton)
     {
-        QGraphicsView::mouseMoveEvent(event);
+
     }
+    else
+    {
+        selectionActive_ = false;
+    }
+
+    QGraphicsView::mouseMoveEvent(event);
 }
 
 /**
@@ -284,6 +337,38 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
 void AndromedaView::drawForeground(QPainter *painter, const QRectF &rect)
 {
     if (painter == NULL) return;
+
+    if (selectionActive_)
+    {
+        drawSelectionMarquee(painter, rect);
+    }
+}
+
+void AndromedaView::drawSelectionMarquee(QPainter *painter, const QRectF &rect)
+{
+    QPen marqueePen(QColor(0,255,200,200));
+
+    marqueePen.setCapStyle(Qt::RoundCap);
+    marqueePen.setJoinStyle(Qt::RoundJoin);
+    marqueePen.setWidth(1);
+    marqueePen.setStyle(Qt::DashLine);
+
+    marqueePen.setCosmetic(true);
+
+    QBrush marqueeBrush(QColor(120,120,120,120));
+
+    painter->setPen(marqueePen);
+    painter->setBrush(marqueeBrush);
+
+    painter->drawRect(getSelectionRect());
+}
+
+QRectF AndromedaView::getSelectionRect()
+{
+    return QRectF(selectionStartPos_.x(),
+                  selectionStartPos_.y(),
+                  cursorPos_.x() - selectionStartPos_.x(),
+                  cursorPos_.y() - selectionStartPos_.y()).normalized();
 }
 
 void AndromedaView::paintEvent(QPaintEvent *event)

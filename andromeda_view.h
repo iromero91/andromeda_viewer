@@ -66,6 +66,7 @@ protected:
 
     // Painting functions (drawn in scene coordinates)
     void drawForeground(QPainter *painter, const QRectF &rect);
+    void drawSelectionMarquee(QPainter *painter, const QRectF &rect);
 
     // Overlay functions (drawn in viewport coordinates)
     void drawOverlay(QPainter *painter, QRect rect);
@@ -77,6 +78,11 @@ protected:
     AndromedaScene *scene_;
 
     QPointF cursorPos_;
+
+    // Selection functions
+    bool selectionActive_;  // True if user is drawing a selection cursor
+    QPointF selectionStartPos_; // Location (in scene coords) of the start of the select rect
+    QRectF getSelectionRect();
 
 private:
 };
