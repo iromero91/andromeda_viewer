@@ -38,6 +38,7 @@ public:
     void setCursorPos(QPointF pos, bool panPastEdges = false);
     void moveCursor(QPointF offset, bool panPastEdges = false);
     void moveCursor(double dx, double dy, bool panPastEdges = false);
+    void snapMouseToCursor();
 
     void scroll(QPoint offset);
     void scroll(int dx, int dy);

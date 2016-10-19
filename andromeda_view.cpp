@@ -47,7 +47,8 @@ void AndromedaView::setCursorPos(QPointF pos, bool panPastEdges)
         // Check if the cursor has moved outside the screen bounds
         QRectF view = getViewport();
 
-        double dx, dy = 0;
+        double dx = 0;
+        double dy = 0;
 
         if (pos.x() < view.left())
             dx = view.left() - pos.x();
@@ -75,6 +76,18 @@ void AndromedaView::moveCursor(QPointF offset, bool panPastEdges)
 void AndromedaView::moveCursor(double dx, double dy, bool panPastEdges)
 {
     moveCursor(QPointF(dx,dy), panPastEdges);
+}
+
+/**
+ * @brief AndromedaView::snapMouseToCursor
+ *
+ * Move the mouse pointer to the location of the scene cursor
+ */
+void AndromedaView::snapMouseToCursor()
+{
+    QPoint pos = mapToGlobal(mapFromScene(cursorPos_));
+
+    cursor().setPos(pos);
 }
 
 void AndromedaView::scroll(QPoint offset)
@@ -121,15 +134,19 @@ void AndromedaView::keyPressEvent(QKeyEvent *event)
     {
     case Qt::Key_Left:
         moveCursor(-offset,0,true);
+        snapMouseToCursor();
         break;
     case Qt::Key_Right:
         moveCursor(offset,0,true);
+        snapMouseToCursor();
         break;
     case Qt::Key_Up:
         moveCursor(0,-offset,true);
+        snapMouseToCursor();
         break;
     case Qt::Key_Down:
         moveCursor(0,offset,true);
+        snapMouseToCursor();
         break;
     default:
         accepted = false;
