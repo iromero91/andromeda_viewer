@@ -2,3 +2,5 @@
 Makefile*
 release/
 debug/
+*.Release
+*.Debug

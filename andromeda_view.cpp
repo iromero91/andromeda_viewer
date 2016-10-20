@@ -236,9 +236,10 @@ void AndromedaView::mouseReleaseEvent(QMouseEvent *event)
         QPointF pixels = unitsPerPixel();
         QRectF selection = getSelectionMarquee();
 
+        // Ignore 'small' selections
         bool validSelection = (checkViewAction(VIEW_ACTION_SELECTING)) &&
-                              ((selection.width() / pixels.x()) > 5) &&
-                              ((selection.height() / pixels.y()) > 5);
+                              (qAbs(selection.width() / pixels.x()) > 5) &&
+                              (qAbs(selection.height() / pixels.y()) > 5);
 
 
         clearViewAction(VIEW_ACTION_SELECTING);
@@ -246,8 +247,17 @@ void AndromedaView::mouseReleaseEvent(QMouseEvent *event)
         if (validSelection)
         {
 
+            QList<QGraphicsItem*> items;
 
-            QList<QGraphicsItem*> items = scene_->items(selection, Qt::ContainsItemShape);
+            // Selection drawn left-to-right requires full selection
+            if (selection.width() > 0)
+            {
+                items = scene_->items(selection, Qt::ContainsItemShape);
+            }
+            else
+            {
+                items = scene_->items(selection, Qt::IntersectsItemShape);
+            }
 
             bool select = true;
 
@@ -368,19 +378,22 @@ void AndromedaView::drawSelectionMarquee(QPainter *painter, const QRectF &rect)
 {
     QPen marqueePen(QColor(0,255,200,200));
 
+    QRectF selection = getSelectionMarquee();
+    bool crossing = selection.width() < 0;
+
     marqueePen.setCapStyle(Qt::RoundCap);
     marqueePen.setJoinStyle(Qt::RoundJoin);
     marqueePen.setWidth(1);
-    marqueePen.setStyle(Qt::DashLine);
+    marqueePen.setStyle(crossing ? Qt::DashLine : Qt::SolidLine);
 
     marqueePen.setCosmetic(true);
 
-    QBrush marqueeBrush(QColor(120,120,120,120));
+    QBrush marqueeBrush(crossing? QColor(0,120,50,50) : QColor(0,50,120,50));
 
     painter->setPen(marqueePen);
     painter->setBrush(marqueeBrush);
 
-    painter->drawRect(getSelectionMarquee());
+    painter->drawRect(selection.normalized());
 }
 
 QRectF AndromedaView::getSelectionMarquee()
@@ -392,7 +405,7 @@ QRectF AndromedaView::getSelectionMarquee()
     return QRectF(startPos_.x(),
                   startPos_.y(),
                   cursorPos_.x() - startPos_.x(),
-                  cursorPos_.y() - startPos_.y()).normalized();
+                  cursorPos_.y() - startPos_.y());
 }
 
 void AndromedaView::paintEvent(QPaintEvent *event)
