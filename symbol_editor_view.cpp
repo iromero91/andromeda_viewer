@@ -8,6 +8,25 @@ SymbolEditorView::SymbolEditorView(QWidget *parent) : AndromedaView(parent)
     tmpLine_.setAcceptHoverEvents(false);
 }
 
+void SymbolEditorView::drawForeground(QPainter *painter, const QRectF &rect)
+{
+    if (checkViewAction(VIEW_ACTION_DRAW_LINE))
+    {
+        QPen pen(QColor(150,150,150,150));
+        pen.setWidth(1);
+        pen.setCosmetic(true);
+        pen.setStyle(Qt::DashLine);
+
+        painter->setPen(pen);
+
+        if (tmpLine_.points_.count() > 0)
+        {
+            painter->drawLine(tmpLine_.points_.last().point, cursorPos_);
+        }
+    }
+    AndromedaView::drawForeground(painter,rect);
+}
+
 void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 {
     if (event == NULL) return;
@@ -138,4 +157,5 @@ void SymbolEditorView::cancelLine()
     tmpLine_.clear();
 
     scene_->removeItem(&tmpLine_);
+    scene_->update();
 }

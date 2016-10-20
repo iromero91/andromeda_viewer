@@ -17,8 +17,8 @@ void AndromedaScene::init()
     axis_pen_.setJoinStyle(Qt::RoundJoin);
     axis_pen_.setCosmetic(true);
 
-    grid_pen_.setColor(QColor(200,200,200,150));
-    grid_pen_.setWidth(1);
+    grid_pen_.setColor(QColor(150,150,150,200));
+    grid_pen_.setWidthF(1.5);
     grid_pen_.setCapStyle(Qt::RoundCap);
     grid_pen_.setJoinStyle(Qt::RoundJoin);
     grid_pen_.setCosmetic(true);
@@ -66,6 +66,7 @@ void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
     long int y_min = (long int) (rect.top() / grid) - 1;
     long int y_max = (long int) (rect.bottom() / grid) + 1;
 
+    /* Draw line grid
     // Draw vertical grid lines
     for (long int i=x_min; i<x_max; i++)
     {
@@ -81,5 +82,14 @@ void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
         if (j == 0) continue;
 
         painter->drawLine(rect.left()-1, j*grid, rect.right()+1, j*grid);
+    }
+    */
+
+    for (long int i=x_min;i<x_max;i++)
+    {
+        for (long int j=y_min;j<y_max;j++)
+        {
+            painter->drawPoint(i*grid, j*grid);
+        }
     }
 }

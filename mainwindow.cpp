@@ -16,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->graphicsView->getScene()->setSceneRect(-1000,-1000,2000,2000);
 
+    // Uncomment to set dark background
+    //ui->graphicsView->getScene()->setBackgroundColor(QColor(25,25,25));
+
     connect(ui->graphicsView,SIGNAL(cursorPositionChanged(QPointF)),this,SLOT(cursorPosChanged(QPointF)));
 
     setWindowTitle("AndromEDA Viewer");

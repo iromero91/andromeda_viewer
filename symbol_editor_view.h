@@ -17,6 +17,8 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
+    void drawForeground(QPainter *painter, const QRectF &rect);
+
     QList<LWPolyline*> lines_;
     LWPolyline tmpLine_;
     void startLine(QPointF pos);

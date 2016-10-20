@@ -362,25 +362,6 @@ void AndromedaView::drawForeground(QPainter *painter, const QRectF &rect)
     {
         drawSelectionMarquee(painter, rect);
     }
-    /*
-    if (makingLine_)
-    {
-        QPen pen(QColor(150,150,150,150));
-        pen.setWidth(1);
-        pen.setCosmetic(true);
-        pen.setStyle(Qt::DashLine);
-
-        painter->setPen(pen);
-
-        if (tmpLine_.points_.count() > 0)
-        {
-            painter->drawLine(tmpLine_.points_.last().point, cursorPos_);
-        }
-    }
-    else if (selectionActive_)
-    {
-    }
-    */
 }
 
 void AndromedaView::drawSelectionMarquee(QPainter *painter, const QRectF &rect)
