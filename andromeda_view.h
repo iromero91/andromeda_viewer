@@ -8,6 +8,7 @@
 #include <QPaintEvent>
 
 #include "andromeda_scene.h"
+#include "lwpolyline.h"
 
 #define ANDROMEDA_VIEW_MAX_SCALING 100.0f
 #define ANDROMEDA_VIEW_MIN_SCALING 0.001f
@@ -60,6 +61,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
 
     void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
@@ -83,6 +85,15 @@ protected:
     bool selectionActive_;  // True if user is drawing a selection cursor
     QPointF selectionStartPos_; // Location (in scene coords) of the start of the select rect
     QRectF getSelectionRect();
+
+    QList<LWPolyline*> lines_;
+    LWPolyline tmpLine_;
+    bool makingLine_;
+    void startLine(QPointF pos);
+    void addLinePoint(QPointF pos);
+    void finishLine(QPointF pos);
+    void addLineToScene();
+    void cancelLine();
 
 private:
 };

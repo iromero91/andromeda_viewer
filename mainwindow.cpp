@@ -21,33 +21,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     TestRect *r = new TestRect();
     r->rect = QRectF(-100,-100,200,175);
-    scene->addItem(r);
+    //scene->addItem(r);
 
     r = new TestRect();
     r->rect = QRectF(45,-30,10,10);
-    scene->addItem(r);
+    //scene->addItem(r);
 
     r = new TestRect();
-    r->rect = QRectF(45,30,10,10);
-    scene->addItem(r);
-
-    /*
-    QGraphicsEllipseItem *e1 = new QGraphicsEllipseItem(0,0,20,10);
-    e1->setPen(QPen(QColor(20,250,50)));
-    e1->setFlag(QGraphicsItem::ItemIsSelectable);
-
-    scene->addItem(e1);
-
-    e1 = new QGraphicsEllipseItem(-50,-50,100,10);
-
-    //e1->setPen(QPen(QColor(250,50,20)));
-    //e1->setFlag(QGraphicsItem::ItemIsMovable);
-    e1->setFlag(QGraphicsItem::ItemIsSelectable);
-
-    scene->addItem(e1);
-
-    scene->addRect(-1000,-1000,2000,2000);
-    */
+    r->rect = QRectF(45,30,100,10);
+    //scene->addItem(r);
 
     ui->graphicsView->setInteractive(true);
 

@@ -17,12 +17,14 @@ SOURCES += main.cpp\
     andromeda_scene.cpp \
     andromeda_view.cpp \
     andromeda_grid.cpp \
-    andromeda_drawable.cpp
+    andromeda_drawable.cpp \
+    lwpolyline.cpp
 
 HEADERS  += mainwindow.h \
     andromeda_scene.h \
     andromeda_view.h \
     andromeda_grid.h \
-    andromeda_drawable.h
+    andromeda_drawable.h \
+    lwpolyline.h
 
 FORMS    += mainwindow.ui

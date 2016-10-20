@@ -43,17 +43,17 @@ void TestRect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 void TestRect::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mouseMoveEvent(event);
+    //QGraphicsItem::mouseMoveEvent(event);
 }
 
 void TestRect::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mousePressEvent(event);
-    update();
+    //QGraphicsItem::mousePressEvent(event);
+    //update();
 }
 
 void TestRect::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mouseReleaseEvent(event);
-    update();
+    //QGraphicsItem::mouseReleaseEvent(event);
+    //update();
 }
