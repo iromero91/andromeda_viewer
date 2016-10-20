@@ -19,7 +19,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
-#include "andromeda_view.h"
+#include "symbol_editor_view.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -28,7 +28,7 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QGridLayout *gridLayout;
-    AndromedaView *graphicsView;
+    SymbolEditorView *graphicsView;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -43,7 +43,7 @@ public:
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        graphicsView = new AndromedaView(centralWidget);
+        graphicsView = new SymbolEditorView(centralWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
 
         gridLayout->addWidget(graphicsView, 0, 0, 1, 1);

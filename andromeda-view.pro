@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     andromeda_view.cpp \
     andromeda_grid.cpp \
     andromeda_drawable.cpp \
-    lwpolyline.cpp
+    lwpolyline.cpp \
+    symbol_editor_view.cpp
 
 HEADERS  += mainwindow.h \
     andromeda_scene.h \
     andromeda_view.h \
     andromeda_grid.h \
     andromeda_drawable.h \
-    lwpolyline.h
+    lwpolyline.h \
+    symbol_editor_view.h
 
 FORMS    += mainwindow.ui

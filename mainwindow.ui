@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="AndromedaView" name="graphicsView"/>
+     <widget class="SymbolEditorView" name="graphicsView"/>
     </item>
    </layout>
   </widget>
@@ -35,9 +35,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>AndromedaView</class>
+   <class>SymbolEditorView</class>
    <extends>QGraphicsView</extends>
-   <header>andromeda_view.h</header>
+   <header>symbol_editor_view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

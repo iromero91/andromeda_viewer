@@ -23,12 +23,6 @@ public:
     void setScene(AndromedaScene *scene);
     AndromedaScene* getScene() { return scene_; }
 
-    // Configuration flags
-    void setOverlayEnabled(bool en) { drawOverlay_ = en; }
-    bool getOverlayEnabled() { return drawOverlay_; }
-    void setCursorEnabled(bool en) { drawCursor_ = en; }
-    bool getCursorEnabled() { return drawCursor_; }
-
     // Viewport functions
     QPointF getCenterLocation();
     QRectF getViewport();
@@ -67,6 +61,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 
     // Painting functions (drawn in scene coordinates)
+    //void drawBackground(QPainter *painter, const QRectF &rect);
     void drawForeground(QPainter *painter, const QRectF &rect);
     void drawSelectionMarquee(QPainter *painter, const QRectF &rect);
 
@@ -74,26 +69,42 @@ protected:
     void drawOverlay(QPainter *painter, QRect rect);
     void drawCursor(QPainter *painter, QRect rect);
 
-    bool drawOverlay_;
-    bool drawCursor_;
-
     AndromedaScene *scene_;
 
-    QPointF cursorPos_;
+    QPointF cursorPos_; // Current location of the cursor
+    QPointF startPos_;  // Location of the 'starting' position (used for multiple functions)
 
     // Selection functions
-    bool selectionActive_;  // True if user is drawing a selection cursor
-    QPointF selectionStartPos_; // Location (in scene coords) of the start of the select rect
-    QRectF getSelectionRect();
+    QRectF getSelectionMarquee();
 
-    QList<LWPolyline*> lines_;
-    LWPolyline tmpLine_;
-    bool makingLine_;
-    void startLine(QPointF pos);
-    void addLinePoint(QPointF pos);
-    void finishLine(QPointF pos);
-    void addLineToScene();
-    void cancelLine();
+    /* View State Machine */
+    enum AndromedaViewActions
+    {
+        VIEW_NO_ACTION = 0x00,
+
+        VIEW_ACTION_SELECTING = 0x01,    // Drawing a selection rectangle
+    };
+
+    // State machine functions
+    unsigned int viewAction_;    // View state machine (current action)
+    void cancelViewAction() { viewAction_ = VIEW_NO_ACTION; }
+    void setViewAction(unsigned int action, bool on = true);
+    void clearViewAction(unsigned int action);
+    bool checkViewAction(unsigned int action);
+
+    enum AndromedaViewFlags
+    {
+        VIEW_NO_FLAGS = 0x00,
+
+        // Drawing flags
+        VIEW_FLAG_DRAW_CURSOR = 0x01,
+        VIEW_FLAG_DRAW_OVERLAY,
+    };
+
+    unsigned int viewFlags_;    // View flags
+    void setViewFlags(unsigned int flags, bool on = true);
+    void clearViewFlags(unsigned int flags);
+    bool checkViewFlags(unsigned int flags);
 
 private:
 };

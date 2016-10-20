@@ -12,26 +12,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    AndromedaScene *scene = new AndromedaScene();
-
-    scene->setBackgroundColor(QColor(200,225,245));
-    scene->setSceneRect(-1000,-1000,2000,2000);
-
-    ui->graphicsView->setScene(scene);
-
-    TestRect *r = new TestRect();
-    r->rect = QRectF(-100,-100,200,175);
-    //scene->addItem(r);
-
-    r = new TestRect();
-    r->rect = QRectF(45,-30,10,10);
-    //scene->addItem(r);
-
-    r = new TestRect();
-    r->rect = QRectF(45,30,100,10);
-    //scene->addItem(r);
-
     ui->graphicsView->setInteractive(true);
+
+    ui->graphicsView->getScene()->setSceneRect(-1000,-1000,2000,2000);
 
     connect(ui->graphicsView,SIGNAL(cursorPositionChanged(QPointF)),this,SLOT(cursorPosChanged(QPointF)));
 

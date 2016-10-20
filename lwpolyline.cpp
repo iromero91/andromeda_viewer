@@ -13,7 +13,9 @@ LWPolyline::LWPolyline() :
     thickness_(1.5),
     filled_(true)
 {
+    setFlags(ItemIsSelectable | ItemIsFocusable);
 
+    setAcceptHoverEvents(true);
 }
 
 QRectF LWPolyline::boundingRect() const
@@ -57,8 +59,10 @@ void LWPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     if (isSelected())
     {
-        c = c.dark(100);
+        c = c.dark();
     }
+
+    c = (option->state & QStyle::State_MouseOver) ? c.light() : c;
 
     QPen pen(c);
     pen.setWidthF(thickness_);
@@ -73,8 +77,7 @@ void LWPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
         if (isSelected())
         {
-            qDebug() << "selected";
-            c = c.dark(100);
+            c = c.dark(50);
         }
 
         QBrush brush(c);
