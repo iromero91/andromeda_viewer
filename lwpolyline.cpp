@@ -77,7 +77,7 @@ void LWPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
         if (isSelected())
         {
-            c = c.dark(50);
+            c = c.dark(150);
         }
 
         QBrush brush(c);
