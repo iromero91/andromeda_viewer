@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     andromeda_grid.cpp \
     andromeda_drawable.cpp \
     lwpolyline.cpp \
-    symbol_editor_view.cpp
+    symbol_editor_view.cpp \
+    geometry.cpp
 
 HEADERS  += mainwindow.h \
     andromeda_scene.h \
@@ -27,6 +28,7 @@ HEADERS  += mainwindow.h \
     andromeda_grid.h \
     andromeda_drawable.h \
     lwpolyline.h \
-    symbol_editor_view.h
+    symbol_editor_view.h \
+    geometry.h
 
 FORMS    += mainwindow.ui
