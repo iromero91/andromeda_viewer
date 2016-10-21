@@ -66,7 +66,6 @@ public:
     enum AndromedaCursorStyles
     {
         VIEW_CURSOR_NONE = 0x00,    // No extra cursor is displayed
-        VIEW_CURSOR_POINT,          // Draw a small point
         VIEW_CURSOR_CROSS_SMALL,    // Draw a small cross
         VIEW_CURSOR_CROSS_LARGE,    // Draw a large cross (to screen boundaries)
 

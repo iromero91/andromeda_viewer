@@ -486,7 +486,6 @@ void AndromedaView::drawCursor(QPainter *painter, QRect rect)
                           rect.bottom() + 1);
 
         break;
-
     }
 }
 
