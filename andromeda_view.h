@@ -43,6 +43,36 @@ public:
     void setScalingFactor(double scaling);
     void scaleRelative(double scaling);
 
+    // Cursor functions
+    void setCursorStyle(unsigned char style);
+    unsigned char getCursorStyle() { return cursorStyle_; }
+
+    /* View State Machine */
+    enum AndromedaViewActions
+    {
+        VIEW_NO_ACTION = 0x00,
+
+        VIEW_ACTION_SELECTING = 0x01,    // Drawing a selection rectangle
+    };
+
+    enum AndromedaViewFlags
+    {
+        VIEW_NO_FLAGS = 0x00,
+
+        // Drawing flags
+        VIEW_FLAG_DRAW_OVERLAY = 0x01,
+    };
+
+    enum AndromedaCursorStyles
+    {
+        VIEW_CURSOR_NONE = 0x00,    // No extra cursor is displayed
+        VIEW_CURSOR_POINT,          // Draw a small point
+        VIEW_CURSOR_CROSS_SMALL,    // Draw a small cross
+        VIEW_CURSOR_CROSS_LARGE,    // Draw a large cross (to screen boundaries)
+
+        VIEW_CURSOR_NUM_STYLES
+    };
+
 public slots:
 
 signals:
@@ -77,14 +107,6 @@ protected:
     // Selection functions
     QRectF getSelectionMarquee();
 
-    /* View State Machine */
-    enum AndromedaViewActions
-    {
-        VIEW_NO_ACTION = 0x00,
-
-        VIEW_ACTION_SELECTING = 0x01,    // Drawing a selection rectangle
-    };
-
     // State machine functions
     unsigned int viewAction_;    // View state machine (current action)
     void cancelViewAction() { viewAction_ = VIEW_NO_ACTION; }
@@ -92,14 +114,9 @@ protected:
     void clearViewAction(unsigned int action);
     bool checkViewAction(unsigned int action);
 
-    enum AndromedaViewFlags
-    {
-        VIEW_NO_FLAGS = 0x00,
 
-        // Drawing flags
-        VIEW_FLAG_DRAW_CURSOR = 0x01,
-        VIEW_FLAG_DRAW_OVERLAY,
-    };
+
+    unsigned char cursorStyle_;     // Cursor style
 
     unsigned int viewFlags_;    // View flags
     void setViewFlags(unsigned int flags, bool on = true);

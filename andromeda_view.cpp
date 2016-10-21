@@ -8,7 +8,8 @@
 AndromedaView::AndromedaView(QWidget *parent) :
     QGraphicsView(parent),
     viewAction_(VIEW_NO_ACTION),
-    viewFlags_(VIEW_FLAG_DRAW_CURSOR)
+    cursorStyle_(VIEW_CURSOR_CROSS_SMALL),
+    viewFlags_(VIEW_NO_FLAGS)
 {
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -162,6 +163,12 @@ void AndromedaView::keyPressEvent(QKeyEvent *event)
         cancelViewAction();
         scene_->update();
         break;
+
+    case Qt::Key_C: //TODO - remove this, just a test
+        setCursorStyle(getCursorStyle() == VIEW_CURSOR_CROSS_LARGE ? VIEW_CURSOR_CROSS_SMALL : VIEW_CURSOR_CROSS_LARGE);
+        scene_->update();
+        break;
+
     default:
         accepted = false;
         break;
@@ -419,8 +426,7 @@ void AndromedaView::paintEvent(QPaintEvent *event)
     QPainter painter(viewport());
 
     // Draw the cursor
-    if (checkViewFlags(VIEW_FLAG_DRAW_CURSOR))
-        drawCursor(&painter, event->rect());
+    drawCursor(&painter, event->rect());
 
     // Draw the overlay
     if (checkViewFlags(VIEW_FLAG_DRAW_OVERLAY))
@@ -436,26 +442,51 @@ void AndromedaView::drawCursor(QPainter *painter, QRect rect)
 {
     if (painter == NULL) return;
 
-#define CURSOR 10
-
     QPoint viewPos = mapFromScene(cursorPos_);
+    int x = viewPos.x();
+    int y = viewPos.y();
 
     QPen p;
     p.setWidth(1);
 
     painter->setPen(p);
 
-    int x = viewPos.x();
-    int y = viewPos.y();
-
-    // Is the cursor position in view?
-    if ((viewPos.x() > -CURSOR) &&
-        (viewPos.x() < (width() + CURSOR)) &&
-        (viewPos.y() > -CURSOR) &&
-        (viewPos.y() < (height() + CURSOR)))
+    switch (cursorStyle_)
     {
-        painter->drawLine(x-CURSOR,y,x+CURSOR,y);
-        painter->drawLine(x,y-CURSOR,x,y+CURSOR);
+    default:
+    case VIEW_CURSOR_NONE:
+        return;
+
+    // Draw a small cross at the cursor position
+    case VIEW_CURSOR_CROSS_SMALL:
+#define CURSOR 10
+        // Is the cursor position in view?
+        if ((viewPos.x() > -CURSOR) &&
+            (viewPos.x() < (width() + CURSOR)) &&
+            (viewPos.y() > -CURSOR) &&
+            (viewPos.y() < (height() + CURSOR)))
+        {
+            painter->drawLine(x-CURSOR,y,x+CURSOR,y);
+            painter->drawLine(x,y-CURSOR,x,y+CURSOR);
+        }
+        break;
+
+    case VIEW_CURSOR_CROSS_LARGE:
+
+        // Draw horizontal line
+        painter->drawLine(rect.left() - 1,
+                          y,
+                          rect.right() + 1,
+                          y);
+
+        // Draw vertical line
+        painter->drawLine(x,
+                          rect.top() - 1,
+                          x,
+                          rect.bottom() + 1);
+
+        break;
+
     }
 }
 
@@ -556,4 +587,12 @@ void AndromedaView::clearViewFlags(unsigned int flags)
 bool AndromedaView::checkViewFlags(unsigned int flags)
 {
     return (viewFlags_ & flags) > 0;
+}
+
+void AndromedaView::setCursorStyle(unsigned char style)
+{
+    if (style < VIEW_CURSOR_NUM_STYLES)
+    {
+        cursorStyle_ = style;
+    }
 }
