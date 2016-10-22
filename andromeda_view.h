@@ -55,6 +55,14 @@ public:
         VIEW_ACTION_SELECTING = 0x01,    // Drawing a selection rectangle
     };
 
+    // Action functions
+    unsigned int getAction();
+    QList<unsigned int> getActionStack() { return actionStack_; }
+    bool pushAction(unsigned int action, bool allowDuplicates = false);
+    bool popAction();
+    bool popAction(unsigned int action);
+    void clearActions();
+
     enum AndromedaViewFlags
     {
         VIEW_NO_FLAGS = 0x00,
@@ -62,6 +70,10 @@ public:
         // Drawing flags
         VIEW_FLAG_DRAW_OVERLAY = 0x01,
     };
+
+    void setViewFlags(unsigned int flags, bool on = true);
+    void clearViewFlags(unsigned int flags);
+    bool checkViewFlags(unsigned int flags);
 
     enum AndromedaCursorStyles
     {
@@ -106,21 +118,12 @@ protected:
     // Selection functions
     QRectF getSelectionMarquee();
 
-    // State machine functions
-    unsigned int viewAction_;    // View state machine (current action)
-    void cancelViewAction() { viewAction_ = VIEW_NO_ACTION; }
-    void setViewAction(unsigned int action, bool on = true);
-    void clearViewAction(unsigned int action);
-    bool checkViewAction(unsigned int action);
-
-
+    QList<unsigned int> actionStack_;
 
     unsigned char cursorStyle_;     // Cursor style
 
     unsigned int viewFlags_;    // View flags
-    void setViewFlags(unsigned int flags, bool on = true);
-    void clearViewFlags(unsigned int flags);
-    bool checkViewFlags(unsigned int flags);
+
 
 private:
 };

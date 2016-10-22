@@ -30,7 +30,12 @@ protected:
     // Actions available for the symbol editor view
     enum SymbolViewerActions
     {
+        //TODO - these are just hacks
+        //TODO - Implement an "action stack"
+        // e.g. pressing 'escape' pops the top action from the stack for multi-sequence actions
+        // selecting a new tool clears the action stack
         VIEW_ACTION_DRAW_LINE = 0x10000,
+        VIEW_ACTION_ADD_CURVE,
     };
 
 };

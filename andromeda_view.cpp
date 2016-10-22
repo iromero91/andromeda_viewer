@@ -7,7 +7,6 @@
 
 AndromedaView::AndromedaView(QWidget *parent) :
     QGraphicsView(parent),
-    viewAction_(VIEW_NO_ACTION),
     cursorStyle_(VIEW_CURSOR_CROSS_SMALL),
     viewFlags_(VIEW_NO_FLAGS)
 {
@@ -160,7 +159,7 @@ void AndromedaView::keyPressEvent(QKeyEvent *event)
         break;
     // Cancel the current action
     case Qt::Key_Escape:
-        cancelViewAction();
+        popAction();
         scene_->update();
         break;
 
@@ -223,7 +222,7 @@ void AndromedaView::mousePressEvent(QMouseEvent *event)
     {
         startPos_ = cursorPos_;
 
-        setViewAction(VIEW_ACTION_SELECTING);
+        pushAction(VIEW_ACTION_SELECTING);
     }
 }
 
@@ -243,71 +242,78 @@ void AndromedaView::mouseReleaseEvent(QMouseEvent *event)
         QPointF pixels = unitsPerPixel();
         QRectF selection = getSelectionMarquee();
 
-        // Ignore 'small' selections
-        bool validSelection = (checkViewAction(VIEW_ACTION_SELECTING)) &&
-                              (qAbs(selection.width() / pixels.x()) > 5) &&
-                              (qAbs(selection.height() / pixels.y()) > 5);
+        unsigned int action = getAction();
 
-
-        clearViewAction(VIEW_ACTION_SELECTING);
-
-        if (validSelection)
+        if (action == VIEW_ACTION_SELECTING)
         {
 
-            QList<QGraphicsItem*> items;
+            // Finished selecting
+            popAction();
 
-            // Selection drawn left-to-right requires full selection
-            if (selection.width() > 0)
+            // Ignore 'small' selections
+            bool validSelection = ((qAbs(selection.width()  / pixels.x()) > 5) &&
+                                   (qAbs(selection.height() / pixels.y()) > 5));
+
+
+
+            if (validSelection)
             {
-                items = scene_->items(selection, Qt::ContainsItemShape);
+
+                QList<QGraphicsItem*> items;
+
+                // Selection drawn left-to-right requires full selection
+                if (selection.width() > 0)
+                {
+                    items = scene_->items(selection, Qt::ContainsItemShape);
+                }
+                else
+                {
+                    items = scene_->items(selection, Qt::IntersectsItemShape);
+                }
+
+                bool select = true;
+
+                if (event->modifiers() & Qt::ControlModifier)
+                {
+                    select = (event->modifiers() & Qt::ShiftModifier) == 0;
+                }
+                else
+                {
+                    scene_->clearSelection();
+                }
+
+                foreach (QGraphicsItem *item, items)
+                {
+                    if (item == NULL) continue;
+
+                    item->setSelected(select);
+                }
+
+                scene_->update();
             }
             else
             {
-                items = scene_->items(selection, Qt::IntersectsItemShape);
-            }
+                QGraphicsItem *item = scene_->itemAt(cursorPos_, QTransform());
 
-            bool select = true;
+                // NO item at location, de-select all items
+                if (item == NULL)
+                {
+                    scene_->clearSelection();
+                }
+                // Toggle selection with control modifier
+                else if (event->modifiers() & Qt::ControlModifier)
+                {
+                    item->setSelected(!item->isSelected());
+                }
+                // Otherwise, clear selection and select this one item
+                else
+                {
+                    scene_->clearSelection();
+                    item->setSelected(true);
+                }
 
-            if (event->modifiers() & Qt::ControlModifier)
-            {
-                select = (event->modifiers() & Qt::ShiftModifier) == 0;
+                scene_->update();
             }
-            else
-            {
-                scene_->clearSelection();
-            }
-
-            foreach (QGraphicsItem *item, items)
-            {
-                if (item == NULL) continue;
-
-                item->setSelected(select);
-            }
-
-            scene_->update();
-        }
-        else
-        {
-            QGraphicsItem *item = scene_->itemAt(cursorPos_, QTransform());
-
-            // NO item at location, de-select all items
-            if (item == NULL)
-            {
-                scene_->clearSelection();
-            }
-            // Toggle selection with control modifier
-            else if (event->modifiers() & Qt::ControlModifier)
-            {
-                item->setSelected(!item->isSelected());
-            }
-            // Otherwise, clear selection and select this one item
-            else
-            {
-                scene_->clearSelection();
-                item->setSelected(true);
-            }
-
-            scene_->update();
         }
     }
 }
@@ -345,15 +351,6 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
         panning = false;
     }
 
-    if (event->buttons() & Qt::LeftButton)
-    {
-
-    }
-    else
-    {
-        clearViewAction(VIEW_ACTION_SELECTING);
-    }
-
     QGraphicsView::mouseMoveEvent(event);
 }
 
@@ -375,7 +372,7 @@ void AndromedaView::drawForeground(QPainter *painter, const QRectF &rect)
 {
     if (painter == NULL) return;
 
-    if (checkViewAction(VIEW_ACTION_SELECTING))
+    if (getAction() == VIEW_ACTION_SELECTING)
     {
         drawSelectionMarquee(painter, rect);
     }
@@ -405,10 +402,6 @@ void AndromedaView::drawSelectionMarquee(QPainter *painter, const QRectF &rect)
 
 QRectF AndromedaView::getSelectionMarquee()
 {
-    // Only returns valid selection rect if currently selecting
-    if (!checkViewAction(VIEW_ACTION_SELECTING))
-        return QRectF();
-
     return QRectF(startPos_.x(),
                   startPos_.y(),
                   cursorPos_.x() - startPos_.x(),
@@ -548,22 +541,51 @@ void AndromedaView::scaleRelative(double scaling)
     setScalingFactor(getScalingFactor() * scaling);
 }
 
-void AndromedaView::setViewAction(unsigned int action, bool on)
+unsigned int AndromedaView::getAction()
 {
-    if (on)
-        viewAction_ |= action;
-    else
-        viewAction_ &= ~action;
+    if (actionStack_.count() > 0)
+    {
+        return actionStack_.last();
+    }
+
+    return (unsigned int) VIEW_NO_ACTION;
 }
 
-void AndromedaView::clearViewAction(unsigned int action)
+bool AndromedaView::pushAction(unsigned int action, bool allowDuplicates)
 {
-    setViewAction(action, false);
+    if (!allowDuplicates && (action == getAction()))
+        return false;
+
+    actionStack_.append(action);
+
+    return true;
 }
 
-bool AndromedaView::checkViewAction(unsigned int action)
+bool AndromedaView::popAction()
 {
-    return (viewAction_ & action) > 0;
+    if (actionStack_.count() > 0)
+    {
+        actionStack_.removeLast();
+
+        return true;
+    }
+
+    return false;
+}
+
+bool AndromedaView::popAction(unsigned int action)
+{
+    if (getAction() == action)
+    {
+        return popAction();
+    }
+
+    return false;
+}
+
+void AndromedaView::clearActions()
+{
+    actionStack_.clear();
 }
 
 void AndromedaView::setViewFlags(unsigned int flags, bool on)

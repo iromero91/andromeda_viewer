@@ -1,5 +1,10 @@
 #include "symbol_editor_view.h"
 
+#include "geometry.h"
+
+#include <QDebug>
+#include <QLineF>
+
 SymbolEditorView::SymbolEditorView(QWidget *parent) : AndromedaView(parent)
 {
     tmpLine_.setFlag(QGraphicsItem::ItemIsSelectable, false);
@@ -10,20 +15,39 @@ SymbolEditorView::SymbolEditorView(QWidget *parent) : AndromedaView(parent)
 
 void SymbolEditorView::drawForeground(QPainter *painter, const QRectF &rect)
 {
-    if (checkViewAction(VIEW_ACTION_DRAW_LINE))
+    QPen pen(QColor(150,150,150,150));
+    pen.setWidth(1);
+    pen.setCosmetic(true);
+    pen.setStyle(Qt::DashLine);
+
+    painter->setPen(pen);
+
+    switch (getAction())
     {
-        QPen pen(QColor(150,150,150,150));
-        pen.setWidth(1);
-        pen.setCosmetic(true);
-        pen.setStyle(Qt::DashLine);
-
-        painter->setPen(pen);
-
+    case VIEW_ACTION_DRAW_LINE:
         if (tmpLine_.points_.count() > 0)
         {
             painter->drawLine(tmpLine_.points_.last().point, cursorPos_);
         }
+        break;
+    case VIEW_ACTION_ADD_CURVE:
+        if (tmpLine_.points_.count() > 1)
+        {
+
+            QPointF p1 = tmpLine_.points_.at(tmpLine_.points_.count()-2).point;
+            QPointF p2 = tmpLine_.points_.last().point;
+
+            QLineF line(p1, p2);
+
+            QPointF mid = Midpoint(p1, p2);
+
+            painter->drawLine(tmpLine_.points_.last().point, cursorPos_);
+            painter->drawLine(tmpLine_.points_.at(tmpLine_.points_.count()-2).point, cursorPos_);
+        }
+    default:
+        break;
     }
+
     AndromedaView::drawForeground(painter,rect);
 }
 
@@ -52,12 +76,32 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 
 void SymbolEditorView::mousePressEvent(QMouseEvent *event)
 {
-    bool accepted = false;
+    bool accepted = true;
 
-    if ((event->button() == Qt::LeftButton) && checkViewAction(VIEW_ACTION_DRAW_LINE))
+    if ((event->button() == Qt::LeftButton))
     {
-        addLinePoint(cursorPos_);
-        accepted = true;
+        switch (getAction())
+        {
+        case VIEW_ACTION_DRAW_LINE:
+            addLinePoint(cursorPos_);
+            accepted = true;
+
+            if (event->modifiers() == Qt::AltModifier)
+            {
+                if (tmpLine_.points_.count() > 1)
+                {
+                    pushAction(VIEW_ACTION_ADD_CURVE);
+                }
+            }
+
+            break;
+        case VIEW_ACTION_ADD_CURVE:
+            //TODO
+            break;
+        default:
+            accepted = false;
+            break;
+        }
     }
 
 
@@ -77,20 +121,19 @@ void SymbolEditorView::mouseMoveEvent(QMouseEvent *event)
 
 void SymbolEditorView::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    unsigned int action = getAction();
+
     if (event->button() == Qt::LeftButton)
     {
-        if (!checkViewAction(VIEW_ACTION_DRAW_LINE))
+
+        if (action != VIEW_ACTION_DRAW_LINE)
         {
-            setViewAction(VIEW_ACTION_DRAW_LINE);
-
-            startPos_ = cursorPos_;
-
             startLine(cursorPos_);
         }
         else
         {
             finishLine(cursorPos_);
-            clearViewAction(VIEW_ACTION_DRAW_LINE);
+            popAction();
         }
     }
 
@@ -102,14 +145,14 @@ void SymbolEditorView::startLine(QPointF pos)
     tmpLine_.clear();
     if (tmpLine_.addPoint(pos))
     {
-        setViewAction(VIEW_ACTION_DRAW_LINE);
+        pushAction(VIEW_ACTION_DRAW_LINE);
         scene_->addItem(&tmpLine_);
     }
 }
 
 void SymbolEditorView::addLinePoint(QPointF pos)
 {
-    if (!checkViewAction(VIEW_ACTION_DRAW_LINE))
+    if (getAction() != VIEW_ACTION_DRAW_LINE)
         return;
 
     tmpLine_.addPoint(pos);
@@ -124,7 +167,7 @@ void SymbolEditorView::addLinePoint(QPointF pos)
 
 void SymbolEditorView::finishLine(QPointF pos)
 {
-    clearViewAction(VIEW_ACTION_DRAW_LINE);
+    popAction();
 
     tmpLine_.addPoint(pos);
 
@@ -153,7 +196,7 @@ void SymbolEditorView::addLineToScene()
 
 void SymbolEditorView::cancelLine()
 {
-    clearViewAction(VIEW_ACTION_DRAW_LINE);
+    popAction(VIEW_ACTION_DRAW_LINE);
     tmpLine_.clear();
 
     scene_->removeItem(&tmpLine_);
