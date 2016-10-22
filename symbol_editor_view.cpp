@@ -140,6 +140,16 @@ void SymbolEditorView::mouseDoubleClickEvent(QMouseEvent *event)
     //AndromedaView::mouseDoubleClickEvent(event);
 }
 
+void SymbolEditorView::onActionAdded(unsigned int action)
+{
+    //TODO
+}
+
+void SymbolEditorView::onActionCancelled(unsigned int action)
+{
+    //TODO
+}
+
 void SymbolEditorView::startLine(QPointF pos)
 {
     tmpLine_.clear();

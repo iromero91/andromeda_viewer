@@ -89,6 +89,8 @@ public slots:
 signals:
     // Called when the user cursor changes (in scene coordinates)
     void cursorPositionChanged(QPointF pos);
+    void actionAdded(unsigned int action);
+    void actionCancelled(unsigned int action);
 
 protected:
     // UI event callbacks
@@ -119,6 +121,8 @@ protected:
     QRectF getSelectionMarquee();
 
     QList<unsigned int> actionStack_;
+    virtual void onActionAdded(unsigned int action) = 0;
+    virtual void onActionCancelled(unsigned int action) = 0;
 
     unsigned char cursorStyle_;     // Cursor style
 

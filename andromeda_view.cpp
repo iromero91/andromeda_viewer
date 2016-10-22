@@ -558,6 +558,10 @@ bool AndromedaView::pushAction(unsigned int action, bool allowDuplicates)
 
     actionStack_.append(action);
 
+    onActionAdded(action);
+
+    emit actionAdded(action);
+
     return true;
 }
 
@@ -565,7 +569,13 @@ bool AndromedaView::popAction()
 {
     if (actionStack_.count() > 0)
     {
+        unsigned int action = actionStack_.last();
+
         actionStack_.removeLast();
+
+        onActionCancelled(action);
+
+        emit actionCancelled(action);
 
         return true;
     }

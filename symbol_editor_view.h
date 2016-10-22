@@ -38,6 +38,9 @@ protected:
         VIEW_ACTION_ADD_CURVE,
     };
 
+    void onActionAdded(unsigned int action);
+    void onActionCancelled(unsigned int action);
+
 };
 
 #endif // SYMBOL_EDITOR_VIEW_H
