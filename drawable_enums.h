@@ -1,0 +1,5 @@
+#ifndef DRAWABLE_ENUMS_H
+#define DRAWABLE_ENUMS_H
+
+#endif // DRAWABLE_ENUMS_H
+

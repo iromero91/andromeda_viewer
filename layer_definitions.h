@@ -20,7 +20,7 @@ enum class LAYER_MODE : uint8_t {
 };
 
 // Layer enumerations
-enum class LAYER : uint64_t {
+enum class LAYER : quint64 {
 
     // Mask for no layers
     NONE = 0x00,
