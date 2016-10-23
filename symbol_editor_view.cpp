@@ -142,16 +142,17 @@ void SymbolEditorView::mouseReleaseEvent(QMouseEvent *event)
 
 void SymbolEditorView::mouseMoveEvent(QMouseEvent *event)
 {
+    AndromedaView::mouseMoveEvent(event);
+
     QPointF pos = mapToScene(event->pos());
 
     switch (getAction())
     {
     case VIEW_ACTION_ELLIPSE_SET_RADIUS:
-        setEllipseRadius(pos);
+        setEllipseRadius(cursorPos_);
         break;
     }
 
-    AndromedaView::mouseMoveEvent(event);
 }
 
 void SymbolEditorView::mouseDoubleClickEvent(QMouseEvent *event)
@@ -193,6 +194,32 @@ void SymbolEditorView::onActionCancelled(unsigned int action)
         tmpLine_.setVisible(false);
         break;
     }
+}
+
+void SymbolEditorView::lineMode()
+{
+    switch (getAction())
+    {
+    case VIEW_ACTION_LINE_ADD_POINT:
+    case VIEW_ACTION_LINE_SET_START:
+        return;
+    }
+
+    clearActions();
+    pushAction(VIEW_ACTION_LINE_SET_START);
+}
+
+void SymbolEditorView::rectMode()
+{
+    switch (getAction())
+    {
+    case VIEW_ACTION_RECT_SET_START:
+    case VIEW_ACTION_RECT_SET_CORNER:
+        return;
+    }
+
+    clearActions();
+    pushAction(VIEW_ACTION_RECT_SET_START);
 }
 
 void SymbolEditorView::startLine(QPointF pos)
@@ -242,9 +269,21 @@ void SymbolEditorView::addLineToScene()
             line->addPoint(point);
         }
 
-        lines_.append(line);
         scene_->addItem(line);
     }
+}
+
+void SymbolEditorView::ellipseMode()
+{
+    switch (getAction())
+    {
+    case VIEW_ACTION_ELLIPSE_SET_CENTER:
+    case VIEW_ACTION_ELLIPSE_SET_RADIUS:
+        return;
+    }
+
+    clearActions();
+    pushAction(VIEW_ACTION_ELLIPSE_SET_CENTER);
 }
 
 void SymbolEditorView::setEllipseCenter(QPointF point)
