@@ -45,5 +45,11 @@ void AndromedaDrawable::drawBoundingBox(QPainter *painter)
     painter->setPen(boundingBoxPen_);
     painter->setBrush(Qt::NoBrush);
 
-    painter->drawRect(boundingRect());
+    QRectF r = boundingRect();
+
+    double t = thickness_ / 2;
+
+    r.adjust(t,t,-t,-t);
+
+    painter->drawRect(r);
 }
