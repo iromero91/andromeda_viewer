@@ -46,6 +46,10 @@ public:
     void setCursorStyle(unsigned char style);
     unsigned char getCursorStyle() { return cursorStyle_; }
 
+    // Item deletion
+    void deleteItems(QList<QGraphicsItem*> items);
+    void deleteSelectedItems();
+
     /* View State Machine */
     enum AndromedaViewActions
     {

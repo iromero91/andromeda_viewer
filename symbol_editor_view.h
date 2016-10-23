@@ -52,7 +52,6 @@ protected:
 
     void onActionAdded(unsigned int action);
     void onActionCancelled(unsigned int action);
-
 };
 
 #endif // SYMBOL_EDITOR_VIEW_H

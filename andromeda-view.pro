@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     andromeda_drawable.cpp \
     lwpolyline.cpp \
     symbol_editor_view.cpp \
-    geometry.cpp
+    geometry.cpp \
+    andromeda_ellipse.cpp
 
 HEADERS  += mainwindow.h \
     andromeda_scene.h \
@@ -29,6 +30,10 @@ HEADERS  += mainwindow.h \
     andromeda_drawable.h \
     lwpolyline.h \
     symbol_editor_view.h \
-    geometry.h
+    geometry.h \
+    andromeda_ellipse.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    fonts.qrc

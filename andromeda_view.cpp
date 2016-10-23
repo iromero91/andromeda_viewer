@@ -32,6 +32,31 @@ void AndromedaView::setScene(AndromedaScene *scene)
     QGraphicsView::setScene(scene);
 }
 
+void AndromedaView::deleteItems(QList<QGraphicsItem *> items)
+{
+    if (scene_ == NULL) return;
+
+    foreach (QGraphicsItem* item, items)
+    {
+        // NULL ptr
+        if (item == NULL) continue;
+
+        // Item is NOT in the scene
+        if (item->scene() != scene_) continue;
+
+        scene_->removeItem(item);
+    }
+
+    scene_->update();
+}
+
+void AndromedaView::deleteSelectedItems()
+{
+    if (scene_ == NULL) return;
+
+    deleteItems(scene_->selectedItems());
+}
+
 /**
  * @brief AndromedaView::setCursorPos
  * Set the position of the cursor (in scene coordinates)

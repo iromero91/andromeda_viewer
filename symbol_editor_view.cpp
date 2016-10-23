@@ -62,6 +62,9 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 
     switch (event->key())
     {
+    case Qt::Key_X: // Delete
+        deleteSelectedItems();
+        break;
     case Qt::Key_Escape:
         popAction();
         break;
