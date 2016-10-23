@@ -115,6 +115,12 @@ void AndromedaView::moveCursor(double dx, double dy, bool panPastEdges)
  */
 void AndromedaView::snapMouseToCursor()
 {
+    // If the cursorPos is off screen, focus view on that point
+    if (!sceneRect().contains(cursorPos_))
+    {
+        centerOn(cursorPos_);
+    }
+
     QPoint pos = mapToGlobal(mapFromScene(cursorPos_));
 
     cursor().setPos(pos);
@@ -162,10 +168,19 @@ void AndromedaView::keyPressEvent(QKeyEvent *event)
 
     switch (event->key())
     {
-    // Reset the cursor origin to the current cursor position
     case Qt::Key_Space:
-        cursorOrigin_ = cursorPos_;
-        emit cursorPositionChanged(cursorPos_);
+        // Center the screen at the cursor location
+        if (event->modifiers() == Qt::ControlModifier)
+        {
+            centerOn(cursorPos_);
+        }
+        // Reset the cursor origin to the current cursor position
+        else
+        {
+            cursorOrigin_ = cursorPos_;
+            emit cursorPositionChanged(cursorPos_);
+        }
+        snapMouseToCursor();
         break;
     // Move the cursor left
     case Qt::Key_Left:

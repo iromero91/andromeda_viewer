@@ -20,36 +20,36 @@ public:
     AndromedaView(QWidget *parent = 0);
 
     void setScene(AndromedaScene *scene);
-    AndromedaScene* getScene() { return scene_; }
+    AndromedaScene* getScene(void) { return scene_; }
 
     // Viewport functions
-    QPointF getCenterLocation();
-    QRectF getViewport();
-    QPointF unitsPerPixel();
+    QPointF getCenterLocation(void);
+    QRectF getViewport(void);
+    QPointF unitsPerPixel(void);
 
     // Cursor functions
-    QPointF getCursorPos() { return cursorPos_; }
-    QPointF getCursorOrigin() { return cursorOrigin_; }
+    QPointF getCursorPos(void) { return cursorPos_; }
+    QPointF getCursorOrigin(void) { return cursorOrigin_; }
     void setCursorPos(QPointF pos, bool panPastEdges = false);
     void moveCursor(QPointF offset, bool panPastEdges = false);
     void moveCursor(double dx, double dy, bool panPastEdges = false);
-    void snapMouseToCursor();
+    void snapMouseToCursor(void);
 
     void scroll(QPoint offset);
     void scroll(int dx, int dy);
 
     // View scaling functions
-    double getScalingFactor() { return transform().m11(); }
+    double getScalingFactor(void) { return transform().m11(); }
     void setScalingFactor(double scaling);
     void scaleRelative(double scaling);
 
     // Cursor functions
     void setCursorStyle(unsigned char style);
-    unsigned char getCursorStyle() { return cursorStyle_; }
+    unsigned char getCursorStyle(void) { return cursorStyle_; }
 
     // Item deletion
     void deleteItems(QList<QGraphicsItem*> items);
-    void deleteSelectedItems();
+    void deleteSelectedItems(void);
 
     /* View State Machine */
     enum AndromedaViewActions
@@ -60,12 +60,12 @@ public:
     };
 
     // Action functions
-    unsigned int getAction();
-    QList<unsigned int> getActionStack() { return actionStack_; }
+    unsigned int getAction(void);
+    QList<unsigned int> getActionStack(void) { return actionStack_; }
     bool pushAction(unsigned int action, bool allowDuplicates = false);
-    bool popAction();
+    bool popAction(void);
     bool popAction(unsigned int action);
-    void clearActions();
+    void clearActions(void);
 
     enum AndromedaViewFlags
     {
@@ -123,7 +123,7 @@ protected:
     QPointF startPos_;  // Location of the 'starting' position (used for multiple functions)
 
     // Selection functions
-    QRectF getSelectionMarquee();
+    QRectF getSelectionMarquee(void);
 
     QList<unsigned int> actionStack_;
     virtual void onActionAdded(unsigned int action) = 0;
