@@ -10,6 +10,9 @@
 
 #include <QString>
 
+#include "drawable_enums.h"
+#include "layer_definitions.h"
+
 const QColor SYMBOL_LINE_COLOR(200,50,50);
 const QColor SYMBOL_FILL_COLOR(250,250,200);
 const QColor SYMBOL_BB_COLOR(150,150,150,150);
@@ -48,6 +51,9 @@ public:
 
     QBrush getFillBrush(void) { return fillBrush_; }
     void setFillBrush(QBrush brush) { fillBrush_ = brush; }
+
+    void setLayer(quint64 layer);
+    quint64 getLayer(void);
 
 protected:
     double thickness_;  // Line thickness
