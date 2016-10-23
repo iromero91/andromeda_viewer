@@ -12,7 +12,50 @@
 LWPolyline::LWPolyline() :
     AndromedaDrawable()
 {
-    setData(DRAWABLE_TYPE, DRAWABLE_LWPOLYLINE);
+}
+
+LWPolypoint LWPolyline::getPolypoint(int index)
+{
+    if (index >= points_.count())
+    {
+        LWPolypoint p;
+        p.point = QPointF();
+        p.angle = 0;
+
+        return p;
+    }
+
+    return points_.at(index);
+}
+
+QPointF LWPolyline::getPoint(int index)
+{
+    return getPolypoint(index).point;
+}
+
+double LWPolyline::getAngle(int index)
+{
+    return getPolypoint(index).angle;
+}
+
+void LWPolyline::setPoint(int index, QPointF point)
+{
+    if (index < points_.count())
+    {
+        LWPolypoint p = points_.at(index);
+        p.point = point;
+        points_.replace(index, p);
+    }
+}
+
+void LWPolyline::setAngle(int index, double angle)
+{
+    if (index < points_.count())
+    {
+        LWPolypoint p = points_.at(index);
+        p.angle = angle;
+        points_.replace(index, p);
+    }
 }
 
 QRectF LWPolyline::boundingRect() const
@@ -61,6 +104,7 @@ void LWPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     painter->setPen(pen);
 
+    /*
     if (filled_)
     {
         c = brush.color();
@@ -73,6 +117,11 @@ void LWPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         brush.setColor(c);
 
         painter->setBrush(brush);
+    }
+    */
+    if (isClosed())
+    {
+        painter->setBrush(QBrush(SYMBOL_FILL_COLOR));
     }
     else
     {
@@ -144,6 +193,9 @@ bool LWPolyline::addPoint(LWPolypoint point)
         return false;
 
     points_.append(point);
+
+    prepareGeometryChange();
+
     return true;
 }
 

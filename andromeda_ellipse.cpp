@@ -1,8 +1,5 @@
 #include "andromeda_ellipse.h"
 
-#include <QPainter>
-#include <QStyleOptionGraphicsItem>
-
 #include <math.h>
 
 AndromedaEllipse::AndromedaEllipse() :
@@ -10,7 +7,6 @@ AndromedaEllipse::AndromedaEllipse() :
      rx_(0),
      ry_(0)
 {
-    setData(DRAWABLE_TYPE, DRAWABLE_ELLIPSE);
 }
 
 QRectF AndromedaEllipse::boundingRect() const
@@ -52,6 +48,7 @@ void AndromedaEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
     painter->setPen(pen);
 
+    /*
     if (filled_)
     {
         c = brush.color();
@@ -67,6 +64,8 @@ void AndromedaEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     {
         painter->setBrush(Qt::NoBrush);
     }
+    */
+    painter->setBrush(QBrush(SYMBOL_FILL_COLOR));
 
     painter->drawEllipse(QPointF(0,0), rx_, ry_);
 

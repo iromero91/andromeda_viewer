@@ -11,6 +11,7 @@
 
 const double PT_EPSILON = 0.01;
 
+//TODO change this to a map
 typedef struct
 
 {
@@ -22,6 +23,13 @@ class LWPolyline : public AndromedaDrawable
 {
 public:
     LWPolyline();
+
+    LWPolypoint getPolypoint(int index);
+    QPointF getPoint(int index);
+    double getAngle(int index);
+
+    void setPoint(int index, QPointF point);
+    void setAngle(int index, double angle);
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;

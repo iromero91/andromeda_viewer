@@ -7,7 +7,8 @@
 #include <QColor>
 #include <QPen>
 #include <QBrush>
-
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
 #include <QString>
 
 #include "drawable_enums.h"
@@ -59,6 +60,12 @@ protected:
     double thickness_;  // Line thickness
     bool filled_;       // Is the shape filled?
     bool drawBoundingBox_;
+
+    //TODO
+    /*
+    QColor getLineColor(void);
+    QColor getFillColor(void);
+    */
 
     QPen linePen_;
     QPen boundingBoxPen_;

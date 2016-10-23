@@ -19,7 +19,7 @@ AndromedaView::AndromedaView(QWidget *parent) :
     setRenderHint(QPainter::TextAntialiasing);
 
     setDragMode(QGraphicsView::RubberBandDrag);
-    setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     // Add a default scene
     setScene(new AndromedaScene());

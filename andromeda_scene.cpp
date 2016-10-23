@@ -11,6 +11,8 @@ AndromedaScene::AndromedaScene(QObject *parent) :
     layerMask_((uint64_t) (LAYER_MASK::ALL))
 {
     init();
+
+
 }
 
 void AndromedaScene::init()

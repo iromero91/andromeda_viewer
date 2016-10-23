@@ -5,6 +5,7 @@
 
 #include "lwpolyline.h"
 #include "andromeda_ellipse.h"
+#include "andromeda_rect.h"
 
 class SymbolEditorView : public AndromedaView
 {
@@ -25,18 +26,31 @@ protected:
     // LWPolyline creation
     LWPolyline tmpLine_;
     void lineMode();
-    void rectMode();
     void startLine(QPointF pos);
     void addLinePoint(QPointF pos);
     void finishLine(QPointF pos);
-    void addLineToScene();
+    void addLine();
+
+    // Add a temporary item for graphics creation
+    void addTempItem(QGraphicsItem *item);
+
+    // Rectangle creation
+    AndromedaRect tmpRect_;
+    void rectMode();
+    void startRect(QPointF pos, double width = 0, double height = 0);
+    void updateRect(QPointF pos);
+    void addRect();
+    void addRect(QPointF pStart, QPointF pEnd);
+    void addRect(QPointF pStart, double width, double height);
 
     // Ellipse creation
     AndromedaEllipse tmpEllipse_;
     void ellipseMode();
     void setEllipseCenter(QPointF point);
     void setEllipseRadius(QPointF point);
-    void addEllipseToScene();
+    void addEllipse();
+    void addEllipse(QPointF center, double radius);
+    void addEllipse(QPointF center, double rx, double ry);
 
     // Actions available for the symbol editor view
     enum SymbolViewerActions
@@ -52,7 +66,7 @@ protected:
         VIEW_ACTION_ELLIPSE_SET_RADIUS,
 
         VIEW_ACTION_RECT_SET_START = 0x100020,
-        VIEW_ACTION_RECT_SET_CORNER,
+        VIEW_ACTION_RECT_SET_FINISH,
     };
 
     void onActionAdded(unsigned int action);

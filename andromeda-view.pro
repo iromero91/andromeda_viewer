@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     geometry.cpp \
     andromeda_ellipse.cpp \
     layer_definitions.cpp \
-    pcb_layers.cpp
+    pcb_layers.cpp \
+    andromeda_rect.cpp
 
 HEADERS  += mainwindow.h \
     andromeda_scene.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     andromeda_ellipse.h \
     layer_definitions.h \
     drawable_enums.h \
-    pcb_layers.h
+    pcb_layers.h \
+    andromeda_rect.h
 
 FORMS    += mainwindow.ui
 

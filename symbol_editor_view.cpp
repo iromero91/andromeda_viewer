@@ -12,19 +12,24 @@
 
 SymbolEditorView::SymbolEditorView(QWidget *parent) : AndromedaView(parent)
 {
-    tmpLine_.setFlag(QGraphicsItem::ItemIsSelectable, false);
-    tmpLine_.setFlag(QGraphicsItem::ItemIsFocusable, false);
-    tmpLine_.setAcceptHoverEvents(false);
-    tmpLine_.setVisible(false);
+    addTempItem(&tmpLine_);
+    addTempItem(&tmpEllipse_);
+    addTempItem(&tmpRect_);
 
-    scene_->addItem(&tmpLine_);
+}
 
-    tmpEllipse_.setFlag(QGraphicsItem::ItemIsSelectable, false);
-    tmpEllipse_.setFlag(QGraphicsItem::ItemIsFocusable, false);
-    tmpEllipse_.setAcceptHoverEvents(false);
-    tmpEllipse_.setVisible(false);
+void SymbolEditorView::addTempItem(QGraphicsItem *item)
+{
+    if (item == NULL) return;
 
-    scene_->addItem(&tmpEllipse_);
+    item->setFlag(QGraphicsItem::ItemIsSelectable, false);
+    item->setFlag(QGraphicsItem::ItemIsFocusable, false);
+    item->setAcceptHoverEvents(false);
+    item->setVisible(false);
+    item->setZValue(INT_MAX);
+
+    if (scene_ != NULL)
+        scene_->addItem(item);
 }
 
 void SymbolEditorView::drawForeground(QPainter *painter, const QRectF &rect)
@@ -43,6 +48,9 @@ void SymbolEditorView::drawForeground(QPainter *painter, const QRectF &rect)
         {
             painter->drawLine(tmpLine_.points_.last().point, cursorPos_);
         }
+        break;
+    case VIEW_ACTION_RECT_SET_FINISH:
+        painter->drawLine(startPos_, cursorPos_);
         break;
     case VIEW_ACTION_ELLIPSE_SET_RADIUS:
         painter->drawLine(tmpEllipse_.pos(), cursorPos_);
@@ -71,12 +79,14 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
     case Qt::Key_E:
         ellipseMode();
         break;
+    case Qt::Key_F:
+        //TODO - toggle shape fill
+        break;
     case Qt::Key_L:
         lineMode();
         break;
     case Qt::Key_R:
         rectMode();
-        break;
         break;
     default:
         accepted = false;
@@ -96,10 +106,14 @@ void SymbolEditorView::mousePressEvent(QMouseEvent *event)
 
     setCursorPos(mapToScene(event->pos()));
 
+    startPos_ = cursorPos_;
+
     if ((event->button() == Qt::LeftButton))
     {
         switch (getAction())
         {
+
+        // Line functions
         case VIEW_ACTION_LINE_SET_START:
             popAction();
             pushAction(VIEW_ACTION_LINE_ADD_POINT);
@@ -109,21 +123,30 @@ void SymbolEditorView::mousePressEvent(QMouseEvent *event)
             addLinePoint(cursorPos_);
             break;
 
+        // Ellipse functions
         case VIEW_ACTION_ELLIPSE_SET_CENTER:
-            startPos_ = cursorPos_;
 
             popAction();
             pushAction(VIEW_ACTION_ELLIPSE_SET_RADIUS);
 
-            tmpEllipse_.setVisible(true);
             setEllipseCenter(startPos_);
+            tmpEllipse_.setVisible(true);
 
             break;
-
         case VIEW_ACTION_ELLIPSE_SET_RADIUS:
             popAction();
-            addEllipseToScene();
+            addEllipse();
             break;
+
+        // Rect functions
+        case VIEW_ACTION_RECT_SET_START:
+            startRect(cursorPos_);
+            tmpRect_.setVisible(true);
+            break;
+        case VIEW_ACTION_RECT_SET_FINISH:
+            addRect();
+            break;
+
         default:
             accepted = false;
             break;
@@ -144,12 +167,13 @@ void SymbolEditorView::mouseMoveEvent(QMouseEvent *event)
 {
     AndromedaView::mouseMoveEvent(event);
 
-    QPointF pos = mapToScene(event->pos());
-
     switch (getAction())
     {
     case VIEW_ACTION_ELLIPSE_SET_RADIUS:
         setEllipseRadius(cursorPos_);
+        break;
+    case VIEW_ACTION_RECT_SET_FINISH:
+        updateRect(cursorPos_);
         break;
     }
 
@@ -193,6 +217,10 @@ void SymbolEditorView::onActionCancelled(unsigned int action)
     case VIEW_ACTION_LINE_ADD_POINT:
         tmpLine_.setVisible(false);
         break;
+    case VIEW_ACTION_RECT_SET_FINISH:
+    case VIEW_ACTION_RECT_SET_START:
+        tmpRect_.setVisible(false);
+        break;
     }
 }
 
@@ -209,19 +237,6 @@ void SymbolEditorView::lineMode()
     pushAction(VIEW_ACTION_LINE_SET_START);
 }
 
-void SymbolEditorView::rectMode()
-{
-    switch (getAction())
-    {
-    case VIEW_ACTION_RECT_SET_START:
-    case VIEW_ACTION_RECT_SET_CORNER:
-        return;
-    }
-
-    clearActions();
-    pushAction(VIEW_ACTION_RECT_SET_START);
-}
-
 void SymbolEditorView::startLine(QPointF pos)
 {
     tmpLine_.clear();
@@ -236,11 +251,13 @@ void SymbolEditorView::addLinePoint(QPointF pos)
     if (getAction() != VIEW_ACTION_LINE_ADD_POINT)
         return;
 
+    //TODO - Check for self-overlapping intersections
+
     tmpLine_.addPoint(pos);
 
     if (tmpLine_.isClosed())
     {
-        addLineToScene();
+        addLine();
     }
 
     scene_->update();
@@ -252,12 +269,12 @@ void SymbolEditorView::finishLine(QPointF pos)
 
     tmpLine_.addPoint(pos);
 
-    addLineToScene();
+    addLine();
 
     scene_->update();
 }
 
-void SymbolEditorView::addLineToScene()
+void SymbolEditorView::addLine()
 {
     if (tmpLine_.points_.count() > 1)
     {
@@ -271,6 +288,84 @@ void SymbolEditorView::addLineToScene()
 
         scene_->addItem(line);
     }
+
+    tmpLine_.setVisible(false);
+}
+
+void SymbolEditorView::rectMode()
+{
+    switch (getAction())
+    {
+    case VIEW_ACTION_RECT_SET_START:
+    case VIEW_ACTION_RECT_SET_FINISH:
+        return;
+    }
+
+    clearActions();
+    pushAction(VIEW_ACTION_RECT_SET_START);
+}
+
+void SymbolEditorView::startRect(QPointF pos, double width, double height)
+{
+
+    tmpRect_.setPos(pos);
+    tmpRect_.setSize(0,0);
+    tmpRect_.setVisible(true);
+
+    popAction(VIEW_ACTION_RECT_SET_START);
+    pushAction(VIEW_ACTION_RECT_SET_FINISH);
+}
+
+void SymbolEditorView::updateRect(QPointF pos)
+{
+    QPointF delta = pos - tmpRect_.pos();
+
+    double x = delta.x();
+    double y = delta.y();
+
+    if (QApplication::keyboardModifiers() == Qt::ControlModifier)
+    {
+        x = qMax(x,y);
+        y = x;
+    }
+
+    tmpRect_.setSize(x,y);
+}
+
+void SymbolEditorView::addRect()
+{
+    clearActions();
+
+    QRectF rect = tmpRect_.getRect().normalized();
+
+    if (rect.width() == 0 || rect.height() == 0)
+        return;
+
+    rect.translate(tmpRect_.pos());
+
+    tmpRect_.setVisible(false);
+
+    LWPolyline *line = new LWPolyline();
+
+    // Convert the rectangle into a polyline
+    line->addPoint(rect.topLeft());
+    line->addPoint(rect.topRight());
+    line->addPoint(rect.bottomRight());
+    line->addPoint(rect.bottomLeft());
+    line->addPoint(rect.topLeft());
+
+    scene_->addItem(line);
+}
+
+
+void SymbolEditorView::addRect(QPointF pStart, QPointF pEnd)
+{
+    //TODO
+}
+
+void SymbolEditorView::addRect(QPointF pStart, double width, double height)
+{
+    addRect(pStart, QPointF(pStart.x() + width, pStart.y() + height));
 }
 
 void SymbolEditorView::ellipseMode()
@@ -309,7 +404,11 @@ void SymbolEditorView::setEllipseRadius(QPointF point)
     tmpEllipse_.update();
 }
 
-void SymbolEditorView::addEllipseToScene()
+/**
+ * @brief SymbolEditorView::addEllipse
+ * Make a copy of the temporary ellipse and add it to the scene
+ */
+void SymbolEditorView::addEllipse()
 {
     if ((tmpEllipse_.getRx() > 0) && (tmpEllipse_.getRy() > 0))
     {
@@ -323,4 +422,21 @@ void SymbolEditorView::addEllipseToScene()
     }
 
     tmpEllipse_.setVisible(false);
+}
+
+void SymbolEditorView::addEllipse(QPointF center, double rx, double ry)
+{
+    if (scene_ == NULL) return;
+
+    AndromedaEllipse *e = new AndromedaEllipse();
+
+    e->setPos(center);
+    e->setRadius(rx, ry);
+
+    scene_->addItem(e);
+}
+
+void SymbolEditorView::addEllipse(QPointF center, double radius)
+{
+    addEllipse(center, radius, radius);
 }
