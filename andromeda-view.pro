@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     symbol_editor_view.cpp \
     geometry.cpp \
     andromeda_ellipse.cpp \
-    layer_definitions.cpp
+    layer_definitions.cpp \
+    pcb_layers.cpp
 
 HEADERS  += mainwindow.h \
     andromeda_scene.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     geometry.h \
     andromeda_ellipse.h \
     layer_definitions.h \
-    drawable_enums.h
+    drawable_enums.h \
+    pcb_layers.h
 
 FORMS    += mainwindow.ui
 
