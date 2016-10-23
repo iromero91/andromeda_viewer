@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     lwpolyline.cpp \
     symbol_editor_view.cpp \
     geometry.cpp \
-    andromeda_ellipse.cpp
+    andromeda_ellipse.cpp \
+    layer_definitions.cpp
 
 HEADERS  += mainwindow.h \
     andromeda_scene.h \
