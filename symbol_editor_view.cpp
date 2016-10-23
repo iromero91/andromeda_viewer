@@ -69,10 +69,14 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
         popAction();
         break;
     case Qt::Key_E:
-        pushAction(VIEW_ACTION_ELLIPSE_SET_CENTER);
+        ellipseMode();
         break;
     case Qt::Key_L:
-        pushAction(VIEW_ACTION_LINE_SET_START);
+        lineMode();
+        break;
+    case Qt::Key_R:
+        rectMode();
+        break;
         break;
     default:
         accepted = false;

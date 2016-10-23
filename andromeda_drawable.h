@@ -8,17 +8,28 @@
 #include <QPen>
 #include <QBrush>
 
-static const QColor SYMBOL_LINE_COLOR(200,50,50);
-static const QColor SYMBOL_FILL_COLOR(250,250,200);
-static const QColor SYMBOL_BB_COLOR(150,150,150,150);
+#include <QString>
 
-static const double SYMBOL_LINE_WIDTH_DEFAULT = 1.5f;
+const QColor SYMBOL_LINE_COLOR(200,50,50);
+const QColor SYMBOL_FILL_COLOR(250,250,200);
+const QColor SYMBOL_BB_COLOR(150,150,150,150);
+
+const double SYMBOL_LINE_WIDTH_DEFAULT = 1.5f;
+
+const QString DRAWABLE_LWPOLYLINE = "LWPolyline";
+const QString DRAWABLE_ELLIPSE = "Ellipse";
+const QString DRAWABLE_PIN = "Pin";
 
 class AndromedaDrawable : public QGraphicsItem
 {
 
 public:
     AndromedaDrawable();
+
+    enum DrawableDataDescriptors
+    {
+        DRAWABLE_TYPE = 0x01,
+    };
 
     void drawBoundingBox(QPainter *painter);
 

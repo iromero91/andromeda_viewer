@@ -12,6 +12,7 @@
 LWPolyline::LWPolyline() :
     AndromedaDrawable()
 {
+    setData(DRAWABLE_TYPE, DRAWABLE_LWPOLYLINE);
 }
 
 QRectF LWPolyline::boundingRect() const

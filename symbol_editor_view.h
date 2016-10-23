@@ -23,8 +23,9 @@ protected:
     void drawForeground(QPainter *painter, const QRectF &rect);
 
     // LWPolyline creation
-    QList<LWPolyline*> lines_;
     LWPolyline tmpLine_;
+    void lineMode();
+    void rectMode();
     void startLine(QPointF pos);
     void addLinePoint(QPointF pos);
     void finishLine(QPointF pos);
@@ -32,6 +33,7 @@ protected:
 
     // Ellipse creation
     AndromedaEllipse tmpEllipse_;
+    void ellipseMode();
     void setEllipseCenter(QPointF point);
     void setEllipseRadius(QPointF point);
     void addEllipseToScene();
@@ -48,6 +50,9 @@ protected:
 
         VIEW_ACTION_ELLIPSE_SET_CENTER = 0x100010,
         VIEW_ACTION_ELLIPSE_SET_RADIUS,
+
+        VIEW_ACTION_RECT_SET_START = 0x100020,
+        VIEW_ACTION_RECT_SET_CORNER,
     };
 
     void onActionAdded(unsigned int action);

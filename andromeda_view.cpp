@@ -620,7 +620,8 @@ bool AndromedaView::popAction(unsigned int action)
 
 void AndromedaView::clearActions()
 {
-    actionStack_.clear();
+    while (actionStack_.count() > 0)
+        popAction();
 }
 
 void AndromedaView::setViewFlags(unsigned int flags, bool on)

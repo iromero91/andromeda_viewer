@@ -10,7 +10,7 @@ AndromedaEllipse::AndromedaEllipse() :
      rx_(0),
      ry_(0)
 {
-
+    setData(DRAWABLE_TYPE, DRAWABLE_ELLIPSE);
 }
 
 QRectF AndromedaEllipse::boundingRect() const
