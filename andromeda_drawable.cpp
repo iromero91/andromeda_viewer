@@ -4,56 +4,46 @@
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
 
-TestRect::TestRect()
+AndromedaDrawable::AndromedaDrawable() :
+    QGraphicsItem(),
+    thickness_(SYMBOL_LINE_WIDTH_DEFAULT),
+    filled_(true),
+    drawBoundingBox_(true)
 {
+    /* Configure default pens */
+
+    // Line pen
+    linePen_.setColor(SYMBOL_LINE_COLOR);
+    linePen_.setWidthF(thickness_);
+    linePen_.setJoinStyle(Qt::RoundJoin);
+    linePen_.setCapStyle(Qt::RoundCap);
+
+    // Bounding Box Pen
+    boundingBoxPen_.setColor(SYMBOL_BB_COLOR);
+    boundingBoxPen_.setWidthF(0.5);
+    boundingBoxPen_.setJoinStyle(Qt::RoundJoin);
+    boundingBoxPen_.setCapStyle(Qt::RoundCap);
+    boundingBoxPen_.setStyle(Qt::DashLine);
+
+    // Fill brush
+    fillBrush_.setColor(SYMBOL_FILL_COLOR);
+
     setFlags(ItemIsSelectable | ItemIsFocusable);
-    //setFlags(ItemIsFocusable);
     setAcceptHoverEvents(true);
-
 }
 
-QRectF TestRect::boundingRect() const
+void AndromedaDrawable::setLineThickness(double thickness)
 {
-    return QRectF(rect.left()-1, rect.top()-1, rect.width()+2, rect.height()+2);
+    //TODO check thickness against limits
+    thickness_ = thickness;
 }
 
-void TestRect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void AndromedaDrawable::drawBoundingBox(QPainter *painter)
 {
-    if (painter == NULL || option == NULL) return;
+    if (painter == NULL) return;
 
-    QPen p;
+    painter->setPen(boundingBoxPen_);
+    painter->setBrush(Qt::NoBrush);
 
-    p.setWidth(2);
-    p.setCapStyle(Qt::RoundCap);
-    p.setJoinStyle(Qt::RoundJoin);
-
-    QColor c(45,200,115);
-
-    c = (option->state & QStyle::State_Selected) ? c.dark(150) : c;
-    c = (option->state & QStyle::State_MouseOver) ? c.light(150) : c;
-
-    p.setColor(c);
-    painter->setPen(p);
-
-    painter->setBrush(QBrush(QColor(100,100,100,150)));
-
-    painter->drawRect(rect);
-
-}
-
-void TestRect::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    //QGraphicsItem::mouseMoveEvent(event);
-}
-
-void TestRect::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    //QGraphicsItem::mousePressEvent(event);
-    //update();
-}
-
-void TestRect::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    //QGraphicsItem::mouseReleaseEvent(event);
-    //update();
+    painter->drawRect(boundingRect());
 }

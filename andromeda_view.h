@@ -8,7 +8,6 @@
 #include <QPaintEvent>
 
 #include "andromeda_scene.h"
-#include "lwpolyline.h"
 
 #define ANDROMEDA_VIEW_MAX_SCALING 100.0f
 #define ANDROMEDA_VIEW_MIN_SCALING 0.001f

@@ -7,6 +7,8 @@
 #include <QGraphicsItem>
 #include <QPainterPath>
 
+#include "andromeda_drawable.h"
+
 const double PT_EPSILON = 0.01;
 
 typedef struct
@@ -16,13 +18,14 @@ typedef struct
     double angle;
 } LWPolypoint;
 
-class LWPolyline : public QGraphicsItem
+class LWPolyline : public AndromedaDrawable
 {
 public:
     LWPolyline();
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
+
     QPainterPath shape() const;
 
     void clear() { points_.clear(); }
@@ -35,9 +38,6 @@ public:
     static bool comparePoints(QPointF pA, QPointF pB, double epsilon = PT_EPSILON);
 
     QList<LWPolypoint> points_;
-
-    double thickness_;
-    bool filled_;
 };
 
 #endif // LWPOLYLINE_H

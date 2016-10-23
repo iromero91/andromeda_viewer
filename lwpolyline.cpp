@@ -10,12 +10,8 @@
 #include <QDebug>
 
 LWPolyline::LWPolyline() :
-    thickness_(1.5),
-    filled_(true)
+    AndromedaDrawable()
 {
-    setFlags(ItemIsSelectable | ItemIsFocusable);
-
-    setAcceptHoverEvents(true);
 }
 
 QRectF LWPolyline::boundingRect() const
@@ -50,37 +46,31 @@ void LWPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 {
     QPainterPath path = shape();
 
-    QColor c(200,50,50);
+    QPen pen = linePen_;
+    QBrush brush = fillBrush_;
 
-    if (!isClosed())
-    {
-        c.setRgb(150,180,200);
-    }
+    QColor c = linePen_.color();
 
     if (isSelected())
-    {
         c = c.dark();
-    }
 
     c = (option->state & QStyle::State_MouseOver) ? c.light() : c;
 
-    QPen pen(c);
-    pen.setWidthF(thickness_);
-    pen.setJoinStyle(Qt::RoundJoin);
-    pen.setCapStyle(Qt::RoundCap);
+    pen.setColor(c);
 
     painter->setPen(pen);
 
     if (filled_)
     {
-        c.setRgb(250,250,200);
+        c = brush.color();
 
         if (isSelected())
         {
-            c = c.dark(150);
+            c = c.dark();
         }
 
-        QBrush brush(c);
+        brush.setColor(c);
+
         painter->setBrush(brush);
     }
     else
@@ -90,13 +80,8 @@ void LWPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     painter->drawPath(path);
 
-    // Draw the bounding rect for test porpoises
-    painter->setBrush(Qt::NoBrush);
-    pen.setWidthF(0.5);
-    pen.setColor(QColor(150,150,150,200));
-    painter->setPen(pen);
-
-    painter->drawRect(boundingRect());
+    if (drawBoundingBox_)
+        drawBoundingBox(painter);
 }
 
 bool LWPolyline::comparePoints(QPointF pA, QPointF pB, double epsilon)
