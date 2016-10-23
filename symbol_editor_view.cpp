@@ -50,9 +50,11 @@ void SymbolEditorView::drawForeground(QPainter *painter, const QRectF &rect)
         }
         break;
     case VIEW_ACTION_RECT_SET_FINISH:
+        updateRect(cursorPos_);
         painter->drawLine(startPos_, cursorPos_);
         break;
     case VIEW_ACTION_ELLIPSE_SET_RADIUS:
+        setEllipseRadius(cursorPos_);
         painter->drawLine(tmpEllipse_.pos(), cursorPos_);
         break;
     default:
@@ -98,6 +100,13 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
         // Pass the event down the chain
         AndromedaView::keyPressEvent(event);
     }
+
+    update();
+}
+
+void SymbolEditorView::keyReleaseEvent(QKeyEvent *event)
+{
+    update();
 }
 
 void SymbolEditorView::mousePressEvent(QMouseEvent *event)
@@ -321,15 +330,28 @@ void SymbolEditorView::startRect(QPointF pos, double width, double height)
 
 void SymbolEditorView::updateRect(QPointF pos)
 {
-    QPointF delta = pos - tmpRect_.pos();
+    QPointF delta = pos - startPos_;
 
     double x = delta.x();
     double y = delta.y();
 
-    if (QApplication::keyboardModifiers() == Qt::ControlModifier)
+    if (QApplication::keyboardModifiers() & Qt::ControlModifier)
     {
         x = qMax(x,y);
         y = x;
+    }
+
+    // SHIFT key draws the rectangle centered at the first point
+    if (QApplication::keyboardModifiers() & Qt::ShiftModifier)
+    {
+        tmpRect_.setPos(startPos_ - QPointF(x,y));
+        x *= 2;
+        y *= 2;
+
+    }
+    else
+    {
+        tmpRect_.setPos(startPos_);
     }
 
     tmpRect_.setSize(x,y);
