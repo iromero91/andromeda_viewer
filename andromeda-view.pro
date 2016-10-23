@@ -34,7 +34,8 @@ HEADERS  += mainwindow.h \
     symbol_editor_view.h \
     geometry.h \
     andromeda_ellipse.h \
-    layer_definitions.h
+    layer_definitions.h \
+    drawable_enums.h
 
 FORMS    += mainwindow.ui
 

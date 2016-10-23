@@ -1,10 +1,14 @@
 #include "andromeda_scene.h"
 #include <QDebug>
 
+#include <QGraphicsItem>
+
 AndromedaScene::AndromedaScene(QObject *parent) :
     QGraphicsScene(parent),
     bg_color_(0xFF, 0xFF, 0xFF),
-    draw_axes_(true)
+    draw_axes_(true),
+    layerDisplayMode_((uint8_t) (LAYER_MODE::SHOW_ALL)),
+    layerSelection_((quint64) (LAYER::ALL))
 {
     init();
 }
@@ -22,6 +26,47 @@ void AndromedaScene::init()
     grid_pen_.setCapStyle(Qt::RoundCap);
     grid_pen_.setJoinStyle(Qt::RoundJoin);
     grid_pen_.setCosmetic(true);
+}
+
+void AndromedaScene::setLayerDisplayMode(int mode)
+{
+    layerDisplayMode_ = mode;
+}
+
+void AndromedaScene::setLayerSelection(quint64 selection)
+{
+    layerSelection_ = selection;
+
+
+
+    foreach (QGraphicsItem *item, items())
+    {
+        if (item == NULL) return;
+
+
+    }
+}
+
+void AndromedaScene::toggleLayers(quint64 layers, bool show)
+{
+    if (show)
+    {
+        setLayerSelection(layerSelection_ | layers);
+    }
+    else
+    {
+        setLayerSelection(layerSelection_ & ~layers);
+    }
+}
+
+void AndromedaScene::showLayers(quint64 layers)
+{
+    toggleLayers(layers, true);
+}
+
+void AndromedaScene::hideLayers(quint64 layers)
+{
+    toggleLayers(layers, false);
 }
 
 void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
@@ -92,4 +137,35 @@ void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
             painter->drawPoint(i*grid, j*grid);
         }
     }
+}
+
+/**
+ * @brief AndromedaScene::getItemLayer
+ * Return the layer ID of the selected item
+ * The layer ID corresponds to how the item will be displayed in the scene
+ * @param item - pointer to the item in question
+ * @return the layer of the item (or LAYER::NONE if there was an error)
+ */
+quint64 AndromedaScene::getItemLayer(QGraphicsItem *item)
+{
+    if (item == NULL) return (quint64) LAYER::NONE;
+
+    bool ok = false;
+
+    quint64 layer = (quint64) item->data((int) DRAWABLE_KEY::ITEM_LAYER).toULongLong(&ok);
+
+    return ok ? layer : (quint64) LAYER::NONE;
+}
+
+/**
+ * @brief AndromedaScene::setItemLayer
+ * Set the layer ID of the selected item
+ * @param item
+ * @param layer
+ */
+void AndromedaScene::setItemLayer(QGraphicsItem *item, quint64 layer)
+{
+    if (item == NULL) return;
+
+    item->setData((int) DRAWABLE_KEY::ITEM_LAYER, (quint64) layer);
 }

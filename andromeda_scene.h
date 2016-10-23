@@ -7,7 +7,11 @@
 #include <QPainter>
 #include <QPen>
 
+#include <stdint.h>
+
 #include "andromeda_grid.h"
+#include "drawable_enums.h"
+#include "layer_definitions.h"
 
 class AndromedaScene : public QGraphicsScene
 {
@@ -27,6 +31,24 @@ public:
 
     void drawBackground(QPainter *painter, const QRectF &rect);
 
+    void setLayerDisplayMode(int mode);
+    int getLayerDisplayMode() { return layerDisplayMode_; }
+
+    void setLayerSelection(quint64 selection);
+
+    void setCurrentLayer(quint64 layer);
+    quint64 getCurrentLayer() { return currentLayer_; }
+
+    void toggleLayers(quint64 layers, bool show);
+    void showLayers(quint64 layers);
+    void hideLayers(quint64 layers);
+
+    void showAllLayers() { setLayerSelection((quint64) LAYER::NONE); }
+    void hideAllLayers() { setLayerSelection((quint64) LAYER::ALL); }
+
+    quint64 getItemLayer(QGraphicsItem *item);
+    void setItemLayer(QGraphicsItem *item, quint64 layer);
+
 protected:
     void init();
 
@@ -37,6 +59,11 @@ protected:
     QPen grid_pen_;     // Pen object for drawing the grid
 
     AndromedaGrid grid_;    // Grid object
+
+    uint8_t layerDisplayMode_;  // How to display multiple layers
+    quint64 layerSelection_;   // Which layers are currently visible
+    quint64 currentLayer_;     // Which layer is currently selected (top)
+
 };
 
 
