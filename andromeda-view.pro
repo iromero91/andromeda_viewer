@@ -6,6 +6,8 @@
 
 QT       += core gui
 
+CONFIG += c++11
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = andromeda-view
@@ -31,7 +33,8 @@ HEADERS  += mainwindow.h \
     lwpolyline.h \
     symbol_editor_view.h \
     geometry.h \
-    andromeda_ellipse.h
+    andromeda_ellipse.h \
+    layer_definitions.h
 
 FORMS    += mainwindow.ui
 
