@@ -39,8 +39,7 @@ public:
     void setCurrentLayer(quint64 layer);
     quint64 getCurrentLayer() { return currentLayer_; }
 
-    void toggleLayers(quint64 layers, bool show);
-    void showLayers(quint64 layers);
+    void showLayers(quint64 layers, bool show = true);
     void hideLayers(quint64 layers);
 
     void showAllLayers() { setLayerSelection((quint64) LAYER::NONE); }

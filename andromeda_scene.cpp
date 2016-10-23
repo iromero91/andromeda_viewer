@@ -33,6 +33,11 @@ void AndromedaScene::setLayerDisplayMode(int mode)
     layerDisplayMode_ = mode;
 }
 
+/**
+ * @brief AndromedaScene::setLayerSelection
+ * Force visibility of the given layer mask
+ * @param selection
+ */
 void AndromedaScene::setLayerSelection(quint64 selection)
 {
     layerSelection_ = selection;
@@ -47,7 +52,7 @@ void AndromedaScene::setLayerSelection(quint64 selection)
     }
 }
 
-void AndromedaScene::toggleLayers(quint64 layers, bool show)
+void AndromedaScene::showLayers(quint64 layers, bool show)
 {
     if (show)
     {
@@ -59,14 +64,9 @@ void AndromedaScene::toggleLayers(quint64 layers, bool show)
     }
 }
 
-void AndromedaScene::showLayers(quint64 layers)
-{
-    toggleLayers(layers, true);
-}
-
 void AndromedaScene::hideLayers(quint64 layers)
 {
-    toggleLayers(layers, false);
+    showLayers(layers, false);
 }
 
 void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
