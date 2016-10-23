@@ -70,6 +70,9 @@ enum class PCB_LAYER_ID : int8_t {
     USER_A              = 58,
     USER_B              = 59,
     USER_C              = 60,
+
+    // Do not extend layer IDs beyond 63!
+    // A 64-bit mask is used to determine which layes are visible in a scene
 };
 
 /* Layer Masks */
