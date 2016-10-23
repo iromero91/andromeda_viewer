@@ -52,8 +52,8 @@ public:
     QBrush getFillBrush(void) { return fillBrush_; }
     void setFillBrush(QBrush brush) { fillBrush_ = brush; }
 
-    void setLayer(quint64 layer);
-    quint64 getLayer(void);
+    void setLayer(int8_t layer);
+    int8_t getLayer(void);
 
 protected:
     double thickness_;  // Line thickness

@@ -8,7 +8,7 @@ AndromedaScene::AndromedaScene(QObject *parent) :
     bg_color_(0xFF, 0xFF, 0xFF),
     draw_axes_(true),
     layerDisplayMode_((uint8_t) (LAYER_MODE::SHOW_ALL)),
-    layerSelection_((quint64) (LAYER::ALL))
+    layerMask_((uint64_t) (LAYER_MASK::ALL))
 {
     init();
 }
@@ -34,39 +34,78 @@ void AndromedaScene::setLayerDisplayMode(int mode)
 }
 
 /**
- * @brief AndromedaScene::setLayerSelection
+ * @brief AndromedaScene::checkLayer
+ * Check if the provided layer is visible in the scene layer selection
+ * @param layerId
+ * @return
+ */
+bool AndromedaScene::checkLayer(int8_t layerId)
+{
+    uint64_t layer = LayerIdToMask(layerId);
+
+    return (layerMask_ & layer) > 0;
+}
+
+/**
+ * @brief AndromedaScene::setLayerMask
  * Force visibility of the given layer mask
  * @param selection
  */
-void AndromedaScene::setLayerSelection(quint64 selection)
+void AndromedaScene::setLayerMask(uint64_t selection)
 {
-    layerSelection_ = selection;
+    layerMask_ = selection;
 
-
+    int8_t itemLayer;
 
     foreach (QGraphicsItem *item, items())
     {
         if (item == NULL) return;
 
+        itemLayer = getItemLayer(item);
 
+        // Check if the item is on a visible layer
+        if (checkLayer(itemLayer))
+        {
+            item->setVisible(true);
+            setItemDepth(item, itemLayer);
+        }
+        else
+        {
+            item->setVisible(false);
+        }
     }
 }
 
-void AndromedaScene::showLayers(quint64 layers, bool show)
+/**
+ * @brief AndromedaScene::showLayers
+ * @param layers
+ * @param show
+ */
+void AndromedaScene::showLayers(uint64_t layerMask, bool show)
 {
     if (show)
     {
-        setLayerSelection(layerSelection_ | layers);
+        setLayerMask(layerMask_ | layerMask);
     }
     else
     {
-        setLayerSelection(layerSelection_ & ~layers);
+        setLayerMask(layerMask_ & ~layerMask);
     }
 }
 
-void AndromedaScene::hideLayers(quint64 layers)
+void AndromedaScene::hideLayers(uint64_t layerMask)
 {
-    showLayers(layers, false);
+    showLayers(layerMask, false);
+}
+
+void AndromedaScene::showLayer(int8_t layerId, bool show)
+{
+    showLayers(LayerIdToMask(layerId), show);
+}
+
+void AndromedaScene::hideLayer(int8_t layerId)
+{
+    showLayer(layerId, false);
 }
 
 void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
@@ -146,15 +185,15 @@ void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
  * @param item - pointer to the item in question
  * @return the layer of the item (or LAYER::NONE if there was an error)
  */
-quint64 AndromedaScene::getItemLayer(QGraphicsItem *item)
+int8_t AndromedaScene::getItemLayer(QGraphicsItem *item)
 {
-    if (item == NULL) return (quint64) LAYER::NONE;
+    if (item == NULL) return (int8_t) LAYER_ID::NONE;
 
     bool ok = false;
 
-    quint64 layer = (quint64) item->data((int) DRAWABLE_KEY::ITEM_LAYER).toULongLong(&ok);
+    int8_t layer = (int8_t) item->data((int) DRAWABLE_KEY::ITEM_LAYER).toInt(&ok);
 
-    return ok ? layer : (quint64) LAYER::NONE;
+    return ok ? layer : (int8_t) LAYER_ID::NONE;
 }
 
 /**
@@ -163,9 +202,39 @@ quint64 AndromedaScene::getItemLayer(QGraphicsItem *item)
  * @param item
  * @param layer
  */
-void AndromedaScene::setItemLayer(QGraphicsItem *item, quint64 layer)
+void AndromedaScene::setItemLayer(QGraphicsItem *item, int8_t layer)
 {
     if (item == NULL) return;
 
-    item->setData((int) DRAWABLE_KEY::ITEM_LAYER, (quint64) layer);
+    item->setData((int) DRAWABLE_KEY::ITEM_LAYER, layer);
+}
+
+/**
+ * @brief AndromedaScene::setItemDepth
+ * Set the Z-Order of a given item, based on it's logical layer assignment
+ * @param item is a pointer to the item
+ * @param layer is the item's logical layer
+ * @param flip determines whether the scene view is 'flipped' or not
+ */
+void AndromedaScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
+{
+    if (item == NULL) return;
+
+    // If the layer is the selected layer, force it to the top
+    if (layer == getCurrentLayer())
+        layer = (int8_t) LAYER_ID::SELECTED;
+
+    //TODO improve this (simplistic) view flipping
+    else if (flip)
+        layer *= -1;
+
+    item->setZValue(layer);
+
+}
+
+void AndromedaScene::setItemDepth(QGraphicsItem *item, bool flip)
+{
+    if (item == NULL) return;
+
+    setItemDepth(item, getItemLayer(item), flip);
 }

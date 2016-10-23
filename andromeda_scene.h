@@ -34,19 +34,27 @@ public:
     void setLayerDisplayMode(int mode);
     int getLayerDisplayMode() { return layerDisplayMode_; }
 
-    void setLayerSelection(quint64 selection);
+    bool checkLayer(int8_t layerId);
 
-    void setCurrentLayer(quint64 layer);
-    quint64 getCurrentLayer() { return currentLayer_; }
+    void setCurrentLayer(int8_t layer);
+    int8_t getCurrentLayer() { return currentLayer_; }
 
-    void showLayers(quint64 layers, bool show = true);
-    void hideLayers(quint64 layers);
+    void setLayerMask(uint64_t layers);
+    uint64_t getLayerMask() { return layerMask_; }
+    void showLayers(uint64_t layerMask, bool show = true);
+    void hideLayers(uint64_t layerMask);
 
-    void showAllLayers() { setLayerSelection((quint64) LAYER::NONE); }
-    void hideAllLayers() { setLayerSelection((quint64) LAYER::ALL); }
+    void showLayer(int8_t layerId, bool show = true);
+    void hideLayer(int8_t layerId);
 
-    quint64 getItemLayer(QGraphicsItem *item);
-    void setItemLayer(QGraphicsItem *item, quint64 layer);
+    void showAllLayers() { setLayerMask((uint64_t) LAYER_MASK::NONE); }
+    void hideAllLayers() { setLayerMask((uint64_t) LAYER_MASK::ALL); }
+
+    int8_t getItemLayer(QGraphicsItem *item);
+    void setItemLayer(QGraphicsItem *item, int8_t layer);
+
+    void setItemDepth(QGraphicsItem *item, int8_t layer, bool flip = false);
+    void setItemDepth(QGraphicsItem *item, bool flip = false);
 
 protected:
     void init();
@@ -60,8 +68,9 @@ protected:
     AndromedaGrid grid_;    // Grid object
 
     uint8_t layerDisplayMode_;  // How to display multiple layers
-    quint64 layerSelection_;   // Which layers are currently visible
-    quint64 currentLayer_;     // Which layer is currently selected (top)
+    uint64_t layerMask_;   // Which layers are currently visible
+
+    int8_t currentLayer_;     // Which layer is currently selected (top)
 
 };
 

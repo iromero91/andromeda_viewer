@@ -54,18 +54,28 @@ void AndromedaDrawable::drawBoundingBox(QPainter *painter)
     painter->drawRect(r);
 }
 
-void AndromedaDrawable::setLayer(quint64 layer)
+/**
+ * @brief AndromedaDrawable::setLayer
+ * Set the associated layer for this item
+ * @param layer
+ */
+void AndromedaDrawable::setLayer(int8_t layer)
 {
-    setData((int) DRAWABLE_KEY::ITEM_LAYER, (quint64) layer);
+    setData((int) DRAWABLE_KEY::ITEM_LAYER, layer);
 }
 
-quint64 AndromedaDrawable::getLayer()
+/**
+ * @brief AndromedaDrawable::getLayer
+ * Get the layer associated with this item
+ * @return
+ */
+int8_t AndromedaDrawable::getLayer()
 {
     bool ok = false;
 
-    quint64 layer = (quint64) data((int) DRAWABLE_KEY::ITEM_LAYER).toULongLong(&ok);
+    int8_t layer = (int8_t) data((int) DRAWABLE_KEY::ITEM_LAYER).toInt(&ok);
 
-    return ok ? layer : (quint64) LAYER::NONE;
+    return ok ? layer : (int8_t) LAYER_ID::NONE;
 }
 
 
