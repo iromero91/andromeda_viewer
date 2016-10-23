@@ -26,7 +26,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::cursorPosChanged(QPointF pos)
 {
-    ui->statusBar->showMessage("x: " + QString::number(pos.x(),'f',2) + ", y: " + QString::number(pos.y(),'f',2));
+    QPointF origin = ui->graphicsView->getCursorOrigin();
+    QPointF delta = pos - origin;
+
+    QString msg = "Pos (";
+
+    msg += QString::number(pos.x(),'f',2) + ",";
+    msg += QString::number(pos.y(),'f',2) + ")";
+
+    msg += " Delta (";
+    msg += QString::number(delta.x(),'f',2) + ",";
+    msg += QString::number(delta.y(),'f',2) + ")";
+
+    ui->statusBar->showMessage(msg);
 }
 
 MainWindow::~MainWindow()

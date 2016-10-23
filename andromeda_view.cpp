@@ -162,6 +162,11 @@ void AndromedaView::keyPressEvent(QKeyEvent *event)
 
     switch (event->key())
     {
+    // Reset the cursor origin to the current cursor position
+    case Qt::Key_Space:
+        cursorOrigin_ = cursorPos_;
+        emit cursorPositionChanged(cursorPos_);
+        break;
     // Move the cursor left
     case Qt::Key_Left:
         moveCursor(-offset,0,true);

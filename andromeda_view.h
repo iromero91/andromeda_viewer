@@ -29,6 +29,7 @@ public:
 
     // Cursor functions
     QPointF getCursorPos() { return cursorPos_; }
+    QPointF getCursorOrigin() { return cursorOrigin_; }
     void setCursorPos(QPointF pos, bool panPastEdges = false);
     void moveCursor(QPointF offset, bool panPastEdges = false);
     void moveCursor(double dx, double dy, bool panPastEdges = false);
@@ -117,6 +118,7 @@ protected:
 
     AndromedaScene *scene_;
 
+    QPointF cursorOrigin_;  // 'Origin' of the cursor
     QPointF cursorPos_; // Current location of the cursor
     QPointF startPos_;  // Location of the 'starting' position (used for multiple functions)
 
