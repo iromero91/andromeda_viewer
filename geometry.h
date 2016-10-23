@@ -26,13 +26,29 @@ double Distance(QPointF pTo, QPointF pFrom = QPointF(0,0));
 
 QPointF Midpoint(QPointF pTo, QPointF pFrom = QPointF(0,0));
 
+/*
+ * Structure for defining the equation of a straight line
+ */
+typedef struct
+{
+    double A;
+    double B;
+    double C;
+} LineEquation_t;
+
+LineEquation_t LineEquation(QPointF pTo, QPointF pFrom = QPointF(0,0));
+
 /* Arc Functions */
 
 double ArcAngle(double radius, double chordLength);
 double ArcRadius(double angle, double chordLength);
 double ArcLength(double radius, double angle);
 
+double AngleNormalized(double angle);
+
 bool ArcIsStraight(double angle, double threshold = ARC_ANGLE_THRESHOLD);
 bool ArcIsCurved(double angle, double threshold = ARC_ANGLE_THRESHOLD);
+
+bool ArcCenter(QPointF *center, double angle, QPointF pTo, QPointF pFrom = QPointF(0,0));
 
 #endif // GEOMETRY_H

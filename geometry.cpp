@@ -53,6 +53,18 @@ QPointF Midpoint(QPointF pTo, QPointF pFrom)
                    (pTo.y() + pFrom.y()) / 2);
 }
 
+LineEquation_t LineEquation(QPointF pTo, QPointF pFrom)
+{
+    LineEquation_t eqn;
+
+    eqn.A = pFrom.y() - pTo.y();
+    eqn.B = pTo.x() - pFrom.x();
+
+    eqn.C = (pFrom.x() * pTo.y()) - (pTo.x() * pFrom.y());
+
+    return eqn;
+}
+
 /**
  * @brief ArcAngle
  * Calculate the angle of an arc given the chord length and the radius
@@ -94,6 +106,27 @@ double ArcLength(double radius, double angle)
 }
 
 /**
+ * @brief AngleNormalized
+ * Normalize an angle (in radians) into the range {-PI, PI}
+ * @param angle
+ * @return
+ */
+double AngleNormalized(double angle)
+{
+    while (angle < -M_PI)
+    {
+        angle += (2 * M_PI);
+    }
+
+    while (angle >  M_PI)
+    {
+        angle -= (2 * M_PI);
+    }
+
+    return angle;
+}
+
+/**
  * @brief ArcIsStraight
  * Determine if an arc segment is "straight" based on the provided angle
  * Straight segments have an angle equal (or close to) either zero (or) PI (180 degrees)
@@ -115,4 +148,43 @@ bool ArcIsStraight(double angle, double threshold)
 bool ArcIsCurved(double angle, double threshold)
 {
     return !ArcIsStraight(angle, threshold);
+}
+
+/**
+ * @brief ArcCenter
+ * Calculace the center points of a circle from two points and an angle
+ * @param center
+ * @param angle
+ * @param pTo
+ * @param pFrom
+ * @return true if the center can be calculated else false
+ */
+bool ArcCenter(QPointF *center, double angle, QPointF pTo, QPointF pFrom)
+{
+    if (ArcIsStraight(angle) || center == NULL)
+        return false;
+
+    QPointF mid = Midpoint(pTo, pFrom);
+
+    double q = Distance(pTo, pFrom);
+
+    QPointF delta = pTo - pFrom;
+
+    double dx = delta.x();
+    double dy = delta.y();
+
+    if (angle < 0)
+    {
+        dx *= -1;
+        dy *= -1;
+    }
+
+    double r = ArcRadius(angle, q);
+
+    double Q = sqrt(pow(r,2) - pow(q/2,2));
+
+    center->setX(mid.x() + Q * dx / q);
+    center->setY(mid.y() + Q * dy / q);
+
+    return true;
 }
