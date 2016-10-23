@@ -231,7 +231,7 @@ void AndromedaView::wheelEvent(QWheelEvent *event)
 
     setCursorPos(mapToScene(mousePos));
 
-    event->accept();
+    //event->accept();
 }
 
 void AndromedaView::mousePressEvent(QMouseEvent *event)
@@ -293,7 +293,7 @@ void AndromedaView::mouseReleaseEvent(QMouseEvent *event)
                 }
                 else
                 {
-                    items = scene_->items(selection, Qt::IntersectsItemShape);
+                    items = scene_->items(selection.normalized(), Qt::IntersectsItemShape);
                 }
 
                 bool select = true;
