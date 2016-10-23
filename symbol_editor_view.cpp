@@ -145,6 +145,7 @@ void SymbolEditorView::mousePressEvent(QMouseEvent *event)
             break;
         case VIEW_ACTION_RECT_SET_FINISH:
             addRect();
+            popAction();
             break;
 
         default:
@@ -288,6 +289,8 @@ void SymbolEditorView::addLine()
 
         scene_->addItem(line);
     }
+
+    clearActions();
 
     tmpLine_.setVisible(false);
 }
