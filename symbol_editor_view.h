@@ -3,6 +3,9 @@
 
 #include "andromeda_view.h"
 
+#include "lwpolyline.h"
+#include "andromeda_ellipse.h"
+
 class SymbolEditorView : public AndromedaView
 {
     Q_OBJECT
@@ -19,6 +22,7 @@ protected:
 
     void drawForeground(QPainter *painter, const QRectF &rect);
 
+    // LWPolyline creation
     QList<LWPolyline*> lines_;
     LWPolyline tmpLine_;
     void startLine(QPointF pos);
@@ -26,6 +30,12 @@ protected:
     void finishLine(QPointF pos);
     void addLineToScene();
     void cancelLine();
+
+    // Ellipse creation
+    AndromedaEllipse tmpEllipse_;
+    void setEllipseCenter(QPointF point);
+    void setEllipseRadius(QPointF point);
+    void addEllipseToScene();
 
     // Actions available for the symbol editor view
     enum SymbolViewerActions
@@ -35,7 +45,9 @@ protected:
         // e.g. pressing 'escape' pops the top action from the stack for multi-sequence actions
         // selecting a new tool clears the action stack
         VIEW_ACTION_DRAW_LINE = 0x10000,
-        VIEW_ACTION_ADD_CURVE,
+
+        VIEW_ACTION_DRAW_ELLIPSE_SET_POINT = 0x100010,
+        VIEW_ACTION_DRAW_ELLIPSE_SET_RADIUS,
     };
 
     void onActionAdded(unsigned int action);
