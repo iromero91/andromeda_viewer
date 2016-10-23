@@ -38,13 +38,13 @@ void SymbolEditorView::drawForeground(QPainter *painter, const QRectF &rect)
 
     switch (getAction())
     {
-    case VIEW_ACTION_DRAW_LINE:
+    case VIEW_ACTION_LINE_ADD_POINT:
         if (tmpLine_.points_.count() > 0)
         {
             painter->drawLine(tmpLine_.points_.last().point, cursorPos_);
         }
         break;
-    case VIEW_ACTION_DRAW_ELLIPSE_SET_RADIUS:
+    case VIEW_ACTION_ELLIPSE_SET_RADIUS:
         painter->drawLine(tmpEllipse_.pos(), cursorPos_);
         break;
     default:
@@ -69,7 +69,10 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
         popAction();
         break;
     case Qt::Key_E:
-        pushAction(VIEW_ACTION_DRAW_ELLIPSE_SET_POINT);
+        pushAction(VIEW_ACTION_ELLIPSE_SET_CENTER);
+        break;
+    case Qt::Key_L:
+        pushAction(VIEW_ACTION_LINE_SET_START);
         break;
     default:
         accepted = false;
@@ -93,23 +96,27 @@ void SymbolEditorView::mousePressEvent(QMouseEvent *event)
     {
         switch (getAction())
         {
-        case VIEW_ACTION_DRAW_LINE:
+        case VIEW_ACTION_LINE_SET_START:
+            popAction();
+            pushAction(VIEW_ACTION_LINE_ADD_POINT);
+            startLine(cursorPos_);
+            break;
+        case VIEW_ACTION_LINE_ADD_POINT:
             addLinePoint(cursorPos_);
-
             break;
 
-        case VIEW_ACTION_DRAW_ELLIPSE_SET_POINT:
+        case VIEW_ACTION_ELLIPSE_SET_CENTER:
             startPos_ = cursorPos_;
 
             popAction();
-            pushAction(VIEW_ACTION_DRAW_ELLIPSE_SET_RADIUS);
+            pushAction(VIEW_ACTION_ELLIPSE_SET_RADIUS);
 
             tmpEllipse_.setVisible(true);
             setEllipseCenter(startPos_);
 
             break;
 
-        case VIEW_ACTION_DRAW_ELLIPSE_SET_RADIUS:
+        case VIEW_ACTION_ELLIPSE_SET_RADIUS:
             popAction();
             addEllipseToScene();
             break;
@@ -135,7 +142,7 @@ void SymbolEditorView::mouseMoveEvent(QMouseEvent *event)
 
     switch (getAction())
     {
-    case VIEW_ACTION_DRAW_ELLIPSE_SET_RADIUS:
+    case VIEW_ACTION_ELLIPSE_SET_RADIUS:
         setEllipseRadius(pos);
         break;
     }
@@ -149,15 +156,15 @@ void SymbolEditorView::mouseDoubleClickEvent(QMouseEvent *event)
 
     if (event->button() == Qt::LeftButton)
     {
-
-        if (action != VIEW_ACTION_DRAW_LINE)
+        switch (action)
         {
-            startLine(cursorPos_);
-        }
-        else
-        {
+        case VIEW_ACTION_LINE_SET_START:
+        case VIEW_ACTION_LINE_ADD_POINT:
             finishLine(cursorPos_);
-            popAction();
+            break;
+
+        default:
+            break;
         }
     }
 
@@ -173,11 +180,12 @@ void SymbolEditorView::onActionCancelled(unsigned int action)
 {
     switch (action)
     {
-    case VIEW_ACTION_DRAW_ELLIPSE_SET_POINT:
-    case VIEW_ACTION_DRAW_ELLIPSE_SET_RADIUS:
+    case VIEW_ACTION_ELLIPSE_SET_CENTER:
+    case VIEW_ACTION_ELLIPSE_SET_RADIUS:
         tmpEllipse_.setVisible(false);
         break;
-    case VIEW_ACTION_DRAW_LINE:
+    case VIEW_ACTION_LINE_SET_START:
+    case VIEW_ACTION_LINE_ADD_POINT:
         tmpLine_.setVisible(false);
         break;
     }
@@ -188,14 +196,13 @@ void SymbolEditorView::startLine(QPointF pos)
     tmpLine_.clear();
     if (tmpLine_.addPoint(pos))
     {
-        pushAction(VIEW_ACTION_DRAW_LINE);
         tmpLine_.setVisible(true);
     }
 }
 
 void SymbolEditorView::addLinePoint(QPointF pos)
 {
-    if (getAction() != VIEW_ACTION_DRAW_LINE)
+    if (getAction() != VIEW_ACTION_LINE_ADD_POINT)
         return;
 
     tmpLine_.addPoint(pos);
@@ -234,16 +241,6 @@ void SymbolEditorView::addLineToScene()
         lines_.append(line);
         scene_->addItem(line);
     }
-    cancelLine();
-}
-
-void SymbolEditorView::cancelLine()
-{
-    popAction(VIEW_ACTION_DRAW_LINE);
-    tmpLine_.setVisible(false);
-    tmpLine_.clear();
-
-    scene_->update();
 }
 
 void SymbolEditorView::setEllipseCenter(QPointF point)

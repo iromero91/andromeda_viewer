@@ -29,7 +29,6 @@ protected:
     void addLinePoint(QPointF pos);
     void finishLine(QPointF pos);
     void addLineToScene();
-    void cancelLine();
 
     // Ellipse creation
     AndromedaEllipse tmpEllipse_;
@@ -44,10 +43,11 @@ protected:
         //TODO - Implement an "action stack"
         // e.g. pressing 'escape' pops the top action from the stack for multi-sequence actions
         // selecting a new tool clears the action stack
-        VIEW_ACTION_DRAW_LINE = 0x10000,
+        VIEW_ACTION_LINE_SET_START = 0x10000,
+        VIEW_ACTION_LINE_ADD_POINT,
 
-        VIEW_ACTION_DRAW_ELLIPSE_SET_POINT = 0x100010,
-        VIEW_ACTION_DRAW_ELLIPSE_SET_RADIUS,
+        VIEW_ACTION_ELLIPSE_SET_CENTER = 0x100010,
+        VIEW_ACTION_ELLIPSE_SET_RADIUS,
     };
 
     void onActionAdded(unsigned int action);
