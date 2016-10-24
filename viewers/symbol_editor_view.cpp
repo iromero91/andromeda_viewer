@@ -1,16 +1,13 @@
-#include "symbol_editor_view.h"
+#include "viewers/symbol_editor_view.h"
 
-#include "geometry.h"
-
-#include "lwpolyline.h"
-#include "andromeda_ellipse.h"
+#include "geometry/geometry.h"
 
 #include <QDebug>
 #include <QLineF>
 
 #include <QApplication>
 
-SymbolEditorView::SymbolEditorView(QWidget *parent) : AndromedaView(parent)
+SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
 {
     addTempItem(&tmpLine_);
     addTempItem(&tmpEllipse_);
@@ -61,7 +58,7 @@ void SymbolEditorView::drawForeground(QPainter *painter, const QRectF &rect)
         break;
     }
 
-    AndromedaView::drawForeground(painter,rect);
+    AView::drawForeground(painter,rect);
 }
 
 void SymbolEditorView::keyPressEvent(QKeyEvent *event)
@@ -98,7 +95,7 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
     if (!accepted)
     {
         // Pass the event down the chain
-        AndromedaView::keyPressEvent(event);
+        AView::keyPressEvent(event);
     }
 
     update();
@@ -165,17 +162,17 @@ void SymbolEditorView::mousePressEvent(QMouseEvent *event)
 
 
     if (!accepted)
-        AndromedaView::mousePressEvent(event);
+        AView::mousePressEvent(event);
 }
 
 void SymbolEditorView::mouseReleaseEvent(QMouseEvent *event)
 {
-    AndromedaView::mouseReleaseEvent(event);
+    AView::mouseReleaseEvent(event);
 }
 
 void SymbolEditorView::mouseMoveEvent(QMouseEvent *event)
 {
-    AndromedaView::mouseMoveEvent(event);
+    AView::mouseMoveEvent(event);
 
     switch (getAction())
     {
@@ -207,7 +204,7 @@ void SymbolEditorView::mouseDoubleClickEvent(QMouseEvent *event)
         }
     }
 
-    //AndromedaView::mouseDoubleClickEvent(event);
+    //AView::mouseDoubleClickEvent(event);
 }
 
 void SymbolEditorView::onActionAdded(unsigned int action)
@@ -289,7 +286,7 @@ void SymbolEditorView::addLine()
     if (tmpLine_.points_.count() > 1)
     {
         // TODO - This is gross code. But let's copy it across for now
-        LWPolyline *line = new LWPolyline();
+        APolyline *line = new APolyline();
 
         foreach (LWPolypoint point, tmpLine_.points_)
         {
@@ -370,7 +367,7 @@ void SymbolEditorView::addRect()
 
     tmpRect_.setVisible(false);
 
-    LWPolyline *line = new LWPolyline();
+    APolyline *line = new APolyline();
 
     // Convert the rectangle into a polyline
     line->addPoint(rect.topLeft());
@@ -437,7 +434,7 @@ void SymbolEditorView::addEllipse()
 {
     if ((tmpEllipse_.getRx() > 0) && (tmpEllipse_.getRy() > 0))
     {
-        AndromedaEllipse *ellipse = new AndromedaEllipse();
+        AEllipse *ellipse = new AEllipse();
 
         ellipse->setPos(tmpEllipse_.pos());
 
@@ -453,7 +450,7 @@ void SymbolEditorView::addEllipse(QPointF center, double rx, double ry)
 {
     if (scene_ == NULL) return;
 
-    AndromedaEllipse *e = new AndromedaEllipse();
+    AEllipse *e = new AEllipse();
 
     e->setPos(center);
     e->setRadius(rx, ry);

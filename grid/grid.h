@@ -1,5 +1,5 @@
-#ifndef ANDROMEDA_GRID_H
-#define ANDROMEDA_GRID_H
+#ifndef GRID_GRID_H
+#define GRID_GRID_H
 
 #include <QPointF>
 
@@ -11,10 +11,10 @@ const double GRID_MINOR_TICK_DEFAULT = 0;
 const double GRID_TICK_MAX = 100.0f;
 
 
-class AndromedaGrid
+class AGrid
 {
 public:
-    AndromedaGrid();
+    AGrid();
 
     enum GridDrawingStyles
     {
@@ -52,5 +52,5 @@ protected:
     int drawStyle_;
 };
 
-#endif // ANDROMEDA_GRID_H
+#endif // GRID_GRID_H
 

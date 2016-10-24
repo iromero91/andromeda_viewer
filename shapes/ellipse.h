@@ -1,14 +1,14 @@
-#ifndef ANDROMEDA_ELLIPSE_H
-#define ANDROMEDA_ELLIPSE_H
+#ifndef SHAPES_ELLIPSE_H
+#define SHAPES_ELLIPSE_H
 
-#include "andromeda_drawable.h"
+#include "shapes/drawable.h"
 
 #include <QPainterPath>
 
-class AndromedaEllipse : public AndromedaDrawable
+class AEllipse : public ADrawable
 {
 public:
-    AndromedaEllipse();
+    AEllipse();
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     QPainterPath shape() const;
@@ -26,5 +26,5 @@ protected:
     double ry_;
 };
 
-#endif // ANDROMEDA_ELLIPSE_H
+#endif // SHAPES_ELLIPSE_H
 

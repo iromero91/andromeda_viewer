@@ -1,8 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "andromeda_scene.h"
-#include "andromeda_view.h"
-#include "andromeda_drawable.h"
+#include "viewers/andromeda_scene.h"
+#include "viewers/andromeda_view.h"
 
 #include <QGraphicsEllipseItem>
 

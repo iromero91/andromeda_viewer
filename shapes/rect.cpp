@@ -1,19 +1,19 @@
-#include "andromeda_rect.h"
+#include "rect.h"
 
-AndromedaRect::AndromedaRect() :
-    AndromedaDrawable(),
+ARect::ARect() :
+    ADrawable(),
     w_(0),
     h_(0)
 {
 
 }
 
-QRectF AndromedaRect::getRect() const
+QRectF ARect::getRect() const
 {
     return QRectF(QPointF(0,0), QSizeF(w_, h_));
 }
 
-QRectF AndromedaRect::boundingRect() const
+QRectF ARect::boundingRect() const
 {
     QRectF rect = getRect();
 
@@ -25,7 +25,7 @@ QRectF AndromedaRect::boundingRect() const
     return rect;
 }
 
-QPainterPath AndromedaRect::shape() const
+QPainterPath ARect::shape() const
 {
     QPainterPath path;
 
@@ -34,7 +34,7 @@ QPainterPath AndromedaRect::shape() const
     return path;
 }
 
-void AndromedaRect::setSize(double width, double height)
+void ARect::setSize(double width, double height)
 {
     w_ = width;
     h_ = height;
@@ -44,7 +44,7 @@ void AndromedaRect::setSize(double width, double height)
     update();
 }
 
-void AndromedaRect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void ARect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPen pen = linePen_;
     QBrush brush = fillBrush_;

@@ -1,5 +1,5 @@
-#ifndef LWPOLYLINE_H
-#define LWPOLYLINE_H
+#ifndef SHAPES_POLYLINE_H
+#define SHAPES_POLYLINE_H
 
 #include <QPointF>
 #include <QList>
@@ -7,11 +7,11 @@
 #include <QGraphicsItem>
 #include <QPainterPath>
 
-#include "andromeda_drawable.h"
+#include "shapes/drawable.h"
 
 const double PT_EPSILON = 0.01;
 
-//TODO change this to a map
+//TODO fix this, is hacky
 typedef struct
 
 {
@@ -19,10 +19,10 @@ typedef struct
     double angle;
 } LWPolypoint;
 
-class LWPolyline : public AndromedaDrawable
+class APolyline : public ADrawable
 {
 public:
-    LWPolyline();
+    APolyline();
 
     LWPolypoint getPolypoint(int index);
     QPointF getPoint(int index);
@@ -48,4 +48,4 @@ public:
     QList<LWPolypoint> points_;
 };
 
-#endif // LWPOLYLINE_H
+#endif // SHAPES_POLYLINE_H

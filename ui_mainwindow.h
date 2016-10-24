@@ -19,7 +19,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
-#include "symbol_editor_view.h"
+#include "viewers/symbol_editor_view.h"
 
 QT_BEGIN_NAMESPACE
 

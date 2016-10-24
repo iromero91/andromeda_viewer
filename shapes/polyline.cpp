@@ -1,4 +1,4 @@
-#include "lwpolyline.h"
+#include "shapes/polyline.h"
 
 #include <qmath.h>
 
@@ -9,12 +9,12 @@
 
 #include <QDebug>
 
-LWPolyline::LWPolyline() :
-    AndromedaDrawable()
+APolyline::APolyline() :
+    ADrawable()
 {
 }
 
-LWPolypoint LWPolyline::getPolypoint(int index)
+LWPolypoint APolyline::getPolypoint(int index)
 {
     if (index >= points_.count())
     {
@@ -28,17 +28,17 @@ LWPolypoint LWPolyline::getPolypoint(int index)
     return points_.at(index);
 }
 
-QPointF LWPolyline::getPoint(int index)
+QPointF APolyline::getPoint(int index)
 {
     return getPolypoint(index).point;
 }
 
-double LWPolyline::getAngle(int index)
+double APolyline::getAngle(int index)
 {
     return getPolypoint(index).angle;
 }
 
-void LWPolyline::setPoint(int index, QPointF point)
+void APolyline::setPoint(int index, QPointF point)
 {
     if (index < points_.count())
     {
@@ -48,7 +48,7 @@ void LWPolyline::setPoint(int index, QPointF point)
     }
 }
 
-void LWPolyline::setAngle(int index, double angle)
+void APolyline::setAngle(int index, double angle)
 {
     if (index < points_.count())
     {
@@ -58,7 +58,7 @@ void LWPolyline::setAngle(int index, double angle)
     }
 }
 
-QRectF LWPolyline::boundingRect() const
+QRectF APolyline::boundingRect() const
 {
     if (points_.count() == 0)
         return QRectF();
@@ -86,7 +86,7 @@ QRectF LWPolyline::boundingRect() const
     return rect;
 }
 
-void LWPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void APolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPainterPath path = shape();
 
@@ -134,14 +134,14 @@ void LWPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         drawBoundingBox(painter);
 }
 
-bool LWPolyline::comparePoints(QPointF pA, QPointF pB, double epsilon)
+bool APolyline::comparePoints(QPointF pA, QPointF pB, double epsilon)
 {
     QPointF delta = pB - pA;
 
     return (fabs(delta.x()) <= epsilon) && (fabs(delta.y()) <= epsilon);
 }
 
-bool LWPolyline::isClosed()
+bool APolyline::isClosed()
 {
     // Need at least three points_
     if (points_.count() < 3)
@@ -150,7 +150,7 @@ bool LWPolyline::isClosed()
     return comparePoints(points_.last().point, points_.first().point);
 }
 
-QPainterPath LWPolyline::shape() const
+QPainterPath APolyline::shape() const
 {
     QPainterPath path;
 
@@ -173,7 +173,7 @@ QPainterPath LWPolyline::shape() const
     return path;
 }
 
-bool LWPolyline::addPoint(LWPolypoint point)
+bool APolyline::addPoint(LWPolypoint point)
 {
     // Enforce zero-angle for the first point, doesn't make sense
     if (points_.count() == 0)
@@ -199,7 +199,7 @@ bool LWPolyline::addPoint(LWPolypoint point)
     return true;
 }
 
-bool LWPolyline::addPoint(QPointF point, double angle)
+bool APolyline::addPoint(QPointF point, double angle)
 {
     LWPolypoint p;
     p.point = point;

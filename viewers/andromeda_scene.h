@@ -9,16 +9,16 @@
 
 #include <stdint.h>
 
-#include "andromeda_grid.h"
-#include "drawable_enums.h"
-#include "layer_definitions.h"
+#include "grid/grid.h"
+#include "layers/layer_defines.h"
+#include "shapes/shape_defines.h"
 
-class AndromedaScene : public QGraphicsScene
+class AScene : public QGraphicsScene
 {
     Q_OBJECT
 
 public:
-    AndromedaScene(QObject *parent = 0);
+    AScene(QObject *parent = 0);
 
     void setBackgroundColor(QColor c) { bg_color_ = c;}
     QColor getBackgroundColor() { return bg_color_; }
@@ -26,8 +26,8 @@ public:
     void setAxesEnabled(bool draw) { draw_axes_ = draw; }
     bool getAxesEnabled() { return draw_axes_; }
 
-    void setGrid(AndromedaGrid grid) { grid_ = grid; }
-    AndromedaGrid getGrid() { return grid_; }
+    void setGrid(AGrid grid) { grid_ = grid; }
+    AGrid getGrid() { return grid_; }
 
     void drawBackground(QPainter *painter, const QRectF &rect);
 
@@ -65,7 +65,7 @@ protected:
     QPen axis_pen_;     // Pen object for drawing the axes
     QPen grid_pen_;     // Pen object for drawing the grid
 
-    AndromedaGrid grid_;    // Grid object
+    AGrid grid_;    // Grid object
 
     uint8_t layerDisplayMode_;  // How to display multiple layers
     uint64_t layerMask_;   // Which layers are currently visible

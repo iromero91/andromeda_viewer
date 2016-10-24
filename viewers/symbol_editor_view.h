@@ -3,11 +3,11 @@
 
 #include "andromeda_view.h"
 
-#include "lwpolyline.h"
-#include "andromeda_ellipse.h"
-#include "andromeda_rect.h"
+#include "shapes/polyline.h"
+#include "shapes/ellipse.h"
+#include "shapes/rect.h"
 
-class SymbolEditorView : public AndromedaView
+class SymbolEditorView : public AView
 {
     Q_OBJECT
 
@@ -25,7 +25,7 @@ protected:
     void drawForeground(QPainter *painter, const QRectF &rect);
 
     // LWPolyline creation
-    LWPolyline tmpLine_;
+    APolyline tmpLine_;
     void lineMode();
     void startLine(QPointF pos);
     void addLinePoint(QPointF pos);
@@ -36,7 +36,7 @@ protected:
     void addTempItem(QGraphicsItem *item);
 
     // Rectangle creation
-    AndromedaRect tmpRect_;
+    ARect tmpRect_;
     void rectMode();
     void startRect(QPointF pos, double width = 0, double height = 0);
     void updateRect(QPointF pos);
@@ -45,7 +45,7 @@ protected:
     void addRect(QPointF pStart, double width, double height);
 
     // Ellipse creation
-    AndromedaEllipse tmpEllipse_;
+    AEllipse tmpEllipse_;
     void ellipseMode();
     void setEllipseCenter(QPointF point);
     void setEllipseRadius(QPointF point);
@@ -72,6 +72,9 @@ protected:
 
     void onActionAdded(unsigned int action);
     void onActionCancelled(unsigned int action);
+
+    QList<AEllipse> ellipses_;
+    QList<APolyline> lines_;
 };
 
 #endif // SYMBOL_EDITOR_VIEW_H

@@ -1,7 +1,8 @@
-#ifndef ANDROMEDA_DRAWABLE_H
-#define ANDROMEDA_DRAWABLE_H
+#ifndef SHAPES_DRAWABLE_H
+#define SHAPES_DRAWABLE_H
 
 #include <QGraphicsItem>
+#include <QGraphicsObject>
 #include <QList>
 #include <QPointF>
 #include <QColor>
@@ -11,24 +12,14 @@
 #include <QStyleOptionGraphicsItem>
 #include <QString>
 
-#include "drawable_enums.h"
-#include "layer_definitions.h"
+#include "layers/layer_defines.h"
+#include "shapes/shape_defines.h"
 
-const QColor SYMBOL_LINE_COLOR(200,50,50);
-const QColor SYMBOL_FILL_COLOR(250,250,200);
-const QColor SYMBOL_BB_COLOR(150,150,150,150);
-
-const double SYMBOL_LINE_WIDTH_DEFAULT = 1.5f;
-
-const QString DRAWABLE_LWPOLYLINE = "LWPolyline";
-const QString DRAWABLE_ELLIPSE = "Ellipse";
-const QString DRAWABLE_PIN = "Pin";
-
-class AndromedaDrawable : public QGraphicsItem
+class ADrawable : public QGraphicsObject
 {
 
 public:
-    AndromedaDrawable();
+    ADrawable();
 
     enum DrawableDataDescriptors
     {
@@ -78,5 +69,5 @@ protected:
 
 };
 
-#endif // ANDROMEDA_DRAWABLE_H
+#endif // SHAPES_DRAWABLE_H
 

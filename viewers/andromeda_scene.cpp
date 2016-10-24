@@ -3,7 +3,7 @@
 
 #include <QGraphicsItem>
 
-AndromedaScene::AndromedaScene(QObject *parent) :
+AScene::AScene(QObject *parent) :
     QGraphicsScene(parent),
     bg_color_(0xFF, 0xFF, 0xFF),
     draw_axes_(true),
@@ -15,7 +15,7 @@ AndromedaScene::AndromedaScene(QObject *parent) :
 
 }
 
-void AndromedaScene::init()
+void AScene::init()
 {
     axis_pen_.setColor(QColor(150,150,150,150));
     axis_pen_.setWidth(2);
@@ -30,18 +30,18 @@ void AndromedaScene::init()
     grid_pen_.setCosmetic(true);
 }
 
-void AndromedaScene::setLayerDisplayMode(int mode)
+void AScene::setLayerDisplayMode(int mode)
 {
     layerDisplayMode_ = mode;
 }
 
 /**
- * @brief AndromedaScene::checkLayer
+ * @brief AScene::checkLayer
  * Check if the provided layer is visible in the scene layer selection
  * @param layerId
  * @return
  */
-bool AndromedaScene::checkLayer(int8_t layerId)
+bool AScene::checkLayer(int8_t layerId)
 {
     uint64_t layer = LayerIdToMask(layerId);
 
@@ -49,11 +49,11 @@ bool AndromedaScene::checkLayer(int8_t layerId)
 }
 
 /**
- * @brief AndromedaScene::setLayerMask
+ * @brief AScene::setLayerMask
  * Force visibility of the given layer mask
  * @param selection
  */
-void AndromedaScene::setLayerMask(uint64_t selection)
+void AScene::setLayerMask(uint64_t selection)
 {
     layerMask_ = selection;
 
@@ -79,11 +79,11 @@ void AndromedaScene::setLayerMask(uint64_t selection)
 }
 
 /**
- * @brief AndromedaScene::showLayers
+ * @brief AScene::showLayers
  * @param layers
  * @param show
  */
-void AndromedaScene::showLayers(uint64_t layerMask, bool show)
+void AScene::showLayers(uint64_t layerMask, bool show)
 {
     if (show)
     {
@@ -95,22 +95,22 @@ void AndromedaScene::showLayers(uint64_t layerMask, bool show)
     }
 }
 
-void AndromedaScene::hideLayers(uint64_t layerMask)
+void AScene::hideLayers(uint64_t layerMask)
 {
     showLayers(layerMask, false);
 }
 
-void AndromedaScene::showLayer(int8_t layerId, bool show)
+void AScene::showLayer(int8_t layerId, bool show)
 {
     showLayers(LayerIdToMask(layerId), show);
 }
 
-void AndromedaScene::hideLayer(int8_t layerId)
+void AScene::hideLayer(int8_t layerId)
 {
     showLayer(layerId, false);
 }
 
-void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
+void AScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     if (painter == NULL) return;
 
@@ -181,13 +181,13 @@ void AndromedaScene::drawBackground(QPainter *painter, const QRectF &rect)
 }
 
 /**
- * @brief AndromedaScene::getItemLayer
+ * @brief AScene::getItemLayer
  * Return the layer ID of the selected item
  * The layer ID corresponds to how the item will be displayed in the scene
  * @param item - pointer to the item in question
  * @return the layer of the item (or LAYER::NONE if there was an error)
  */
-int8_t AndromedaScene::getItemLayer(QGraphicsItem *item)
+int8_t AScene::getItemLayer(QGraphicsItem *item)
 {
     if (item == NULL) return (int8_t) LAYER_ID::NONE;
 
@@ -199,12 +199,12 @@ int8_t AndromedaScene::getItemLayer(QGraphicsItem *item)
 }
 
 /**
- * @brief AndromedaScene::setItemLayer
+ * @brief AScene::setItemLayer
  * Set the layer ID of the selected item
  * @param item
  * @param layer
  */
-void AndromedaScene::setItemLayer(QGraphicsItem *item, int8_t layer)
+void AScene::setItemLayer(QGraphicsItem *item, int8_t layer)
 {
     if (item == NULL) return;
 
@@ -212,13 +212,13 @@ void AndromedaScene::setItemLayer(QGraphicsItem *item, int8_t layer)
 }
 
 /**
- * @brief AndromedaScene::setItemDepth
+ * @brief AScene::setItemDepth
  * Set the Z-Order of a given item, based on it's logical layer assignment
  * @param item is a pointer to the item
  * @param layer is the item's logical layer
  * @param flip determines whether the scene view is 'flipped' or not
  */
-void AndromedaScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
+void AScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
 {
     if (item == NULL) return;
 
@@ -234,7 +234,7 @@ void AndromedaScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
 
 }
 
-void AndromedaScene::setItemDepth(QGraphicsItem *item, bool flip)
+void AScene::setItemDepth(QGraphicsItem *item, bool flip)
 {
     if (item == NULL) return;
 

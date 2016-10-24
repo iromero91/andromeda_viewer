@@ -1,6 +1,6 @@
-#include "andromeda_grid.h"
+#include "grid/grid.h"
 
-AndromedaGrid::AndromedaGrid() :
+AGrid::AGrid() :
     majorTick_(GRID_MAJOR_TICK_DEFAULT),
     minorTick_(0),
     origin_(0,0),
@@ -10,7 +10,7 @@ AndromedaGrid::AndromedaGrid() :
 }
 
 /**
- * @brief AndromedaGrid::mapToGrid
+ * @brief AGrid::mapToGrid
  *
  * Map an arbitary value to its closest point on the specified grid
  * @param value is the value to be mapped to a regular grid
@@ -18,7 +18,7 @@ AndromedaGrid::AndromedaGrid() :
  * @param origin is the (optional) offset (default = 0)
  * @return
  */
-double AndromedaGrid::mapToGrid(double value, double spacing, double origin)
+double AGrid::mapToGrid(double value, double spacing, double origin)
 {
     double div = value / spacing;
 
@@ -31,7 +31,7 @@ double AndromedaGrid::mapToGrid(double value, double spacing, double origin)
     return (double) ((int) div * spacing);
 }
 
-QPointF AndromedaGrid::mapToGrid(QPointF point, QPointF spacing, QPointF origin)
+QPointF AGrid::mapToGrid(QPointF point, QPointF spacing, QPointF origin)
 {
     QPoint mapped;
 
@@ -41,7 +41,7 @@ QPointF AndromedaGrid::mapToGrid(QPointF point, QPointF spacing, QPointF origin)
     return mapped;
 }
 
-bool AndromedaGrid::setMajorTick(double tick)
+bool AGrid::setMajorTick(double tick)
 {
     // Tick spacing cannot be lower than zero
     if (tick < 0) return false;
@@ -57,7 +57,7 @@ bool AndromedaGrid::setMajorTick(double tick)
     return true;
 }
 
-bool AndromedaGrid::setMinorTick(double tick)
+bool AGrid::setMinorTick(double tick)
 {
     // Tick spacing cannot be lower than zero
     if (tick < 0) return false;

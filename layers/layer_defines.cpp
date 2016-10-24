@@ -1,4 +1,4 @@
-#include "layer_definitions.h"
+#include "layer_defines.h"
 
 uint64_t LayerIdToMask(unsigned char layerId)
 {

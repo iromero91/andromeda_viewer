@@ -1,11 +1,12 @@
-#include "andromeda_drawable.h"
 #include <QPen>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
 
-AndromedaDrawable::AndromedaDrawable() :
-    QGraphicsItem(),
+#include "shapes/drawable.h"
+
+ADrawable::ADrawable() :
+    QGraphicsObject(),
     thickness_(SYMBOL_LINE_WIDTH_DEFAULT),
     filled_(true),
     drawBoundingBox_(true)
@@ -32,13 +33,13 @@ AndromedaDrawable::AndromedaDrawable() :
     setAcceptHoverEvents(true);
 }
 
-void AndromedaDrawable::setLineThickness(double thickness)
+void ADrawable::setLineThickness(double thickness)
 {
     //TODO check thickness against limits
     thickness_ = thickness;
 }
 
-void AndromedaDrawable::drawBoundingBox(QPainter *painter)
+void ADrawable::drawBoundingBox(QPainter *painter)
 {
     if (painter == NULL) return;
 
@@ -55,21 +56,21 @@ void AndromedaDrawable::drawBoundingBox(QPainter *painter)
 }
 
 /**
- * @brief AndromedaDrawable::setLayer
+ * @brief ADrawable::setLayer
  * Set the associated layer for this item
  * @param layer
  */
-void AndromedaDrawable::setLayer(int8_t layer)
+void ADrawable::setLayer(int8_t layer)
 {
     setData((int) DRAWABLE_KEY::ITEM_LAYER, layer);
 }
 
 /**
- * @brief AndromedaDrawable::getLayer
+ * @brief ADrawable::getLayer
  * Get the layer associated with this item
  * @return
  */
-int8_t AndromedaDrawable::getLayer()
+int8_t ADrawable::getLayer()
 {
     bool ok = false;
 

@@ -1,14 +1,13 @@
+#ifndef SHAPES_RECT_H
+#define SHAPES_RECT_H
 
-#ifndef ANDROMEDA_RECT_H
-#define ANDROMEDA_RECT_H
-
-#include "andromeda_drawable.h"
+#include "shapes/drawable.h"
 #include <QPainterPath>
 
-class AndromedaRect : public AndromedaDrawable
+class ARect : public ADrawable
 {
 public:
-    AndromedaRect();
+    ARect();
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     QPainterPath shape() const;
@@ -25,5 +24,5 @@ protected:
     double h_;  // height
 };
 
-#endif // ANDROMEDA_RECT_H
+#endif // SHAPES_RECT_H
 

@@ -1,14 +1,15 @@
-#include "andromeda_view.h"
-#include "andromeda_grid.h"
+#include "viewers/andromeda_view.h"
+#include "grid/grid.h"
 
 #include <QScrollBar>
 #include <QGraphicsItem>
 #include <QDebug>
 
-AndromedaView::AndromedaView(QWidget *parent) :
+AView::AView(QWidget *parent) :
     QGraphicsView(parent),
     cursorStyle_(VIEW_CURSOR_CROSS_SMALL),
-    viewFlags_(VIEW_NO_FLAGS)
+    viewFlags_(VIEW_NO_FLAGS),
+    mousePanActive_(false)
 {
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -22,17 +23,17 @@ AndromedaView::AndromedaView(QWidget *parent) :
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     // Add a default scene
-    setScene(new AndromedaScene());
+    setScene(new AScene());
 }
 
-void AndromedaView::setScene(AndromedaScene *scene)
+void AView::setScene(AScene *scene)
 {
     scene_ = scene;
 
     QGraphicsView::setScene(scene);
 }
 
-void AndromedaView::deleteItems(QList<QGraphicsItem *> items)
+void AView::deleteItems(QList<QGraphicsItem *> items)
 {
     if (scene_ == NULL) return;
 
@@ -50,7 +51,7 @@ void AndromedaView::deleteItems(QList<QGraphicsItem *> items)
     scene_->update();
 }
 
-void AndromedaView::deleteSelectedItems()
+void AView::deleteSelectedItems()
 {
     if (scene_ == NULL) return;
 
@@ -58,15 +59,15 @@ void AndromedaView::deleteSelectedItems()
 }
 
 /**
- * @brief AndromedaView::setCursorPos
+ * @brief AView::setCursorPos
  * Set the position of the cursor (in scene coordinates)
  * @param pos
  */
-void AndromedaView::setCursorPos(QPointF pos, bool panPastEdges)
+void AView::setCursorPos(QPointF pos, bool panPastEdges)
 {
     double grid = getScene()->getGrid().getMajorTick();
 
-    pos = AndromedaGrid::mapToGrid(pos, QPointF(grid,grid));
+    pos = AGrid::mapToGrid(pos, QPointF(grid,grid));
 
     if ((pos.x() == cursorPos_.x()) && (pos.y() == cursorPos_.y())) return;
 
@@ -98,22 +99,22 @@ void AndromedaView::setCursorPos(QPointF pos, bool panPastEdges)
     getScene()->update();
 }
 
-void AndromedaView::moveCursor(QPointF offset, bool panPastEdges)
+void AView::moveCursor(QPointF offset, bool panPastEdges)
 {
     setCursorPos(cursorPos_ + offset, panPastEdges);
 }
 
-void AndromedaView::moveCursor(double dx, double dy, bool panPastEdges)
+void AView::moveCursor(double dx, double dy, bool panPastEdges)
 {
     moveCursor(QPointF(dx,dy), panPastEdges);
 }
 
 /**
- * @brief AndromedaView::snapMouseToCursor
+ * @brief AView::snapMouseToCursor
  *
  * Move the mouse pointer to the location of the scene cursor
  */
-void AndromedaView::snapMouseToCursor()
+void AView::snapMouseToCursor()
 {
     // If the cursorPos is off screen, focus view on that point
     if (!sceneRect().contains(cursorPos_))
@@ -126,18 +127,18 @@ void AndromedaView::snapMouseToCursor()
     cursor().setPos(pos);
 }
 
-void AndromedaView::scroll(QPoint offset)
+void AView::scroll(QPoint offset)
 {
     scroll(offset.x(), offset.y());
 }
 
 /**
- * @brief AndromedaView::scroll
+ * @brief AView::scroll
  * Adjust the scroll bar position by a given amount
  * @param dx
  * @param dy
  */
-void AndromedaView::scroll(int dx, int dy)
+void AView::scroll(int dx, int dy)
 {
     bool update = false;
 
@@ -158,7 +159,7 @@ void AndromedaView::scroll(int dx, int dy)
 
 }
 
-void AndromedaView::keyPressEvent(QKeyEvent *event)
+void AView::keyPressEvent(QKeyEvent *event)
 {
     if (event == NULL) return;
 
@@ -229,12 +230,12 @@ void AndromedaView::keyPressEvent(QKeyEvent *event)
 }
 
 /**
- * @brief AndromedaView::wheelEvent
+ * @brief AView::wheelEvent
  *
  * Called when the mouse wheel is scrolled and this widget has mouse focus
  * @param event
  */
-void AndromedaView::wheelEvent(QWheelEvent *event)
+void AView::wheelEvent(QWheelEvent *event)
 {
     if (scene_ == NULL || event == NULL) return;
 
@@ -254,7 +255,7 @@ void AndromedaView::wheelEvent(QWheelEvent *event)
     //event->accept();
 }
 
-void AndromedaView::mousePressEvent(QMouseEvent *event)
+void AView::mousePressEvent(QMouseEvent *event)
 {
     if (event == NULL || scene_ == NULL) return;
 
@@ -262,27 +263,37 @@ void AndromedaView::mousePressEvent(QMouseEvent *event)
 
     setCursorPos(scenePos);
 
-    // Selection
-    if (event->button() == Qt::LeftButton)
+    switch (event->button())
     {
+    case Qt::MiddleButton:
+        setCursor(QCursor(Qt::OpenHandCursor));
+        break;
+    case Qt::LeftButton:
         startPos_ = cursorPos_;
-
         pushAction(VIEW_ACTION_SELECTING);
+        break;
+
+    default:
+        break;
     }
 }
 
 
 
-void AndromedaView::mouseDoubleClickEvent(QMouseEvent *event)
+void AView::mouseDoubleClickEvent(QMouseEvent *event)
 {
 }
 
-void AndromedaView::mouseReleaseEvent(QMouseEvent *event)
+void AView::mouseReleaseEvent(QMouseEvent *event)
 {
     if (scene_ == NULL || event == NULL) return;
 
     // Left mouse button is used for selection
-    if (event->button() == Qt::LeftButton)
+    if (event->button() == Qt::MiddleButton)
+    {
+        endMousePan();
+    }
+    else if (event->button() == Qt::LeftButton)
     {
         QPointF pixels = unitsPerPixel();
         QRectF selection = getSelectionMarquee();
@@ -364,9 +375,8 @@ void AndromedaView::mouseReleaseEvent(QMouseEvent *event)
 }
 
 
-void AndromedaView::mouseMoveEvent(QMouseEvent *event)
+void AView::mouseMoveEvent(QMouseEvent *event)
 {
-    static bool panning = false;
     static QPoint lastMousePos;
 
     if (getScene() == NULL || event == NULL) return;
@@ -379,41 +389,54 @@ void AndromedaView::mouseMoveEvent(QMouseEvent *event)
     // Check for panning event
     if (event->buttons() & Qt::MiddleButton)
     {
-
-        if (panning)
+        if (!mousePanActive_)
+        {
+            startMousePan();
+        }
+        else
         {
             QPoint delta = mousePos - lastMousePos;
-
             scroll(delta);
         }
 
         // Set the panning flag
-        panning = true;
         lastMousePos = mousePos;
     }
     else
     {
-        panning = false;
+        endMousePan();
     }
 
     QGraphicsView::mouseMoveEvent(event);
 }
 
+void AView::startMousePan()
+{
+    mousePanActive_ = true;
+    setCursor(QCursor(Qt::ClosedHandCursor));
+}
+
+void AView::endMousePan()
+{
+    mousePanActive_ = false;
+    setCursor(QCursor(Qt::ArrowCursor));
+}
+
 /*
-void AndromedaView::drawBackground(QPainter *painter, const QRectF &rect)
+void AView::drawBackground(QPainter *painter, const QRectF &rect)
 {
 
 }
 */
 
 /**
- * @brief AndromedaView::drawForeground
+ * @brief AView::drawForeground
  * Custom foreground painting (AFTER the scene is painted)
  * Painting is performed in scene coordinates
  * @param painter
  * @param rect
  */
-void AndromedaView::drawForeground(QPainter *painter, const QRectF &rect)
+void AView::drawForeground(QPainter *painter, const QRectF &rect)
 {
     if (painter == NULL) return;
 
@@ -423,7 +446,7 @@ void AndromedaView::drawForeground(QPainter *painter, const QRectF &rect)
     }
 }
 
-void AndromedaView::drawSelectionMarquee(QPainter *painter, const QRectF &rect)
+void AView::drawSelectionMarquee(QPainter *painter, const QRectF &rect)
 {
     QPen marqueePen(QColor(0,255,200,200));
 
@@ -445,7 +468,7 @@ void AndromedaView::drawSelectionMarquee(QPainter *painter, const QRectF &rect)
     painter->drawRect(selection.normalized());
 }
 
-QRectF AndromedaView::getSelectionMarquee()
+QRectF AView::getSelectionMarquee()
 {
     return QRectF(startPos_.x(),
                   startPos_.y(),
@@ -453,7 +476,7 @@ QRectF AndromedaView::getSelectionMarquee()
                   cursorPos_.y() - startPos_.y());
 }
 
-void AndromedaView::paintEvent(QPaintEvent *event)
+void AView::paintEvent(QPaintEvent *event)
 {
     if (event == NULL) return;
 
@@ -471,12 +494,12 @@ void AndromedaView::paintEvent(QPaintEvent *event)
         drawOverlay(&painter, event->rect());
 }
 
-void AndromedaView::drawOverlay(QPainter *painter, QRect rect)
+void AView::drawOverlay(QPainter *painter, QRect rect)
 {
     // Re-implement this to draw an overlayover the scene
 }
 
-void AndromedaView::drawCursor(QPainter *painter, QRect rect)
+void AView::drawCursor(QPainter *painter, QRect rect)
 {
     if (painter == NULL) return;
 
@@ -528,19 +551,19 @@ void AndromedaView::drawCursor(QPainter *painter, QRect rect)
 }
 
 /**
- * @brief AndromedaView::getCenterLocation
+ * @brief AView::getCenterLocation
  * @return the center of the viewport (in scene coordinates)
  */
-QPointF AndromedaView::getCenterLocation()
+QPointF AView::getCenterLocation()
 {
     return mapToScene(width()/2,height()/2);
 }
 
 /**
- * @brief AndromedaView::getViewport
+ * @brief AView::getViewport
  * @return the viewport rectangle in scene coordinates
  */
-QRectF AndromedaView::getViewport()
+QRectF AView::getViewport()
 {
     return QRectF(
                 mapToScene(0,0),
@@ -549,10 +572,10 @@ QRectF AndromedaView::getViewport()
 }
 
 /**
- * @brief AndromedaView::unitsPerPixel
+ * @brief AView::unitsPerPixel
  * @return <x,y> mapping of how many internal units correspond to each visible pixel
  */
-QPointF AndromedaView::unitsPerPixel()
+QPointF AView::unitsPerPixel()
 {
     QRectF scene = getViewport();
 
@@ -560,10 +583,10 @@ QPointF AndromedaView::unitsPerPixel()
 }
 
 /**
- * @brief AndromedaView::setScalingFactor
+ * @brief AView::setScalingFactor
  * @param scaling is the desired scaling factor
  */
-void AndromedaView::setScalingFactor(double scaling)
+void AView::setScalingFactor(double scaling)
 {
     if (scaling <= 0) return;
 
@@ -577,16 +600,16 @@ void AndromedaView::setScalingFactor(double scaling)
 }
 
 /**
- * @brief AndromedaView::scaleRelative
+ * @brief AView::scaleRelative
  * Scale the view by a specified amount relative to the current scaling
  * @param scaling
  */
-void AndromedaView::scaleRelative(double scaling)
+void AView::scaleRelative(double scaling)
 {
     setScalingFactor(getScalingFactor() * scaling);
 }
 
-unsigned int AndromedaView::getAction()
+unsigned int AView::getAction()
 {
     if (actionStack_.count() > 0)
     {
@@ -596,7 +619,7 @@ unsigned int AndromedaView::getAction()
     return (unsigned int) VIEW_NO_ACTION;
 }
 
-bool AndromedaView::pushAction(unsigned int action, bool allowDuplicates)
+bool AView::pushAction(unsigned int action, bool allowDuplicates)
 {
     if (!allowDuplicates && (action == getAction()))
         return false;
@@ -610,7 +633,7 @@ bool AndromedaView::pushAction(unsigned int action, bool allowDuplicates)
     return true;
 }
 
-bool AndromedaView::popAction()
+bool AView::popAction()
 {
     if (actionStack_.count() > 0)
     {
@@ -628,7 +651,7 @@ bool AndromedaView::popAction()
     return false;
 }
 
-bool AndromedaView::popAction(unsigned int action)
+bool AView::popAction(unsigned int action)
 {
     if (getAction() == action)
     {
@@ -638,13 +661,13 @@ bool AndromedaView::popAction(unsigned int action)
     return false;
 }
 
-void AndromedaView::clearActions()
+void AView::clearActions()
 {
     while (actionStack_.count() > 0)
         popAction();
 }
 
-void AndromedaView::setViewFlags(unsigned int flags, bool on)
+void AView::setViewFlags(unsigned int flags, bool on)
 {
     if (on)
     {
@@ -656,17 +679,17 @@ void AndromedaView::setViewFlags(unsigned int flags, bool on)
     }
 }
 
-void AndromedaView::clearViewFlags(unsigned int flags)
+void AView::clearViewFlags(unsigned int flags)
 {
     setViewFlags(flags, false);
 }
 
-bool AndromedaView::checkViewFlags(unsigned int flags)
+bool AView::checkViewFlags(unsigned int flags)
 {
     return (viewFlags_ & flags) > 0;
 }
 
-void AndromedaView::setCursorStyle(unsigned char style)
+void AView::setCursorStyle(unsigned char style)
 {
     if (style < VIEW_CURSOR_NUM_STYLES)
     {

@@ -37,7 +37,7 @@
   <customwidget>
    <class>SymbolEditorView</class>
    <extends>QGraphicsView</extends>
-   <header>symbol_editor_view.h</header>
+   <header>viewers/symbol_editor_view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

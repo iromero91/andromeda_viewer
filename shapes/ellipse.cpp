@@ -1,15 +1,15 @@
-#include "andromeda_ellipse.h"
+#include "shapes/ellipse.h"
 
 #include <math.h>
 
-AndromedaEllipse::AndromedaEllipse() :
-     AndromedaDrawable(),
+AEllipse::AEllipse() :
+     ADrawable(),
      rx_(0),
      ry_(0)
 {
 }
 
-QRectF AndromedaEllipse::boundingRect() const
+QRectF AEllipse::boundingRect() const
 {
     QRectF rect(-rx_, -ry_, 2*rx_, 2*ry_);
 
@@ -21,7 +21,7 @@ QRectF AndromedaEllipse::boundingRect() const
     return rect;
 }
 
-QPainterPath AndromedaEllipse::shape() const
+QPainterPath AEllipse::shape() const
 {
     QPainterPath path;
 
@@ -30,7 +30,7 @@ QPainterPath AndromedaEllipse::shape() const
     return path;
 }
 
-void AndromedaEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void AEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     //QPainterPath path = shape();
 
@@ -74,7 +74,7 @@ void AndromedaEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
 }
 
-void AndromedaEllipse::setRadius(double rx, double ry)
+void AEllipse::setRadius(double rx, double ry)
 {
     rx_ = fabs(rx);
     ry_ = fabs(ry);
@@ -84,7 +84,31 @@ void AndromedaEllipse::setRadius(double rx, double ry)
     update();
 }
 
-void AndromedaEllipse::setRadius(double r)
+void AEllipse::setRadius(double r)
 {
     setRadius(r,r);
 }
+
+/*
+QList<QPointF> AEllipse::getAnchors()
+{
+    QList<QPointF> anchors;
+
+    // Center
+    anchors.append(pos);
+
+    // Top
+    anchors.append(QPointF(pos.x(), pos.y() - ry_));
+
+    // Bottom
+    anchors.append(QPointF(pos.x(), pos.y() + ry_));
+
+    // Left
+    anchors.append(QPointF(pos.x() - rx_, pos.y()));
+
+    // Right
+    anchors.append(QPointF(pos.x() + rx_, pos.y()));
+
+    return anchors;
+}
+*/

@@ -6,21 +6,22 @@
 #include <QWheelEvent>
 #include <QKeyEvent>
 #include <QPaintEvent>
+#include <QCursor>
 
 #include "andromeda_scene.h"
 
 #define ANDROMEDA_VIEW_MAX_SCALING 100.0f
 #define ANDROMEDA_VIEW_MIN_SCALING 0.001f
 
-class AndromedaView : public QGraphicsView
+class AView : public QGraphicsView
 {
     Q_OBJECT
 
 public:
-    AndromedaView(QWidget *parent = 0);
+    AView(QWidget *parent = 0);
 
-    void setScene(AndromedaScene *scene);
-    AndromedaScene* getScene(void) { return scene_; }
+    void setScene(AScene *scene);
+    AScene* getScene(void) { return scene_; }
 
     // Viewport functions
     QPointF getCenterLocation(void);
@@ -52,7 +53,7 @@ public:
     void deleteSelectedItems(void);
 
     /* View State Machine */
-    enum AndromedaViewActions
+    enum AViewActions
     {
         VIEW_NO_ACTION = 0x00,
 
@@ -67,7 +68,7 @@ public:
     bool popAction(unsigned int action);
     void clearActions(void);
 
-    enum AndromedaViewFlags
+    enum AViewFlags
     {
         VIEW_NO_FLAGS = 0x00,
 
@@ -116,7 +117,7 @@ protected:
     void drawOverlay(QPainter *painter, QRect rect);
     void drawCursor(QPainter *painter, QRect rect);
 
-    AndromedaScene *scene_;
+    AScene *scene_;
 
     QPointF cursorOrigin_;  // 'Origin' of the cursor
     QPointF cursorPos_; // Current location of the cursor
@@ -133,6 +134,10 @@ protected:
 
     unsigned int viewFlags_;    // View flags
 
+    bool mousePanActive_;
+
+    void startMousePan();
+    void endMousePan();
 
 private:
 };

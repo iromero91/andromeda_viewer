@@ -1,5 +1,5 @@
-#ifndef LAYER_DEFINITIONS_H
-#define LAYER_DEFINITIONS_H
+#ifndef LAYER_DEFINES_H
+#define LAYER_DEFINES_H
 
 #include "pcb_layers.h"
 
@@ -41,5 +41,5 @@ enum class LAYER_ID : unsigned char {
 
 uint64_t LayerIdToMask(unsigned char layerId);
 
-#endif // LAYER_DEFINITIONS_H
+#endif // LAYER_DEFINES_H
 
