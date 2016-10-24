@@ -56,6 +56,10 @@ public:
     void setLayer(int8_t layer);
     int8_t getLayer(void);
 
+    // Return a list of 'anchors' for this item
+    // Default, empty list
+    QList<QPointF> getAnchors() { return QList<QPointF>(); }
+
 protected:
     double thickness_;  // Line thickness
     bool filled_;       // Is the shape filled?
