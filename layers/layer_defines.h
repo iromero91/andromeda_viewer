@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 // Layer display modes
-enum class LAYER_MODE : uint8_t {
+enum class LAYER_MODE : unsigned char {
 
     // Show *no* layers
     SHOW_NONE = 0x00,

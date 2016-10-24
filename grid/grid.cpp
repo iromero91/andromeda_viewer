@@ -1,4 +1,4 @@
-#include "grid/grid.h"
+#include "grid.h"
 
 AGrid::AGrid() :
     majorTick_(GRID_MAJOR_TICK_DEFAULT),

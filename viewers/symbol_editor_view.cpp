@@ -1,4 +1,4 @@
-#include "viewers/symbol_editor_view.h"
+#include "symbol_editor_view.h"
 
 #include "geometry/geometry.h"
 

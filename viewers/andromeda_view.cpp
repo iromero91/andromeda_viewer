@@ -1,4 +1,4 @@
-#include "viewers/andromeda_view.h"
+#include "andromeda_view.h"
 #include "grid/grid.h"
 
 #include <QScrollBar>

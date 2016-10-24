@@ -3,7 +3,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
 
-#include "shapes/drawable.h"
+#include "drawable.h"
 
 ADrawable::ADrawable() :
     QGraphicsObject(),

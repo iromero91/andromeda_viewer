@@ -25,7 +25,9 @@ SOURCES += main.cpp\
     shapes/polyline.cpp \
     shapes/rect.cpp \
     grid/grid.cpp \
-    layers/layer_defines.cpp
+    layers/layer_defines.cpp \
+    tools/drawing_tool_base.cpp \
+    tools/polyline_tool_base.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
@@ -40,7 +42,9 @@ HEADERS  += mainwindow.h \
     shapes/polyline.h \
     shapes/rect.h \
     grid/grid.h \
-    layers/layer_defines.h
+    layers/layer_defines.h \
+    tools/tool_defines.h \
+    tools/polyline_tool_base.h
 
 FORMS    += mainwindow.ui
 

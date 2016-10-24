@@ -17,6 +17,7 @@
 
 class ADrawable : public QGraphicsObject
 {
+    Q_OBJECT
 
 public:
     ADrawable();

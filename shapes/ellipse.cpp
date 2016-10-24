@@ -1,4 +1,4 @@
-#include "shapes/ellipse.h"
+#include "ellipse.h"
 
 #include <math.h>
 

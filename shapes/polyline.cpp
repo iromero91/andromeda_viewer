@@ -1,4 +1,4 @@
-#include "shapes/polyline.h"
+#include "polyline.h"
 
 #include <qmath.h>
 
