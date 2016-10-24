@@ -1,5 +1,7 @@
 #include "drawing_tool_base.h"
 
+#include "layers/layer_defines.h"
+
 ADrawingTool::ADrawingTool() :
     QGraphicsObject(),
     tool_state_(0)
@@ -8,6 +10,8 @@ ADrawingTool::ADrawingTool() :
 
     defaultPen();
     defaultBrush();
+
+    setZValue((int) LAYER_ID::TOOLS);
 }
 
 /**

@@ -32,11 +32,25 @@ enum class LAYER_MASK : uint64_t {
 };
 
 // Generic layer enumerations
-enum class LAYER_ID : unsigned char {
-    NONE    = 0,
+enum class LAYER_ID : int {
+
+    // Layers 0-63 are available for use
+    // Each of these layers can be masked ON or OFF
+    // All other layers are always 'ON'
+
+    TOP = 64,
 
     // The currently selected layer is forced to the top
-    SELECTED = 62,
+    SELECTED = 70,
+
+    // User-facing tools draw temporary objects on the TOOLS layer
+    TOOLS = 80,
+
+    // Special value to force item to be insisible
+    INVISIBLE = 100,
+
+    // Special value corresponding to "no layer"
+    NONE = 200,
 };
 
 uint64_t LayerIdToMask(unsigned char layerId);

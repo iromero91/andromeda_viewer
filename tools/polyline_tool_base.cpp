@@ -41,6 +41,18 @@ void PolylineDrawingToolBase::addPoint(QPointF point)
     }
 }
 
+APolyline PolylineDrawingToolBase::getPolyline()
+{
+    APolyline line;
+
+    line.addPoint(start_pos_);
+
+    foreach (QPointF p, points_)
+    {
+        line.addPoint(p);
+    }
+}
+
 void PolylineDrawingToolBase::finish()
 {
 

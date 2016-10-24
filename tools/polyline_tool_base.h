@@ -16,6 +16,9 @@ class PolylineDrawingToolBase : public ADrawingTool
 public:
     PolylineDrawingToolBase();
 
+    // Return the polyline constructed by this tool
+    APolyline getPolyline(void);
+
 public slots:
     void reset(void);
     void start(void);

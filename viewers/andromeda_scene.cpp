@@ -12,7 +12,6 @@ AScene::AScene(QObject *parent) :
 {
     init();
 
-
 }
 
 void AScene::init()
@@ -43,6 +42,18 @@ void AScene::setLayerDisplayMode(int mode)
  */
 bool AScene::checkLayer(int8_t layerId)
 {
+    // The layer mask accounts for 64 unique layers
+    // Any layers outside the maskable range are for display only and are ALWAYS on
+    if ((layerId < 0)|| (layerId >= (int) LAYER_ID::TOP))
+    {
+        return true;
+    }
+
+    else if (layerId == (int) LAYER_ID::INVISIBLE)
+    {
+        return false;
+    }
+
     uint64_t layer = LayerIdToMask(layerId);
 
     return (layerMask_ & layer) > 0;
@@ -222,8 +233,14 @@ void AScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
 {
     if (item == NULL) return;
 
+    // If the layer is above the top layer, ignore
+    if (layer >= (int) LAYER_ID::TOP)
+    {
+
+    }
+
     // If the layer is the selected layer, force it to the top
-    if (layer == getCurrentLayer())
+    else if (layer == getCurrentLayer())
         layer = (int8_t) LAYER_ID::SELECTED;
 
     //TODO improve this (simplistic) view flipping
