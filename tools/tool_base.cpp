@@ -4,7 +4,7 @@
 
 AToolBase::AToolBase() :
     QGraphicsObject(),
-    tool_state_(0)
+    tool_state_((int) TOOL_STATE::INACTIVE)
 {
     setZValue((int) LAYER_ID::TOOLS);
     setVisible(false);
@@ -21,30 +21,12 @@ void AToolBase::clear()
 }
 
 /**
- * @brief AToolBase::update
- * Update the tool position (e.g. as the user moves the mouse around)
- * @param pos
- */
-void AToolBase::update(QPointF pos)
-{
-    tool_pos_ = pos;
-
-    onUpdate();
-
-    prepareGeometryChange();
-}
-
-void AToolBase::onUpdate()
-{
-    // Reimplement this as a callback
-}
-
-/**
  * @brief AToolBase::cancel
  * Cancel the tool
  */
 void AToolBase::cancel()
 {
+    tool_state_ = (int) TOOL_STATE::INACTIVE;
     clear();
     emit cancelled();
 }

@@ -11,6 +11,9 @@
 #include <QPen>
 #include <QBrush>
 
+#include <QMouseEvent>
+#include <QKeyEvent>
+
 #include "tool_defines.h"
 
 class AToolBase : public QGraphicsObject
@@ -19,6 +22,8 @@ class AToolBase : public QGraphicsObject
 
 public:
     AToolBase();
+
+    bool isActive(void) { return tool_state_ != (int) TOOL_STATE::INACTIVE; }
 
     int getToolState(void) { return tool_state_; }
     void setToolState(int state) { tool_state_ = state; }
@@ -30,20 +35,20 @@ public slots:
     // Start the tool (no position provided)
     virtual void start(void) = 0;
 
-    // Start the tool at the provided position
-    virtual void start(QPointF pos) = 0;
-
-    // Update the tool position as the mouse moves
-    void update(QPointF pos);
-
-    // Add a new point to the tool
-    virtual void addPoint(QPointF point) = 0;
-
     // Finish the tool
     virtual void finish(void) = 0;
 
     // Cancel the tool
     void cancel(void);
+
+    // Send events to the tool
+    // Override these to implement
+    bool onMousePress(QMouseEvent *event) { return false; }
+    bool onMouseRelease(QMouseEvent *event) { return false; }
+    bool onMouseMove(QMouseEvent *event) { return false; }
+    bool onMouseDoubleClick(QMouseEvent *event) { return false; }
+    bool onKeyPress(QKeyEvent *event) { return false; }
+    bool onKeyRelease(QKeyEvent *event) { return false; }
 
 signals:
     void started(void);

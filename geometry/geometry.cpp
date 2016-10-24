@@ -159,9 +159,9 @@ bool ArcIsCurved(double angle, double threshold)
  * @param pFrom
  * @return true if the center can be calculated else false
  */
-bool ArcCenter(QPointF *center, double angle, QPointF pTo, QPointF pFrom)
+bool ArcCenter(QPointF &center, double angle, QPointF pTo, QPointF pFrom)
 {
-    if (ArcIsStraight(angle) || center == NULL)
+    if (ArcIsStraight(angle))
         return false;
 
     QPointF mid = Midpoint(pTo, pFrom);
@@ -183,8 +183,8 @@ bool ArcCenter(QPointF *center, double angle, QPointF pTo, QPointF pFrom)
 
     double Q = sqrt(pow(r,2) - pow(q/2,2));
 
-    center->setX(mid.x() + Q * dx / q);
-    center->setY(mid.y() + Q * dy / q);
+    center.setX(mid.x() + Q * dx / q);
+    center.setY(mid.y() + Q * dy / q);
 
     return true;
 }

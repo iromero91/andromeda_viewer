@@ -1,5 +1,7 @@
 #include "polyline_tool.h"
 
+#include <QDebug>
+
 PolylineDrawingTool::PolylineDrawingTool() :
     AToolBase()
 {
@@ -74,15 +76,8 @@ void PolylineDrawingTool::start()
     reset();
 
     setVisible(true);
-}
 
-void PolylineDrawingTool::start(QPointF pos)
-{
-    start();
-
-    start_pos_ = pos;
-
-    setToolState((int) LINE_TOOL_STATE::ADDING_POINTS);
+    qDebug() << "start poly tool";
 }
 
 void PolylineDrawingTool::addPoint(QPointF point)
@@ -96,6 +91,9 @@ void PolylineDrawingTool::addPoint(QPointF point)
     {
         points_.append(point);
     }
+
+    prepareGeometryChange();
+
 }
 
 APolyline PolylineDrawingTool::getPolyline()

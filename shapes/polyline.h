@@ -45,6 +45,8 @@ public:
 
     static bool comparePoints(QPointF pA, QPointF pB, double epsilon = PT_EPSILON);
 
+protected:
+    QPointF start_pos_;
     QList<LWPolypoint> points_;
 };
 

@@ -5,7 +5,8 @@
 #include "shapes/polyline.h"
 
 enum class LINE_TOOL_STATE : int {
-    FIRST_POINT = 0,    // Adding the first point
+
+    FIRST_POINT = 10,    // Adding the first point
     ADDING_POINTS,      // Adding subsequent points
 };
 
@@ -27,7 +28,6 @@ public:
 public slots:
     void reset(void);
     void start(void);
-    void start(QPointF pos);
     void addPoint(QPointF point);
     void finish();
 

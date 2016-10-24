@@ -51,28 +51,12 @@ public:
     void deleteItems(QList<QGraphicsItem*> items);
     void deleteSelectedItems(void);
 
-    /* View State Machine */
-    enum AViewActions
-    {
-        VIEW_NO_ACTION = 0x00,
-
-        VIEW_ACTION_SELECTING = 0x01,    // Drawing a selection rectangle
-    };
-
     // Tool functions
     bool startTool(void);           // Start the current tool
-    bool startTool(QPointF pos);    // Start the current tool at a given pos
     bool startTool(AToolBase *tool);
-    bool startTool(AToolBase *tool, QPointF pos);
     void cancelTool(void);
-
-    // Action functions
-    unsigned int getAction(void);
-    QList<unsigned int> getActionStack(void) { return actionStack_; }
-    bool pushAction(unsigned int action, bool allowDuplicates = false);
-    bool popAction(void);
-    bool popAction(unsigned int action);
-    void clearActions(void);
+    bool isToolActive(void);
+    bool isToolAvailable() { return current_tool_ != nullptr; }
 
     enum AViewFlags
     {
@@ -100,8 +84,6 @@ public slots:
 signals:
     // Called when the user cursor changes (in scene coordinates)
     void cursorPositionChanged(QPointF pos);
-    void actionAdded(unsigned int action);
-    void actionCancelled(unsigned int action);
 
 protected:
     // UI event callbacks
@@ -112,6 +94,8 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event);
 
     void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+
     void paintEvent(QPaintEvent *event);
 
     // Painting functions (drawn in scene coordinates)
@@ -135,18 +119,20 @@ protected:
     // Tools
     AToolBase *current_tool_;
 
-    QList<unsigned int> actionStack_;
-    virtual void onActionAdded(unsigned int action) = 0;
-    virtual void onActionCancelled(unsigned int action) = 0;
-
     unsigned char cursorStyle_;     // Cursor style
 
     unsigned int viewFlags_;    // View flags
 
-    bool mousePanActive_;
-
+    // Mouse panning
+    bool mouse_pan_active_;
     void startMousePan();
     void endMousePan();
+
+    // Selection
+    bool selection_active_;
+    void startSelection();
+    void finishSelection();
+    void cancelSelection();
 
 private:
 };

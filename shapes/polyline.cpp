@@ -63,19 +63,11 @@ QRectF APolyline::boundingRect() const
     if (points_.count() == 0)
         return QRectF();
 
-    QRectF rect(points_.first().point.x(), points_.first().point.y(), 0, 0);
+    QRectF rect(start_pos_, QSizeF(0,0));
 
-    QPointF p;
-
-    for (int i=1;i<points_.count();i++)
+    for (int i=0; i<points_.count(); i++)
     {
-        p = points_.at(i).point;
-
-        rect.setLeft(fmin(rect.left(), p.x()));
-        rect.setRight(fmax(rect.right(), p.x()));
-
-        rect.setTop(fmin(rect.top(), p.y()));
-        rect.setBottom(fmax(rect.bottom(), p.y()));
+        rect = rect.united(QRectF(points_.at(i).point, QSizeF(0,0)));
     }
 
     rect.adjust(-thickness_,
@@ -143,31 +135,22 @@ bool APolyline::comparePoints(QPointF pA, QPointF pB, double epsilon)
 
 bool APolyline::isClosed()
 {
-    // Need at least three points_
-    if (points_.count() < 3)
+    // Need at least three points (including starting position)
+    if (points_.count() < 2)
         return false;
 
-    return comparePoints(points_.last().point, points_.first().point);
+    return comparePoints(points_.last().point, start_pos_);
 }
 
 QPainterPath APolyline::shape() const
 {
     QPainterPath path;
 
-    if (points_.count() == 0)
-        return path;
+    path.moveTo(start_pos_);
 
-    path.moveTo(points_.first().point);
-
-    QPointF p;
-
-    for (int i=1;i<points_.count();i++)
+    for (int i=0; i<points_.count(); i++)
     {
-        //TODO - account for curved lines
-
-        p = points_.at(i).point;
-
-        path.lineTo(p);
+        path.lineTo(points_.at(i).point);
     }
 
     return path;

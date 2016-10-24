@@ -49,6 +49,6 @@ double AngleNormalized(double angle);
 bool ArcIsStraight(double angle, double threshold = ARC_ANGLE_THRESHOLD);
 bool ArcIsCurved(double angle, double threshold = ARC_ANGLE_THRESHOLD);
 
-bool ArcCenter(QPointF *center, double angle, QPointF pTo, QPointF pFrom = QPointF(0,0));
+bool ArcCenter(QPointF &center, double angle, QPointF pTo, QPointF pFrom = QPointF(0,0));
 
 #endif // GEOMETRY_H
