@@ -1,5 +1,5 @@
-#ifndef DRAWING_TOOL_H
-#define DRAWING_TOOL_H
+#ifndef TOOL_BASE_H
+#define TOOL_BASE_H
 
 /*
  * Drawing tools are used to handle sequential drawing steps.
@@ -13,21 +13,15 @@
 
 #include "tool_defines.h"
 
-class ADrawingTool : public QGraphicsObject
+class AToolBase : public QGraphicsObject
 {
     Q_OBJECT
 
 public:
-    ADrawingTool();
+    AToolBase();
 
     int getToolState(void) { return tool_state_; }
     void setToolState(int state) { tool_state_ = state; }
-
-    void setPen(QPen pen) { tool_pen_ = pen; }
-    void setBrush(QBrush brush) { tool_brush_ = brush; }
-
-    QPen getPen() { return tool_pen_; }
-    QBrush getBrush() { return tool_brush_; }
 
 public slots:
     // Reset the tool to a neutral state
@@ -63,9 +57,6 @@ protected:
     // Current tool position
     QPointF tool_pos_;
 
-    QPen tool_pen_;
-    QBrush tool_brush_;
-
     void defaultPen(void);
     void defaultBrush(void);
 
@@ -73,8 +64,8 @@ protected:
     void clear(void);
 
     // Called from SLOT(update)
-    virtual void onUpdate(void) = 0;
+    void onUpdate(void);
 };
 
-#endif // DRAWING_TOOL_H
+#endif // TOOL_BASE_H
 

@@ -26,13 +26,12 @@ SOURCES += main.cpp\
     shapes/rect.cpp \
     grid/grid.cpp \
     layers/layer_defines.cpp \
-    tools/drawing_tool_base.cpp \
-    tools/polyline_tool_base.cpp
+    tools/tool_base.cpp \
+    tools/polyline_tool.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
     geometry/geometry.h \
-    tools/drawing_tool_base.h \
     viewers/andromeda_scene.h \
     viewers/andromeda_view.h \
     viewers/symbol_editor_view.h \
@@ -44,7 +43,8 @@ HEADERS  += mainwindow.h \
     grid/grid.h \
     layers/layer_defines.h \
     tools/tool_defines.h \
-    tools/polyline_tool_base.h
+    tools/tool_base.h \
+    tools/polyline_tool.h
 
 FORMS    += mainwindow.ui
 

@@ -9,7 +9,8 @@ AView::AView(QWidget *parent) :
     QGraphicsView(parent),
     cursorStyle_(VIEW_CURSOR_CROSS_SMALL),
     viewFlags_(VIEW_NO_FLAGS),
-    mousePanActive_(false)
+    mousePanActive_(false),
+    current_tool_(nullptr)
 {
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -607,6 +608,50 @@ void AView::setScalingFactor(double scaling)
 void AView::scaleRelative(double scaling)
 {
     setScalingFactor(getScalingFactor() * scaling);
+}
+
+bool AView::startTool()
+{
+    startTool(current_tool_);
+}
+
+bool AView::startTool(QPointF pos)
+{
+    startTool(current_tool_, pos);
+}
+
+bool AView::startTool(AToolBase *tool)
+{
+    if (tool == nullptr)
+        return false;
+
+    if (tool->scene() != scene_)
+        return false;
+
+    current_tool_ = tool;
+
+    tool->start();
+}
+
+bool AView::startTool(AToolBase *tool, QPointF pos)
+{
+    if (tool == nullptr)
+        return false;
+
+    if (tool->scene() != scene_)
+        return false;
+
+    current_tool_ = tool;
+
+    tool->start(pos);
+}
+
+void AView::cancelTool()
+{
+    if (current_tool_ == nullptr)
+        return;
+
+    current_tool_->cancel();
 }
 
 unsigned int AView::getAction()

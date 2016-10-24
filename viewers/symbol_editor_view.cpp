@@ -13,6 +13,7 @@ SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
     addTempItem(&tmpEllipse_);
     addTempItem(&tmpRect_);
 
+    scene_->addItem(&poly_tool_);
 }
 
 void SymbolEditorView::addTempItem(QGraphicsItem *item)

@@ -20,17 +20,20 @@ class AScene : public QGraphicsScene
 public:
     AScene(QObject *parent = 0);
 
+    // Background functions
     void setBackgroundColor(QColor c) { bg_color_ = c;}
     QColor getBackgroundColor() { return bg_color_; }
+    void drawBackground(QPainter *painter, const QRectF &rect);
 
+    // Axis functions
     void setAxesEnabled(bool draw) { draw_axes_ = draw; }
     bool getAxesEnabled() { return draw_axes_; }
 
+    // Grid functions
     void setGrid(AGrid grid) { grid_ = grid; }
     AGrid getGrid() { return grid_; }
 
-    void drawBackground(QPainter *painter, const QRectF &rect);
-
+    // Layer functions
     void setLayerDisplayMode(int mode);
     int getLayerDisplayMode() { return layerDisplayMode_; }
 

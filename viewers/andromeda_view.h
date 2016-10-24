@@ -9,6 +9,7 @@
 #include <QCursor>
 
 #include "andromeda_scene.h"
+#include "tools/tool_base.h"
 
 #define ANDROMEDA_VIEW_MAX_SCALING 100.0f
 #define ANDROMEDA_VIEW_MIN_SCALING 0.001f
@@ -35,6 +36,8 @@ public:
     void moveCursor(QPointF offset, bool panPastEdges = false);
     void moveCursor(double dx, double dy, bool panPastEdges = false);
     void snapMouseToCursor(void);
+    void setCursorStyle(unsigned char style);
+    unsigned char getCursorStyle(void) { return cursorStyle_; }
 
     void scroll(QPoint offset);
     void scroll(int dx, int dy);
@@ -43,10 +46,6 @@ public:
     double getScalingFactor(void) { return transform().m11(); }
     void setScalingFactor(double scaling);
     void scaleRelative(double scaling);
-
-    // Cursor functions
-    void setCursorStyle(unsigned char style);
-    unsigned char getCursorStyle(void) { return cursorStyle_; }
 
     // Item deletion
     void deleteItems(QList<QGraphicsItem*> items);
@@ -59,6 +58,13 @@ public:
 
         VIEW_ACTION_SELECTING = 0x01,    // Drawing a selection rectangle
     };
+
+    // Tool functions
+    bool startTool(void);           // Start the current tool
+    bool startTool(QPointF pos);    // Start the current tool at a given pos
+    bool startTool(AToolBase *tool);
+    bool startTool(AToolBase *tool, QPointF pos);
+    void cancelTool(void);
 
     // Action functions
     unsigned int getAction(void);
@@ -125,6 +131,9 @@ protected:
 
     // Selection functions
     QRectF getSelectionMarquee(void);
+
+    // Tools
+    AToolBase *current_tool_;
 
     QList<unsigned int> actionStack_;
     virtual void onActionAdded(unsigned int action) = 0;

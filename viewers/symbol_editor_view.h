@@ -7,6 +7,8 @@
 #include "shapes/ellipse.h"
 #include "shapes/rect.h"
 
+#include "tools/polyline_tool.h"
+
 class SymbolEditorView : public AView
 {
     Q_OBJECT
@@ -23,6 +25,9 @@ protected:
     void keyReleaseEvent(QKeyEvent *event);
 
     void drawForeground(QPainter *painter, const QRectF &rect);
+
+    // Polyline tool
+    PolylineDrawingTool poly_tool_;
 
     // LWPolyline creation
     APolyline tmpLine_;

@@ -1,7 +1,7 @@
-#ifndef POLYLINE_TOOL_BASE_H
-#define POLYLINE_TOOL_BASE_H
+#ifndef POLYLINE_TOOL_H
+#define POLYLINE_TOOL_H
 
-#include "drawing_tool_base.h"
+#include "tool_base.h"
 #include "shapes/polyline.h"
 
 enum class LINE_TOOL_STATE : int {
@@ -9,15 +9,20 @@ enum class LINE_TOOL_STATE : int {
     ADDING_POINTS,      // Adding subsequent points
 };
 
-class PolylineDrawingToolBase : public ADrawingTool
+class PolylineDrawingTool : public AToolBase
 {
     Q_OBJECT
 
 public:
-    PolylineDrawingToolBase();
+    PolylineDrawingTool();
 
     // Return the polyline constructed by this tool
     APolyline getPolyline(void);
+
+    // Painting functions
+    QRectF boundingRect() const;
+    QPainterPath shape() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 public slots:
     void reset(void);
@@ -34,5 +39,5 @@ protected:
 
 };
 
-#endif // POLYLINE_TOOL_BASE_H
+#endif // POLYLINE_TOOL_H
 
