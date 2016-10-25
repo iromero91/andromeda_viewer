@@ -21,8 +21,8 @@ public:
     void setHeight(double height) { setSize(w_, height); }
 
 protected:
-    double w_;  // width
-    double h_;  // height
+    double w_ = 0;  // width
+    double h_ = 0;  // height
 };
 
 #endif // SHAPES_RECT_H

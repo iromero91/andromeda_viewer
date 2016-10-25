@@ -1,8 +1,6 @@
 #include "rect.h"
 
-ARect::ARect() : ADrawable(),
-    w_(0),
-    h_(0)
+ARect::ARect() : ADrawable()
 {
 
 }
@@ -47,10 +45,10 @@ void ARect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 {
     Q_UNUSED(widget);
 
-    QPen pen = linePen_;
-    QBrush brush = fillBrush_;
+    QPen pen = line_pen_;
+    QBrush brush = fill_brush_;
 
-    QColor c = linePen_.color();
+    QColor c = line_pen_.color();
 
     if (isSelected())
         c = c.dark();

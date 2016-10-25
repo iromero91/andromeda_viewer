@@ -13,6 +13,7 @@
 
 #include "layers/layer_defines.h"
 #include "shapes/shape_defines.h"
+#include "geometry/bounding_box.h"
 
 class ADrawable : public QGraphicsItem
 {
@@ -34,14 +35,14 @@ public:
     bool isFilled(void) { return filled_; }
 
     // Pen functions
-    QPen getLinePen(void) { return linePen_; }
-    void setLinePen(QPen pen) { linePen_ = pen; }
+    QPen getLinePen(void) { return line_pen_; }
+    void setLinePen(QPen pen) { line_pen_ = pen; }
 
-    QPen getBoundingBoxPen(void) { return boundingBoxPen_; }
-    void setBoundingBoxPen(QPen pen) { boundingBoxPen_ = pen; }
+    QPen getBoundingBoxPen(void) { return bounding_box_pen_; }
+    void setBoundingBoxPen(QPen pen) { bounding_box_pen_ = pen; }
 
-    QBrush getFillBrush(void) { return fillBrush_; }
-    void setFillBrush(QBrush brush) { fillBrush_ = brush; }
+    QBrush getFillBrush(void) { return fill_brush_; }
+    void setFillBrush(QBrush brush) { fill_brush_ = brush; }
 
     void setLayer(int8_t layer);
     int8_t getLayer(void);
@@ -61,10 +62,10 @@ protected:
     QColor getFillColor(void);
     */
 
-    QPen linePen_;
-    QPen boundingBoxPen_;
+    QPen line_pen_;
+    QPen bounding_box_pen_;
 
-    QBrush fillBrush_;
+    QBrush fill_brush_;
 
 };
 

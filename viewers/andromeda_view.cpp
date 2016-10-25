@@ -688,8 +688,6 @@ void AView::stopTool(AToolBase *tool)
     if (tool != nullptr)
     {
         tool->stop();
-
-        qDebug() << "stop:" << !tool->isActive();
     }
 }
 
@@ -706,8 +704,6 @@ void AView::resetTool(AToolBase *tool)
     if (tool != nullptr)
     {
         tool->reset();
-
-        qDebug() << "reset";
     }
 
 }

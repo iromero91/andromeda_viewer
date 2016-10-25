@@ -63,20 +63,19 @@ QRectF APolyline::boundingRect() const
     if (points_.count() == 0)
         return QRectF();
 
-    QRectF rect(start_pos_, QSizeF(0,0));
+    ABoundingBox box(start_pos_);
 
     for (int i=0; i<points_.count(); i++)
     {
-        //TODO make a bounding box class that is a bit cleverer!
-        rect = rect.united(QRectF(points_.at(i).point, QSizeF(1,1)));
+        box.add(points_.at(i).point);
     }
 
-    rect.adjust(-thickness_,
+    box.adjust(-thickness_,
                 -thickness_,
                  thickness_,
                  thickness_);
 
-    return rect;
+    return QRectF(box);
 }
 
 void APolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -85,10 +84,10 @@ void APolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     QPainterPath path = shape();
 
-    QPen pen = linePen_;
-    QBrush brush = fillBrush_;
+    QPen pen = line_pen_;
+    QBrush brush = fill_brush_;
 
-    QColor c = linePen_.color();
+    QColor c = line_pen_.color();
 
     if (isSelected())
         c = c.dark();

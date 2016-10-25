@@ -2,9 +2,7 @@
 
 #include <math.h>
 
-AEllipse::AEllipse() : ADrawable(),
-     rx_(0),
-     ry_(0)
+AEllipse::AEllipse() : ADrawable()
 {
 }
 
@@ -33,10 +31,10 @@ void AEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     Q_UNUSED(widget);
 
-    QPen pen = linePen_;
-    QBrush brush = fillBrush_;
+    QPen pen = line_pen_;
+    QBrush brush = fill_brush_;
 
-    QColor c = linePen_.color();
+    QColor c = line_pen_.color();
 
     if (isSelected())
         c = c.dark();

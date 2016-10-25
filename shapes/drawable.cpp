@@ -10,20 +10,20 @@ ADrawable::ADrawable() : QGraphicsItem()
     /* Configure default pens */
 
     // Line pen
-    linePen_.setColor(SYMBOL_LINE_COLOR);
-    linePen_.setWidthF(thickness_);
-    linePen_.setJoinStyle(Qt::RoundJoin);
-    linePen_.setCapStyle(Qt::RoundCap);
+    line_pen_.setColor(SYMBOL_LINE_COLOR);
+    line_pen_.setWidthF(thickness_);
+    line_pen_.setJoinStyle(Qt::RoundJoin);
+    line_pen_.setCapStyle(Qt::RoundCap);
 
     // Bounding Box Pen
-    boundingBoxPen_.setColor(SYMBOL_BB_COLOR);
-    boundingBoxPen_.setWidthF(0.5);
-    boundingBoxPen_.setJoinStyle(Qt::RoundJoin);
-    boundingBoxPen_.setCapStyle(Qt::RoundCap);
-    boundingBoxPen_.setStyle(Qt::DashLine);
+    bounding_box_pen_.setColor(SYMBOL_BB_COLOR);
+    bounding_box_pen_.setWidthF(0.5);
+    bounding_box_pen_.setJoinStyle(Qt::RoundJoin);
+    bounding_box_pen_.setCapStyle(Qt::RoundCap);
+    bounding_box_pen_.setStyle(Qt::DashLine);
 
     // Fill brush
-    fillBrush_.setColor(SYMBOL_FILL_COLOR);
+    fill_brush_.setColor(SYMBOL_FILL_COLOR);
 
     setFlags(ItemIsSelectable | ItemIsFocusable);
     setAcceptHoverEvents(true);
@@ -39,7 +39,7 @@ void ADrawable::drawBoundingBox(QPainter *painter)
 {
     if (painter == nullptr) return;
 
-    painter->setPen(boundingBoxPen_);
+    painter->setPen(bounding_box_pen_);
     painter->setBrush(Qt::NoBrush);
 
     QRectF r = boundingRect();
