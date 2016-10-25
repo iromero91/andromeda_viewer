@@ -9,7 +9,6 @@
 
 SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
 {
-    scene_->addItem(&poly_tool_);
 }
 
 void SymbolEditorView::drawForeground(QPainter *painter, const QRectF &rect)

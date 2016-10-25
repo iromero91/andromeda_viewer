@@ -6,13 +6,12 @@
 #include <QGraphicsItem>
 #include <QDebug>
 
-AView::AView(QWidget *parent) :
-    QGraphicsView(parent),
+AView::AView(QWidget *parent) : QGraphicsView(parent),
+    current_tool_(nullptr),
     cursorStyle_(VIEW_CURSOR_CROSS_SMALL),
     viewFlags_(VIEW_NO_FLAGS),
     mouse_pan_active_(false),
-    selection_active_(false),
-    current_tool_(nullptr)
+    selection_active_(false)
 {
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -171,7 +170,7 @@ void AView::keyPressEvent(QKeyEvent *event)
     double offset = getScene()->getGrid().getMajorTick();
 
     // First try to send the event to the active tool
-    if (isToolAvailable())
+    if (isToolActive())
     {
         if (current_tool_->onKeyPress(event))
             return;
@@ -241,7 +240,7 @@ void AView::keyPressEvent(QKeyEvent *event)
 
 void AView::keyReleaseEvent(QKeyEvent *event)
 {
-    if (isToolAvailable())
+    if (isToolActive())
     {
         if (current_tool_->onKeyRelease(event))
         {
@@ -285,7 +284,7 @@ void AView::mousePressEvent(QMouseEvent *event)
     setCursorPos(scenePos);
 
     // First try sending the command to the active tool
-    if (isToolAvailable())
+    if (isToolActive())
     {
         if (current_tool_->onMousePress(event))
         {
@@ -312,7 +311,7 @@ void AView::mousePressEvent(QMouseEvent *event)
 
 void AView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if (isToolAvailable())
+    if (isToolActive())
     {
         if (current_tool_->onMouseDoubleClick(event))
         {
@@ -325,7 +324,7 @@ void AView::mouseReleaseEvent(QMouseEvent *event)
 {
     if (scene_ == NULL || event == nullptr) return;
 
-    if (isToolAvailable())
+    if (isToolActive())
     {
         if (current_tool_->onMouseRelease(event))
         {
@@ -421,7 +420,13 @@ void AView::drawForeground(QPainter *painter, const QRectF &rect)
 {
     if (painter == nullptr) return;
 
-    if (selection_active_)
+    // Draw the active tool
+    if (isToolActive())
+    {
+        current_tool_->paint(painter, rect);
+    }
+
+    else if (selection_active_)
     {
         drawSelectionMarquee(painter, rect);
     }
@@ -431,9 +436,13 @@ void AView::drawSelectionMarquee(QPainter *painter, const QRectF &rect)
 {
     if (painter == nullptr) return;
 
+    QRectF selection = getSelectionMarquee();
+
+    // Don't paint if off-screen
+    if (!selection.intersects(rect)) return;
+
     QPen marqueePen(QColor(0,255,200,200));
 
-    QRectF selection = getSelectionMarquee();
     bool crossing = selection.width() < 0;
 
     marqueePen.setCapStyle(Qt::RoundCap);
@@ -480,6 +489,9 @@ void AView::paintEvent(QPaintEvent *event)
 void AView::drawOverlay(QPainter *painter, QRect rect)
 {
     // Re-implement this to draw an overlayover the scene
+
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
 }
 
 void AView::drawCursor(QPainter *painter, QRect rect)
@@ -600,14 +612,15 @@ bool AView::startTool()
 bool AView::startTool(AToolBase *tool)
 {
     if (tool == nullptr)
+    {
         return false;
-
-    if (tool->scene() != scene_)
-        return false;
+    }
 
     // Same tool, just keep going
     if (current_tool_ == tool)
+    {
         return true;
+    }
 
     // Cancel the current tool
     cancelTool();
@@ -621,7 +634,8 @@ bool AView::startTool(AToolBase *tool)
 
 void AView::cancelTool()
 {
-    if (current_tool_ == nullptr)
+    // No tool to cancel
+    if (!isToolAvailable())
         return;
 
     current_tool_->cancel();
@@ -629,7 +643,7 @@ void AView::cancelTool()
 
 bool AView::isToolActive()
 {
-    if (current_tool_ == nullptr)
+    if (!isToolAvailable())
         return false;
 
     return current_tool_->isActive();

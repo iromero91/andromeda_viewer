@@ -7,50 +7,31 @@ PolylineDrawingTool::PolylineDrawingTool() :
 {
 }
 
-QRectF PolylineDrawingTool::boundingRect() const
-{
-    QRectF rect(start_pos_, QSizeF(0,0));
-
-    foreach (QPointF point, points_)
-    {
-        rect = rect.united(QRectF(point, QSizeF(0,0)));
-    }
-
-    // include the tool position
-    rect = rect.united(QRectF(tool_pos_, QSizeF(0,0)));
-
-    //rect.adjust(-t, -t, t, t);
-
-    return rect;
-}
-
-QPainterPath PolylineDrawingTool::shape() const
-{
-    QPainterPath path;
-
-    path.moveTo(start_pos_);
-
-    foreach (QPointF p, points_)
-    {
-        path.lineTo(p);
-    }
-
-    return path;
-}
-
-void PolylineDrawingTool::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void PolylineDrawingTool::paint(QPainter *painter, const QRectF &rect)
 {
     painter->setBrush(Qt::NoBrush);
 
+    //TODO allow tool pen to be changed
     QPen p;
     p.setColor(DRAWING_TOOL_OUTLINE_COLOR);
+    p.setWidthF(1.5);
+    p.setCosmetic(true);
+    p.setStyle(Qt::SolidLine);
     painter->setPen(p);
 
-    if (points_.count() > 0)
+    QPainterPath path(start_pos_);
+
+    foreach (QPointF point, points_)
     {
-        painter->drawPath(shape());
+        path.lineTo(point);
     }
 
+    if (path.intersects(rect))
+    {
+        painter->drawPath(path);
+    }
+
+    // Draw a line from most-recent point to the current cursor position
     if (getToolState() > (int) LINE_TOOL_STATE::FIRST_POINT)
     {
         QPointF last = points_.count() == 0 ? start_pos_ : points_.last();
@@ -74,10 +55,6 @@ void PolylineDrawingTool::reset()
 void PolylineDrawingTool::start()
 {
     reset();
-
-    setVisible(true);
-
-    qDebug() << "start poly tool";
 }
 
 void PolylineDrawingTool::addPoint(QPointF point)
@@ -91,14 +68,11 @@ void PolylineDrawingTool::addPoint(QPointF point)
     {
         points_.append(point);
     }
-
-    prepareGeometryChange();
-
 }
 
-APolyline PolylineDrawingTool::getPolyline()
+void PolylineDrawingTool::getPolyline(APolyline &line)
 {
-    APolyline line;
+    line.clear();
 
     line.addPoint(start_pos_);
 

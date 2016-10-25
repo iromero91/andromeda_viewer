@@ -9,8 +9,7 @@
 
 #include <QDebug>
 
-APolyline::APolyline() :
-    ADrawable()
+APolyline::APolyline() : ADrawable()
 {
 }
 
@@ -80,6 +79,8 @@ QRectF APolyline::boundingRect() const
 
 void APolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(widget);
+
     QPainterPath path = shape();
 
     QPen pen = linePen_;

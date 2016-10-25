@@ -1,7 +1,6 @@
 #include "rect.h"
 
-ARect::ARect() :
-    ADrawable(),
+ARect::ARect() : ADrawable(),
     w_(0),
     h_(0)
 {
@@ -46,6 +45,8 @@ void ARect::setSize(double width, double height)
 
 void ARect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(widget);
+
     QPen pen = linePen_;
     QBrush brush = fillBrush_;
 

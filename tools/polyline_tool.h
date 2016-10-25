@@ -18,12 +18,9 @@ public:
     PolylineDrawingTool();
 
     // Return the polyline constructed by this tool
-    APolyline getPolyline(void);
+    void getPolyline(APolyline &line);
 
-    // Painting functions
-    QRectF boundingRect() const;
-    QPainterPath shape() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter, const QRectF &rect);
 
 public slots:
     void reset(void);

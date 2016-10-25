@@ -21,6 +21,8 @@ typedef struct
 
 class APolyline : public ADrawable
 {
+    Q_OBJECT
+
 public:
     APolyline();
 

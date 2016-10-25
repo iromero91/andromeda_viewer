@@ -3,8 +3,7 @@
 
 #include <QGraphicsItem>
 
-AScene::AScene(QObject *parent) :
-    QGraphicsScene(parent),
+AScene::AScene(QObject *parent) : QGraphicsScene(parent),
     bg_color_(0xFF, 0xFF, 0xFF),
     draw_axes_(true),
     layerDisplayMode_((uint8_t) (LAYER_MODE::SHOW_ALL)),

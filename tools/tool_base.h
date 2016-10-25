@@ -1,13 +1,16 @@
 #ifndef TOOL_BASE_H
 #define TOOL_BASE_H
 
+#include <QDebug>
+
 /*
  * Drawing tools are used to handle sequential drawing steps.
  * Each drawing tool keeps an internal state machine and handles the specifics of its own drawing
  * The drawing tool gets added to the scene
  */
 
-#include <QGraphicsObject>
+#include <QObject>
+#include <QPainter>
 #include <QPen>
 #include <QBrush>
 
@@ -16,7 +19,7 @@
 
 #include "tool_defines.h"
 
-class AToolBase : public QGraphicsObject
+class AToolBase : public QObject
 {
     Q_OBJECT
 
@@ -27,6 +30,8 @@ public:
 
     int getToolState(void) { return tool_state_; }
     void setToolState(int state) { tool_state_ = state; }
+
+    void paint(QPainter *painter, const QRectF &rect);
 
 public slots:
     // Reset the tool to a neutral state
@@ -43,12 +48,12 @@ public slots:
 
     // Send events to the tool
     // Override these to implement
-    bool onMousePress(QMouseEvent *event) { return false; }
-    bool onMouseRelease(QMouseEvent *event) { return false; }
-    bool onMouseMove(QMouseEvent *event) { return false; }
-    bool onMouseDoubleClick(QMouseEvent *event) { return false; }
-    bool onKeyPress(QKeyEvent *event) { return false; }
-    bool onKeyRelease(QKeyEvent *event) { return false; }
+    bool onMousePress(QMouseEvent *event)       { Q_UNUSED(event); return false; }
+    bool onMouseRelease(QMouseEvent *event)     { Q_UNUSED(event); return false; }
+    bool onMouseMove(QMouseEvent *event)        { Q_UNUSED(event); return false; }
+    bool onMouseDoubleClick(QMouseEvent *event) { Q_UNUSED(event); return false; }
+    bool onKeyPress(QKeyEvent *event)           { Q_UNUSED(event); return false; }
+    bool onKeyRelease(QKeyEvent *event)         { Q_UNUSED(event); return false; }
 
 signals:
     void started(void);

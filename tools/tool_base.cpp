@@ -3,11 +3,9 @@
 #include "layers/layer_defines.h"
 
 AToolBase::AToolBase() :
-    QGraphicsObject(),
+    QObject(),
     tool_state_((int) TOOL_STATE::INACTIVE)
 {
-    setZValue((int) LAYER_ID::TOOLS);
-    setVisible(false);
 }
 
 /**
@@ -17,7 +15,6 @@ AToolBase::AToolBase() :
 void AToolBase::clear()
 {
     reset();
-    setVisible(false);
 }
 
 /**
@@ -29,4 +26,16 @@ void AToolBase::cancel()
     tool_state_ = (int) TOOL_STATE::INACTIVE;
     clear();
     emit cancelled();
+}
+
+/**
+ * @brief AToolBase::paint
+ * Paint the tool on top of the scene
+ * @param painter
+ */
+void AToolBase::paint(QPainter *painter, const QRectF &rect)
+{
+    // Reimplement in specific tool class
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
 }

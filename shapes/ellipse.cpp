@@ -2,8 +2,7 @@
 
 #include <math.h>
 
-AEllipse::AEllipse() :
-     ADrawable(),
+AEllipse::AEllipse() : ADrawable(),
      rx_(0),
      ry_(0)
 {
@@ -32,7 +31,7 @@ QPainterPath AEllipse::shape() const
 
 void AEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    //QPainterPath path = shape();
+    Q_UNUSED(widget);
 
     QPen pen = linePen_;
     QBrush brush = fillBrush_;
