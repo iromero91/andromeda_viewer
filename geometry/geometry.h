@@ -10,8 +10,17 @@
 #include <qmath.h>
 #include <QPointF>
 
+namespace AGeometry
+{
+
 // Some arbitratily small angle
 const double ARC_ANGLE_THRESHOLD = 0.001 * M_PI / 180;
+
+// Some arbitrarily small distance
+const double DISTANCE_EPSILON = 1e-8;
+
+/* Point Functions */
+bool PointsAreCoincident(QPointF p1, QPointF p2, double threshold = DISTANCE_EPSILON);
 
 /* Line Functions */
 
@@ -50,5 +59,7 @@ bool ArcIsStraight(double angle, double threshold = ARC_ANGLE_THRESHOLD);
 bool ArcIsCurved(double angle, double threshold = ARC_ANGLE_THRESHOLD);
 
 bool ArcCenter(QPointF &center, double angle, QPointF pTo, QPointF pFrom = QPointF(0,0));
+
+}
 
 #endif // GEOMETRY_H

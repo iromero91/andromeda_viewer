@@ -1,5 +1,17 @@
 #include "geometry.h"
 
+// Static geometry functions are wrapped in AGeometry:: namespace
+
+using namespace AGeometry;
+
+// Determine if two points are coincident (within a given threshold)
+bool AGeometry::PointsAreCoincident(QPointF p1, QPointF p2, double threshold)
+{
+    double d2 = DistanceSquared(p1,p2);
+
+    return (d2 < pow(threshold, 2));
+}
+
 /**
  * @brief Angle
  * Calculate the angle between two points
@@ -7,7 +19,7 @@
  * @param pFrom
  * @return
  */
-double Angle(QPointF pTo, QPointF pFrom)
+double AGeometry::Angle(QPointF pTo, QPointF pFrom)
 {
     QPointF delta = pTo - pFrom;
 
@@ -21,7 +33,7 @@ double Angle(QPointF pTo, QPointF pFrom)
  * @param pFrom
  * @return
  */
-double DistanceSquared(QPointF pTo, QPointF pFrom)
+double AGeometry::DistanceSquared(QPointF pTo, QPointF pFrom)
 {
     QPointF delta = pTo - pFrom;
 
@@ -35,7 +47,7 @@ double DistanceSquared(QPointF pTo, QPointF pFrom)
  * @param pFrom
  * @return
  */
-double Distance(QPointF pTo, QPointF pFrom)
+double AGeometry::Distance(QPointF pTo, QPointF pFrom)
 {
     return qSqrt(DistanceSquared(pTo, pFrom));
 }
@@ -47,13 +59,13 @@ double Distance(QPointF pTo, QPointF pFrom)
  * @param pFrom
  * @return the midpoint (QPointF)
  */
-QPointF Midpoint(QPointF pTo, QPointF pFrom)
+QPointF AGeometry::Midpoint(QPointF pTo, QPointF pFrom)
 {
     return QPointF((pTo.x() + pFrom.x()) / 2,
                    (pTo.y() + pFrom.y()) / 2);
 }
 
-LineEquation_t LineEquation(QPointF pTo, QPointF pFrom)
+LineEquation_t AGeometry::LineEquation(QPointF pTo, QPointF pFrom)
 {
     LineEquation_t eqn;
 
@@ -73,7 +85,7 @@ LineEquation_t LineEquation(QPointF pTo, QPointF pFrom)
  * @param chordLength
  * @return
  */
-double ArcAngle(double radius, double chordLength)
+double AGeometry::ArcAngle(double radius, double chordLength)
 {
     // Return zero if the parameters are incompatible
     if (qFabs(radius) <= (chordLength / 2)) return 0;
@@ -88,7 +100,7 @@ double ArcAngle(double radius, double chordLength)
  * @param chordLength
  * @return
  */
-double ArcRadius(double angle, double chordLength)
+double AGeometry::ArcRadius(double angle, double chordLength)
 {
     return chordLength / 2 / qSin(angle / 2);
 }
@@ -100,7 +112,7 @@ double ArcRadius(double angle, double chordLength)
  * @param angle
  * @return
  */
-double ArcLength(double radius, double angle)
+double AGeometry::ArcLength(double radius, double angle)
 {
     return radius * angle;
 }
@@ -111,7 +123,7 @@ double ArcLength(double radius, double angle)
  * @param angle
  * @return
  */
-double AngleNormalized(double angle)
+double AGeometry::AngleNormalized(double angle)
 {
     while (angle < -M_PI)
     {
@@ -134,7 +146,7 @@ double AngleNormalized(double angle)
  * @param threshold is used for floating real number comparison
  * @return true if the segment is straight else false
  */
-bool ArcIsStraight(double angle, double threshold)
+bool AGeometry::ArcIsStraight(double angle, double threshold)
 {
     if (qFabs(angle) < threshold)
         return true;
@@ -145,9 +157,9 @@ bool ArcIsStraight(double angle, double threshold)
     return false;
 }
 
-bool ArcIsCurved(double angle, double threshold)
+bool AGeometry::ArcIsCurved(double angle, double threshold)
 {
-    return !ArcIsStraight(angle, threshold);
+    return !AGeometry::ArcIsStraight(angle, threshold);
 }
 
 /**
@@ -159,12 +171,12 @@ bool ArcIsCurved(double angle, double threshold)
  * @param pFrom
  * @return true if the center can be calculated else false
  */
-bool ArcCenter(QPointF &center, double angle, QPointF pTo, QPointF pFrom)
+bool AGeometry::ArcCenter(QPointF &center, double angle, QPointF pTo, QPointF pFrom)
 {
     if (ArcIsStraight(angle))
         return false;
 
-    QPointF mid = Midpoint(pTo, pFrom);
+    QPointF mid = AGeometry::Midpoint(pTo, pFrom);
 
     double q = Distance(pTo, pFrom);
 
