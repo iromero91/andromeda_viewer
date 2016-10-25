@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 // Layer display modes
-enum class LAYER_MODE : unsigned char {
+enum class LAYER_MODE : int {
 
     // Show *no* layers
     SHOW_NONE = 0x00,
@@ -34,11 +34,12 @@ enum class LAYER_MASK : uint64_t {
 // Generic layer enumerations
 enum class LAYER_ID : int {
 
+
     // Layers 0-63 are available for use
     // Each of these layers can be masked ON or OFF
     // All other layers are always 'ON'
-
-    TOP = 64,
+    BOTTOM = 0,
+    TOP = 63,
 
     // The currently selected layer is forced to the top
     SELECTED = 70,
