@@ -493,8 +493,10 @@ void AView::paintEvent(QPaintEvent *event)
     // Grab the painter
     QPainter painter(viewport());
 
+    //TODO - draw a different cursor if the user is using a tool or just navigating
     // Draw the cursor
-    drawCursor(&painter, event->rect());
+    if (isToolActive())
+        drawCursor(&painter, event->rect());
 
     // Draw the overlay
     if (checkViewFlags(VIEW_FLAG_DRAW_OVERLAY))
@@ -631,7 +633,8 @@ void AView::addTool(AToolBase *tool)
 
 void AView::toolUpdated()
 {
-    repaint();
+    // Force a scene redraw
+    scene_->update();
 
     QObject *tool = QObject::sender();
 
@@ -687,7 +690,7 @@ void AView::stopTool(AToolBase *tool)
 
     if (tool != nullptr)
     {
-        tool->stop();
+        tool->cancel();
     }
 }
 

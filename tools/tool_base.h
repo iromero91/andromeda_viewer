@@ -27,6 +27,7 @@ public:
     AToolBase(QObject *parent = 0);
 
     bool isActive(void) { return (tool_state_ > TOOL_STATE::INACTIVE); }
+    bool isFinished(void) { return (tool_state_ == TOOL_STATE::FINISHED); }
 
     TOOL_STATE getToolState(void) { return tool_state_; }
     void setToolState(TOOL_STATE state) { tool_state_ = state; }
@@ -47,7 +48,6 @@ public:
 public slots:
     // Do not override these in any subclasses
     void start(void);
-    void stop(void);
     void cancel(void);
     void reset(void);
     void finish(void);
@@ -71,8 +71,11 @@ protected:
     virtual void onReset(void)      {}
     virtual void onFinish(void)     {}
 
-    void defaultPen(void);
-    void defaultBrush(void);
+    QPen trace_pen_;
+    QPen tool_pen_;
+    QBrush tool_brush_;
+
+    void defaultPens(void);
 };
 
 #endif // TOOL_BASE_H

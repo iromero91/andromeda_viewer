@@ -15,18 +15,14 @@ void PolylineDrawingTool::onReset()
 
 void PolylineDrawingTool::paint(QPainter *painter, const QRectF &rect)
 {
-    painter->setBrush(Qt::NoBrush);
+    if (painter == nullptr)
+        return;
 
-    //TODO allow tool pen to be changed
-    QPen p;
-    p.setColor(DRAWING_TOOL_OUTLINE_COLOR);
-    p.setWidthF(1.5);
-    p.setCosmetic(true);
-    p.setStyle(Qt::SolidLine);
-    painter->setPen(p);
+    painter->setBrush(tool_brush_);
 
     if (points_.count() > 0)
     {
+        painter->setPen(tool_pen_);
         QPainterPath path(start_pos_);
 
         foreach (QPointF point, points_)
@@ -42,13 +38,9 @@ void PolylineDrawingTool::paint(QPainter *painter, const QRectF &rect)
 
     if (getToolState() > TOOL_STATE::POLYLINE_SET_ORIGIN)
     {
+        painter->setPen(trace_pen_);
+
         QPointF last = points_.count() == 0 ? start_pos_ : points_.last();
-
-        p.setColor(DRAWING_TOOL_TRACE_LINE_COLOR);
-        p.setStyle(Qt::DashLine);
-
-        painter->setPen(p);
-
         painter->drawLine(last, tool_pos_);
     }
 }

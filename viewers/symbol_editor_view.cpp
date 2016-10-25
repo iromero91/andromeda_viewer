@@ -10,6 +10,7 @@
 SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
 {
     addTool(&poly_tool_);
+    addTool(&ellipse_tool_);
 }
 
 void SymbolEditorView::keyPressEvent(QKeyEvent *event)
@@ -25,6 +26,9 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_L:
         startTool(&poly_tool_);
+        break;
+    case Qt::Key_E:
+        startTool(&ellipse_tool_);
         break;
     default:
         accepted = false;
@@ -44,6 +48,9 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 
 void SymbolEditorView::onToolFinished(QObject *toolPtr)
 {
+    if (toolPtr == nullptr)
+        return;
+
     int pointer = (int) toolPtr;
 
     // Pointer comparison fun
@@ -56,5 +63,16 @@ void SymbolEditorView::onToolFinished(QObject *toolPtr)
         scene_->addItem(line);
 
         poly_tool_.reset();
+    }
+    else if (pointer == (int) &ellipse_tool_)
+    {
+        AEllipse *ell = new AEllipse();
+
+        ellipse_tool_.getEllipse(*ell);
+
+        if (ell->getRx() > 0 && ell->getRy() > 0)
+            scene_->addItem(ell);
+
+        ellipse_tool_.reset();
     }
 }

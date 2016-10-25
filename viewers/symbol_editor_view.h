@@ -8,6 +8,7 @@
 #include "shapes/rect.h"
 
 #include "tools/polyline_tool.h"
+#include "tools/ellipse_drawing_tool.h"
 
 class SymbolEditorView : public AView
 {
@@ -21,6 +22,8 @@ protected:
 
     // Polyline tool
     PolylineDrawingTool poly_tool_;
+
+    EllipseDrawingTool ellipse_tool_;
 
     // Tool callbacks
     void onToolFinished(QObject *toolPtr);

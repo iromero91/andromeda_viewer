@@ -4,7 +4,24 @@
 
 AToolBase::AToolBase(QObject *parent) : QObject(parent)
 {
+    defaultPens();
+}
 
+void AToolBase::defaultPens()
+{
+    // Fill brush
+    tool_brush_ = QBrush(Qt::NoBrush);
+
+    // Pen for tool outline
+    tool_pen_.setColor(DRAWING_TOOL_OUTLINE_COLOR);
+    tool_pen_.setWidthF(2.5);
+    tool_pen_.setCosmetic(true);
+    tool_pen_.setStyle(Qt::DashDotLine);
+
+    trace_pen_.setColor(DRAWING_TOOL_TRACE_LINE_COLOR);
+    trace_pen_.setWidthF(2.0);
+    trace_pen_.setCosmetic(true);
+    trace_pen_.setStyle(Qt::DotLine);
 }
 
 void AToolBase::start()
@@ -12,21 +29,11 @@ void AToolBase::start()
     reset();
 
     onStart();
-
-}
-
-void AToolBase::stop()
-{
-    reset();
-
-    tool_state_ = TOOL_STATE::INACTIVE;
-
-    onStop();
 }
 
 void AToolBase::reset()
 {
-    tool_state_ = TOOL_STATE::RESET;
+    setToolState(TOOL_STATE::RESET);
 
     onReset();
 
@@ -36,6 +43,7 @@ void AToolBase::reset()
 
 void AToolBase::finish()
 {
+    setToolState(TOOL_STATE::FINISHED);
     onFinish();
     emit finished();
 }
@@ -46,9 +54,9 @@ void AToolBase::finish()
  */
 void AToolBase::cancel()
 {
-    tool_state_ = TOOL_STATE::INACTIVE;
-
     reset();
+
+    setToolState(TOOL_STATE::INACTIVE);
 
     onCancel();
 
