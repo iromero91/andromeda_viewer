@@ -51,9 +51,9 @@ public:
     QList<QPointF> getAnchors() { return QList<QPointF>(); }
 
 protected:
-    double thickness_;  // Line thickness
-    bool filled_;       // Is the shape filled?
-    bool drawBoundingBox_;
+    double thickness_ = SYMBOL_LINE_WIDTH_DEFAULT;  // Line thickness
+    bool filled_ = true;       // Is the shape filled?
+    bool drawBoundingBox_ = false;
 
     //TODO
     /*

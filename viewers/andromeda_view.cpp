@@ -174,8 +174,23 @@ void AView::keyPressEvent(QKeyEvent *event)
     switch (event->key())
     {
     case Qt::Key_Escape:
-        cancelTool();
-        cancelSelection();
+
+        if (isToolAvailable())
+        {
+            switch (current_tool_->getToolState())
+            {
+            case TOOL_STATE::INACTIVE:
+            case TOOL_STATE::RESET:
+                stopTool();
+                break;
+            default:
+                resetTool();
+                break;
+            }
+        }
+
+        if (selection_active_)
+            cancelSelection();
         return;
     case Qt::Key_Space:
         // Center the screen at the cursor location
@@ -609,69 +624,111 @@ void AView::addTool(AToolBase *tool)
     if (tool == nullptr)
         return;
 
-    connect(tool, SIGNAL(update()), this, SLOT(toolUpdated()));
+    connect(tool, SIGNAL(updated()), this, SLOT(toolUpdated()));
+    connect(tool, SIGNAL(finished()), this, SLOT(toolFinished()));
+    connect(tool, SIGNAL(cancelled()), this, SLOT(toolCancelled()));
 }
 
 void AView::toolUpdated()
 {
-    qDebug() << "tool updated";
     repaint();
+
+    QObject *tool = QObject::sender();
+
+    // Pass the calling tool through to the callback
+    if (tool != nullptr)
+        onToolUpdated(tool);
 }
 
-bool AView::startTool()
+void AView::toolCancelled()
 {
-    return startTool(current_tool_);
+    QObject *tool = QObject::sender();
+
+    if (tool != nullptr)
+        onToolCancelled(tool);
+}
+
+void AView::toolFinished()
+{
+    QObject *tool = QObject::sender();
+
+    if (tool != nullptr)
+        onToolFinished(tool);
 }
 
 bool AView::startTool(AToolBase *tool)
 {
     if (tool == nullptr)
-    {
+        tool = current_tool_;
+
+    // Still null?
+    if (tool == nullptr)
         return false;
-    }
 
-    // Same tool, just keep going
-    if (current_tool_ == tool)
-    {
-        return true;
-    }
-
-    // Cancel the current tool
-    cancelTool();
+    // Stop the current tool
+    stopTool();
 
     current_tool_ = tool;
-
-    qDebug() << "start";
 
     tool->start();
 
     return true;
 }
 
-void AView::cancelTool()
+/**
+ * @brief AView::stopTool
+ * Stop the tool (place in TOOL_STATE::INACTIVE mode)
+ * @param tool is a pointer to the tool. If nullptr is supplied, current tool is used
+ */
+void AView::stopTool(AToolBase *tool)
 {
-    if (!isToolActive())
-        return;
+    if (tool == nullptr)
+        tool = current_tool_;
 
-    // If the tool is in the reset state, stop it completely
-    if (current_tool_->getToolState() == TOOL_STATE::RESET)
+    if (tool != nullptr)
     {
-        current_tool_->stop();
-    }
-    // Otherwise, just signal a reset
-    // Then, pressing escape again will completely cancel the tool
-    else
-    {
-        current_tool_->reset();
+        tool->stop();
+
+        qDebug() << "stop:" << !tool->isActive();
     }
 }
 
-bool AView::isToolActive()
+/**
+ * @brief AView::resetTool
+ * Reset the state of the tool
+ * @param tool is a pointer to the tool. If nullptr is supplied, current tool is used
+ */
+void AView::resetTool(AToolBase *tool)
 {
-    if (!isToolAvailable())
+    if (tool == nullptr)
+        tool = current_tool_;
+
+    if (tool != nullptr)
+    {
+        tool->reset();
+
+        qDebug() << "reset";
+    }
+
+}
+
+bool AView::isToolAvailable(AToolBase *tool)
+{
+    if (tool == nullptr)
+        tool = current_tool_;
+
+    return tool != nullptr;
+}
+
+bool AView::isToolActive(AToolBase *tool)
+{
+    if (tool == nullptr)
+        tool = current_tool_;
+
+    if (!isToolAvailable(tool))
         return false;
 
-    return current_tool_->isActive();
+    return tool->isActive();
 }
 
 void AView::setViewFlags(unsigned int flags, bool on)

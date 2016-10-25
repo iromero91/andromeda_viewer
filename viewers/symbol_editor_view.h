@@ -17,17 +17,13 @@ public:
     SymbolEditorView(QWidget * parent = 0);
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
-
-    void drawForeground(QPainter *painter, const QRectF &rect);
 
     // Polyline tool
     PolylineDrawingTool poly_tool_;
+
+    // Tool callbacks
+    void onToolFinished(QObject *toolPtr);
 };
 
 #endif // SYMBOL_EDITOR_VIEW_H

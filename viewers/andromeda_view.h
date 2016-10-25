@@ -53,11 +53,11 @@ public:
 
     // Tool functions
     void addTool(AToolBase *tool);
-    bool startTool(void);           // Start the current tool
-    bool startTool(AToolBase *tool);
-    void cancelTool(void);
-    bool isToolActive(void);
-    bool isToolAvailable() { return current_tool_ != nullptr; }
+    bool startTool(AToolBase *tool = nullptr);
+    void resetTool(AToolBase *tool = nullptr);
+    void stopTool(AToolBase *tool = nullptr);
+    bool isToolActive(AToolBase *tool = nullptr);
+    bool isToolAvailable(AToolBase *tool = nullptr);
 
     enum AViewFlags
     {
@@ -82,6 +82,8 @@ public:
 
 public slots:
     void toolUpdated(void);
+    void toolFinished(void);
+    void toolCancelled(void);
 
 signals:
     // Called when the user cursor changes (in scene coordinates)
@@ -120,6 +122,10 @@ protected:
 
     // Tools
     AToolBase *current_tool_ = nullptr;
+
+    virtual void onToolUpdated(QObject *toolPtr)    { Q_UNUSED(toolPtr); }
+    virtual void onToolFinished(QObject *toolPtr)   { Q_UNUSED(toolPtr); }
+    virtual void onToolCancelled(QObject *toolPtr)  { Q_UNUSED(toolPtr); }
 
     unsigned char cursorStyle_ = VIEW_CURSOR_CROSS_SMALL;     // Cursor style
 

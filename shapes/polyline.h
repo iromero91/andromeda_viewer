@@ -23,6 +23,10 @@ class APolyline : public ADrawable
 public:
     APolyline();
 
+    //TODO this class needs fixing
+    void setStartPos(QPointF pos) { start_pos_ = pos; }
+    QPointF getStartPos(void) { return start_pos_; }
+
     LWPolypoint getPolypoint(int index);
     QPointF getPoint(int index);
     double getAngle(int index);

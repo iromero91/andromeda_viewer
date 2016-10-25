@@ -12,18 +12,6 @@ SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
     addTool(&poly_tool_);
 }
 
-void SymbolEditorView::drawForeground(QPainter *painter, const QRectF &rect)
-{
-    QPen pen(QColor(150,150,150,150));
-    pen.setWidth(1);
-    pen.setCosmetic(true);
-    pen.setStyle(Qt::DashLine);
-
-    //painter->setPen(pen);
-
-    AView::drawForeground(painter,rect);
-}
-
 void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 {
     if (event == nullptr) return;
@@ -53,39 +41,20 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
     update();
 }
 
-void SymbolEditorView::keyReleaseEvent(QKeyEvent *event)
-{
-    bool accepted = false;
 
-    if (!accepted)
+void SymbolEditorView::onToolFinished(QObject *toolPtr)
+{
+    int pointer = (int) toolPtr;
+
+    // Pointer comparison fun
+    if (pointer == (int) &poly_tool_)
     {
-        AView::keyReleaseEvent(event);
+        APolyline *line = new APolyline();
+
+        poly_tool_.getPolyline(*line);
+
+        scene_->addItem(line);
+
+        poly_tool_.reset();
     }
-}
-
-void SymbolEditorView::mousePressEvent(QMouseEvent *event)
-{
-    bool accepted = false;
-
-    setCursorPos(mapToScene(event->pos()));
-
-    startPos_ = cursor_pos_;
-
-    if (!accepted)
-        AView::mousePressEvent(event);
-}
-
-void SymbolEditorView::mouseReleaseEvent(QMouseEvent *event)
-{
-    AView::mouseReleaseEvent(event);
-}
-
-void SymbolEditorView::mouseMoveEvent(QMouseEvent *event)
-{
-    AView::mouseMoveEvent(event);
-}
-
-void SymbolEditorView::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    AView::mouseDoubleClickEvent(event);
 }

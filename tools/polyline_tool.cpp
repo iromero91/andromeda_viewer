@@ -68,10 +68,10 @@ bool PolylineDrawingTool::addPoint(QPointF point)
     case TOOL_STATE::POLYLINE_ADD_POINT:
         if (points_.count() > 1)
         {
-            if (AGeometry::PointsAreCoincident(point, points_.first()))
+            if (AGeometry::PointsAreCoincident(point, start_pos_))
             {
                 // Close the polygon and finish
-                points_.append(points_.first());
+                points_.append(start_pos_);
                 finish();
                 return true;
             }
@@ -87,12 +87,14 @@ void PolylineDrawingTool::getPolyline(APolyline &line)
 {
     line.clear();
 
-    line.addPoint(start_pos_);
+    line.setStartPos(start_pos_);
 
     foreach (QPointF p, points_)
     {
         line.addPoint(p);
     }
+
+    line.setFilled(true);
 }
 
 bool PolylineDrawingTool::onMousePress(QMouseEvent *event, QPointF cursorPos)
