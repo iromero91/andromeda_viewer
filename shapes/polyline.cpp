@@ -67,7 +67,8 @@ QRectF APolyline::boundingRect() const
 
     for (int i=0; i<points_.count(); i++)
     {
-        rect = rect.united(QRectF(points_.at(i).point, QSizeF(0,0)));
+        //TODO make a bounding box class that is a bit cleverer!
+        rect = rect.united(QRectF(points_.at(i).point, QSizeF(1,1)));
     }
 
     rect.adjust(-thickness_,
