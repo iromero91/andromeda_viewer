@@ -62,18 +62,18 @@ public:
 protected:
     void init();
 
-    QColor bg_color_;   // Background color for the scene
-    bool draw_axes_;    // Flag for displaying axes
+    QColor bg_color_ = QColor(0xFF,0xFF,0xFF);   // Background color for the scene
+    bool draw_axes_= true;              // Flag for displaying axes
 
     QPen axis_pen_;     // Pen object for drawing the axes
     QPen grid_pen_;     // Pen object for drawing the grid
 
     AGrid grid_;    // Grid object
 
-    uint8_t layerDisplayMode_;  // How to display multiple layers
-    uint64_t layerMask_;   // Which layers are currently visible
+    int layerDisplayMode_ = (int) LAYER_MODE::SHOW_ALL;     // How to display multiple layers
+    uint64_t layerMask_ = (uint64_t) LAYER_MASK::ALL;       // Which layers are currently visible
 
-    int8_t currentLayer_;     // Which layer is currently selected (top)
+    int currentLayer_ = (int) LAYER_ID::TOP;     // Which layer is currently selected (top)
 
 };
 

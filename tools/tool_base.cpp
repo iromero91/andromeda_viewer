@@ -2,9 +2,7 @@
 
 #include "layers/layer_defines.h"
 
-AToolBase::AToolBase() :
-    QObject(),
-    tool_state_((int) TOOL_STATE::INACTIVE)
+AToolBase::AToolBase() : QObject()
 {
 }
 

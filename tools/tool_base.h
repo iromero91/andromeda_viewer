@@ -48,12 +48,13 @@ public slots:
 
     // Send events to the tool
     // Override these to implement
-    bool onMousePress(QMouseEvent *event)       { Q_UNUSED(event); return false; }
-    bool onMouseRelease(QMouseEvent *event)     { Q_UNUSED(event); return false; }
-    bool onMouseMove(QMouseEvent *event)        { Q_UNUSED(event); return false; }
-    bool onMouseDoubleClick(QMouseEvent *event) { Q_UNUSED(event); return false; }
-    bool onKeyPress(QKeyEvent *event)           { Q_UNUSED(event); return false; }
-    bool onKeyRelease(QKeyEvent *event)         { Q_UNUSED(event); return false; }
+    // In addition to the event, the cursorPos is sent for mouse events
+    bool onMousePress(QMouseEvent *event, QPointF cursorPos)        { Q_UNUSED(event); Q_UNUSED(cursorPos); return false; }
+    bool onMouseRelease(QMouseEvent *event, QPointF cursorPos)      { Q_UNUSED(event); Q_UNUSED(cursorPos); return false; }
+    bool onMouseMove(QMouseEvent *event, QPointF cursorPos)         { Q_UNUSED(event); Q_UNUSED(cursorPos); return false; }
+    bool onMouseDoubleClick(QMouseEvent *event, QPointF cursorPos)  { Q_UNUSED(event); Q_UNUSED(cursorPos); return false; }
+    bool onKeyPress(QKeyEvent *event)       { Q_UNUSED(event); return false; }
+    bool onKeyRelease(QKeyEvent *event)     { Q_UNUSED(event); return false; }
 
 signals:
     void started(void);
@@ -62,7 +63,7 @@ signals:
 
 protected:
     // Tool state machine
-    int tool_state_;
+    int tool_state_ = (int) TOOL_STATE::INACTIVE;
 
     // Current tool position
     QPointF tool_pos_;

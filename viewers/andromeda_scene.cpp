@@ -3,14 +3,9 @@
 
 #include <QGraphicsItem>
 
-AScene::AScene(QObject *parent) : QGraphicsScene(parent),
-    bg_color_(0xFF, 0xFF, 0xFF),
-    draw_axes_(true),
-    layerDisplayMode_((uint8_t) (LAYER_MODE::SHOW_ALL)),
-    layerMask_((uint64_t) (LAYER_MASK::ALL))
+AScene::AScene(QObject *parent) : QGraphicsScene(parent)
 {
     init();
-
 }
 
 void AScene::init()
@@ -43,7 +38,7 @@ bool AScene::checkLayer(int8_t layerId)
 {
     // The layer mask accounts for 64 unique layers
     // Any layers outside the maskable range are for display only and are ALWAYS on
-    if ((layerId < 0)|| (layerId >= (int) LAYER_ID::TOP))
+    if ((layerId < (int) LAYER_ID::BOTTOM)|| (layerId > (int) LAYER_ID::TOP))
     {
         return true;
     }
@@ -233,7 +228,7 @@ void AScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
     if (item == nullptr) return;
 
     // If the layer is above the top layer, ignore
-    if (layer >= (int) LAYER_ID::TOP)
+    if ((layer < (int) LAYER_ID::BOTTOM) || (layer > (int) LAYER_ID::TOP))
     {
 
     }

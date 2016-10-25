@@ -68,7 +68,7 @@ void SymbolEditorView::mousePressEvent(QMouseEvent *event)
 
     setCursorPos(mapToScene(event->pos()));
 
-    startPos_ = cursorPos_;
+    startPos_ = cursor_pos_;
 
     if (!accepted)
         AView::mousePressEvent(event);

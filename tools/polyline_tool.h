@@ -28,6 +28,8 @@ public slots:
     void addPoint(QPointF point);
     void finish();
 
+    void onMousePress(QMouseEvent *event);
+
 protected:
 
     QPointF start_pos_;

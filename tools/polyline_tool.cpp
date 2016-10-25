@@ -2,8 +2,7 @@
 
 #include <QDebug>
 
-PolylineDrawingTool::PolylineDrawingTool() :
-    AToolBase()
+PolylineDrawingTool::PolylineDrawingTool() : AToolBase()
 {
 }
 
@@ -85,4 +84,13 @@ void PolylineDrawingTool::getPolyline(APolyline &line)
 void PolylineDrawingTool::finish()
 {
 
+}
+
+void PolylineDrawingTool::onMousePress(QMouseEvent *event)
+{
+    switch (event->button())
+    {
+    case Qt::LeftButton:
+
+    }
 }
