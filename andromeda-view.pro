@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     layers/layer_defines.cpp \
     tools/tool_base.cpp \
     tools/polyline_tool.cpp \
-    logging/debug_handler.cpp
+    logging/debug_handler.cpp \
+    geometry/bounding_box.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     tools/tool_defines.h \
     tools/tool_base.h \
     tools/polyline_tool.h \
-    logging/debug_handler.h
+    logging/debug_handler.h \
+    geometry/bounding_box.h
 
 FORMS    += mainwindow.ui
 
