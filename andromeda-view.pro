@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     grid/grid.cpp \
     layers/layer_defines.cpp \
     tools/tool_base.cpp \
-    tools/polyline_tool.cpp
+    tools/polyline_tool.cpp \
+    logging/debug_handler.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
@@ -44,7 +45,8 @@ HEADERS  += mainwindow.h \
     layers/layer_defines.h \
     tools/tool_defines.h \
     tools/tool_base.h \
-    tools/polyline_tool.h
+    tools/polyline_tool.h \
+    logging/debug_handler.h
 
 FORMS    += mainwindow.ui
 
