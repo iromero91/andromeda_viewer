@@ -24,58 +24,55 @@ class AToolBase : public QObject
     Q_OBJECT
 
 public:
-    AToolBase();
+    AToolBase(QObject *parent = 0);
 
-    bool isActive(void) { return tool_state_ != (int) TOOL_STATE::INACTIVE; }
+    bool isActive(void) { return (tool_state_ > TOOL_STATE::INACTIVE); }
 
-    int getToolState(void) { return tool_state_; }
-    void setToolState(int state) { tool_state_ = state; }
+    TOOL_STATE getToolState(void) { return tool_state_; }
+    void setToolState(TOOL_STATE state) { tool_state_ = state; }
 
-    void paint(QPainter *painter, const QRectF &rect);
+    virtual void paint(QPainter *painter, const QRectF &rect);
+
+    virtual bool onMousePress(QMouseEvent *event, QPointF cursorPos);
+    virtual bool onMouseRelease(QMouseEvent *event, QPointF cursorPos);
+    virtual bool onMouseMove(QPointF cursorPos);
+    virtual bool onMouseDoubleClick(QMouseEvent *event, QPointF cursorPos);
+
+    virtual bool onKeyPress(QKeyEvent *event);
+    virtual bool onKeyRelease(QKeyEvent *event);
+
+    void setToolPos(QPointF pos) { tool_pos_ = pos; }
+    QPointF getToolPos() { return tool_pos_; }
 
 public slots:
-    // Reset the tool to a neutral state
-    virtual void reset(void) = 0;
-
-    // Start the tool (no position provided)
-    virtual void start(void) = 0;
-
-    // Finish the tool
-    virtual void finish(void) = 0;
-
-    // Cancel the tool
+    // Do not override these in any subclasses
+    void start(void);
+    void stop(void);
     void cancel(void);
-
-    // Send events to the tool
-    // Override these to implement
-    // In addition to the event, the cursorPos is sent for mouse events
-    bool onMousePress(QMouseEvent *event, QPointF cursorPos)        { Q_UNUSED(event); Q_UNUSED(cursorPos); return false; }
-    bool onMouseRelease(QMouseEvent *event, QPointF cursorPos)      { Q_UNUSED(event); Q_UNUSED(cursorPos); return false; }
-    bool onMouseMove(QMouseEvent *event, QPointF cursorPos)         { Q_UNUSED(event); Q_UNUSED(cursorPos); return false; }
-    bool onMouseDoubleClick(QMouseEvent *event, QPointF cursorPos)  { Q_UNUSED(event); Q_UNUSED(cursorPos); return false; }
-    bool onKeyPress(QKeyEvent *event)       { Q_UNUSED(event); return false; }
-    bool onKeyRelease(QKeyEvent *event)     { Q_UNUSED(event); return false; }
+    void reset(void);
+    void finish(void);
 
 signals:
-    void started(void);
     void finished(void);
     void cancelled(void);
+    void updated(void);
 
 protected:
     // Tool state machine
-    int tool_state_ = (int) TOOL_STATE::INACTIVE;
+    TOOL_STATE tool_state_ = TOOL_STATE::INACTIVE;
 
     // Current tool position
     QPointF tool_pos_;
 
+    // Overridable callbacks
+    virtual void onStart(void)      {}
+    virtual void onStop(void)       {}
+    virtual void onCancel(void)     {}
+    virtual void onReset(void)      {}
+    virtual void onFinish(void)     {}
+
     void defaultPen(void);
     void defaultBrush(void);
-
-    // Called by finish() and cancel()
-    void clear(void);
-
-    // Called from SLOT(update)
-    void onUpdate(void);
 };
 
 #endif // TOOL_BASE_H

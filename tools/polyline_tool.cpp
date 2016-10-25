@@ -1,9 +1,16 @@
 #include "polyline_tool.h"
+#include "geometry/geometry.h"
 
 #include <QDebug>
 
-PolylineDrawingTool::PolylineDrawingTool() : AToolBase()
+PolylineDrawingTool::PolylineDrawingTool(QObject *parent) : AToolBase(parent)
 {
+
+}
+
+void PolylineDrawingTool::onReset()
+{
+    points_.clear();
 }
 
 void PolylineDrawingTool::paint(QPainter *painter, const QRectF &rect)
@@ -18,20 +25,22 @@ void PolylineDrawingTool::paint(QPainter *painter, const QRectF &rect)
     p.setStyle(Qt::SolidLine);
     painter->setPen(p);
 
-    QPainterPath path(start_pos_);
-
-    foreach (QPointF point, points_)
+    if (points_.count() > 0)
     {
-        path.lineTo(point);
+        QPainterPath path(start_pos_);
+
+        foreach (QPointF point, points_)
+        {
+            path.lineTo(point);
+        }
+
+        if (path.intersects(rect))
+        {
+            painter->drawPath(path);
+        }
     }
 
-    if (path.intersects(rect))
-    {
-        painter->drawPath(path);
-    }
-
-    // Draw a line from most-recent point to the current cursor position
-    if (getToolState() > (int) LINE_TOOL_STATE::FIRST_POINT)
+    if (getToolState() > TOOL_STATE::POLYLINE_SET_ORIGIN)
     {
         QPointF last = points_.count() == 0 ? start_pos_ : points_.last();
 
@@ -44,29 +53,34 @@ void PolylineDrawingTool::paint(QPainter *painter, const QRectF &rect)
     }
 }
 
-void PolylineDrawingTool::reset()
+bool PolylineDrawingTool::addPoint(QPointF point)
 {
-    points_.clear();
-
-    setToolState((int) LINE_TOOL_STATE::FIRST_POINT);
-}
-
-void PolylineDrawingTool::start()
-{
-    reset();
-}
-
-void PolylineDrawingTool::addPoint(QPointF point)
-{
-    if (getToolState() == (int) LINE_TOOL_STATE::FIRST_POINT)
+    switch (getToolState())
     {
-        start_pos_ = point;
-        setToolState((int) LINE_TOOL_STATE::ADDING_POINTS);
-    }
-    else
-    {
+    default:
+    case TOOL_STATE::POLYLINE_SET_ORIGIN:
+        // Set the starting position
+        reset();
+        setToolState(TOOL_STATE::POLYLINE_ADD_POINT);
+
+        setStartPos(point);
+        break;
+    case TOOL_STATE::POLYLINE_ADD_POINT:
+        if (points_.count() > 1)
+        {
+            if (AGeometry::PointsAreCoincident(point, points_.first()))
+            {
+                // Close the polygon and finish
+                points_.append(points_.first());
+                finish();
+                return true;
+            }
+        }
         points_.append(point);
     }
+
+    // False indicates that the polygon did not close itself
+    return false;
 }
 
 void PolylineDrawingTool::getPolyline(APolyline &line)
@@ -81,16 +95,41 @@ void PolylineDrawingTool::getPolyline(APolyline &line)
     }
 }
 
-void PolylineDrawingTool::finish()
+bool PolylineDrawingTool::onMousePress(QMouseEvent *event, QPointF cursorPos)
 {
+    bool handled = false;
 
-}
-
-void PolylineDrawingTool::onMousePress(QMouseEvent *event)
-{
     switch (event->button())
     {
     case Qt::LeftButton:
-
+        addPoint(cursorPos);
+        handled = true;
+        break;
+    default:
+        break;
     }
+
+    return handled;
+}
+
+bool PolylineDrawingTool::onMouseDoubleClick(QMouseEvent *event, QPointF cursorPos)
+{
+    bool handled = false;
+
+    switch (event->button())
+    {
+    case Qt::LeftButton:
+        // If the polyline didn't finish by itself, enforce closing
+        if (!addPoint(cursorPos))
+        {
+            finish();
+        }
+        handled = true;
+        break;
+
+    default:
+        break;
+    }
+
+    return handled;
 }

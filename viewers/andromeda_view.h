@@ -52,6 +52,7 @@ public:
     void deleteSelectedItems(void);
 
     // Tool functions
+    void addTool(AToolBase *tool);
     bool startTool(void);           // Start the current tool
     bool startTool(AToolBase *tool);
     void cancelTool(void);
@@ -80,6 +81,7 @@ public:
     };
 
 public slots:
+    void toolUpdated(void);
 
 signals:
     // Called when the user cursor changes (in scene coordinates)

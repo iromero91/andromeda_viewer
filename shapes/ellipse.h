@@ -7,7 +7,6 @@
 
 class AEllipse : public ADrawable
 {
-    Q_OBJECT
 
 public:
     AEllipse();

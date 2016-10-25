@@ -52,10 +52,3 @@ FORMS    += mainwindow.ui
 
 RESOURCES += \
     fonts.qrc
-
-DISTFILES += \
-    grid/grid.pri \
-    tools/tools.pri \
-    layers/layers.pri \
-    grid/grid.pri \
-    shapes/shapes.pri

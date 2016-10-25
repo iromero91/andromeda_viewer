@@ -5,7 +5,7 @@
 
 #include "drawable.h"
 
-ADrawable::ADrawable() : QGraphicsObject(),
+ADrawable::ADrawable() : QGraphicsItem(),
     thickness_(SYMBOL_LINE_WIDTH_DEFAULT),
     filled_(true),
     drawBoundingBox_(true)

@@ -2,7 +2,6 @@
 #define SHAPES_DRAWABLE_H
 
 #include <QGraphicsItem>
-#include <QGraphicsObject>
 #include <QList>
 #include <QPointF>
 #include <QColor>
@@ -15,9 +14,8 @@
 #include "layers/layer_defines.h"
 #include "shapes/shape_defines.h"
 
-class ADrawable : public QGraphicsObject
+class ADrawable : public QGraphicsItem
 {
-    Q_OBJECT
 
 public:
     ADrawable();

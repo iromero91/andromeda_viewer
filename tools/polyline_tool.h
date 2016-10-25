@@ -4,33 +4,27 @@
 #include "tool_base.h"
 #include "shapes/polyline.h"
 
-enum class LINE_TOOL_STATE : int {
-
-    FIRST_POINT = 10,    // Adding the first point
-    ADDING_POINTS,      // Adding subsequent points
-};
-
 class PolylineDrawingTool : public AToolBase
 {
     Q_OBJECT
 
 public:
-    PolylineDrawingTool();
+    PolylineDrawingTool(QObject *parent = 0);
 
     // Return the polyline constructed by this tool
     void getPolyline(APolyline &line);
 
     void paint(QPainter *painter, const QRectF &rect);
 
-public slots:
-    void reset(void);
-    void start(void);
-    void addPoint(QPointF point);
-    void finish();
+    void setStartPos(QPointF point) { start_pos_ = point; }
+    bool addPoint(QPointF point);
 
-    void onMousePress(QMouseEvent *event);
+    bool onMousePress(QMouseEvent *event, QPointF cursorPos);
+    bool onMouseDoubleClick(QMouseEvent *event, QPointF cursorPos);
 
 protected:
+    // Callback functions
+    void onReset(void);
 
     QPointF start_pos_;
 

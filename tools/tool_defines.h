@@ -9,8 +9,14 @@ const QColor DRAWING_TOOL_OUTLINE_COLOR(125,200,250,200);
 // Color of line between last point and mouse
 const QColor DRAWING_TOOL_TRACE_LINE_COLOR(225,250,250,200);
 
+//Enumerated states for all drawing tools
 enum class TOOL_STATE : int {
-    INACTIVE = 0,
+    INACTIVE = -1,  // Tool is in an inactive state and won't respond to input
+    RESET = 0,      // Tool is in RESET state (default state)
+
+    // Polyline drawing tools
+    POLYLINE_SET_ORIGIN = 10,
+    POLYLINE_ADD_POINT,
 };
 
 #endif // TOOL_DEFINES_H

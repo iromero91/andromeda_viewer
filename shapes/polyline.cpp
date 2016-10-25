@@ -1,4 +1,5 @@
 #include "polyline.h"
+#include "geometry/geometry.h"
 
 #include <qmath.h>
 
@@ -127,20 +128,13 @@ void APolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         drawBoundingBox(painter);
 }
 
-bool APolyline::comparePoints(QPointF pA, QPointF pB, double epsilon)
-{
-    QPointF delta = pB - pA;
-
-    return (fabs(delta.x()) <= epsilon) && (fabs(delta.y()) <= epsilon);
-}
-
 bool APolyline::isClosed()
 {
     // Need at least three points (including starting position)
     if (points_.count() < 2)
         return false;
 
-    return comparePoints(points_.last().point, start_pos_);
+    return AGeometry::PointsAreCoincident(points_.last().point, start_pos_);
 }
 
 QPainterPath APolyline::shape() const
@@ -173,7 +167,7 @@ bool APolyline::addPoint(LWPolypoint point)
         return false;
 
     // New point is the same!
-    if (comparePoints(point.point, points_.last().point))
+    if (AGeometry::PointsAreCoincident(point.point, points_.last().point))
         return false;
 
     points_.append(point);

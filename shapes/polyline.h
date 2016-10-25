@@ -9,8 +9,6 @@
 
 #include "shapes/drawable.h"
 
-const double PT_EPSILON = 0.01;
-
 //TODO fix this, is hacky
 typedef struct
 
@@ -21,7 +19,6 @@ typedef struct
 
 class APolyline : public ADrawable
 {
-    Q_OBJECT
 
 public:
     APolyline();
@@ -44,8 +41,6 @@ public:
 
     bool addPoint(LWPolypoint point);
     bool addPoint(QPointF point, double angle=0);
-
-    static bool comparePoints(QPointF pA, QPointF pB, double epsilon = PT_EPSILON);
 
 protected:
     QPointF start_pos_;

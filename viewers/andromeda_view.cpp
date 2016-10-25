@@ -93,6 +93,11 @@ void AView::setCursorPos(QPointF pos, bool panPastEdges)
 
     emit cursorPositionChanged(cursor_pos_);
 
+    if (isToolActive())
+    {
+        current_tool_->onMouseMove(cursor_pos_);
+    }
+
     getScene()->update();
 }
 
@@ -164,15 +169,14 @@ void AView::keyPressEvent(QKeyEvent *event)
 
     double offset = getScene()->getGrid().getMajorTick();
 
-    // First try to send the event to the active tool
-    if (isToolActive())
-    {
-        if (current_tool_->onKeyPress(event))
-            return;
-    }
+    // High priority keys
 
     switch (event->key())
     {
+    case Qt::Key_Escape:
+        cancelTool();
+        cancelSelection();
+        return;
     case Qt::Key_Space:
         // Center the screen at the cursor location
         if (event->modifiers() == Qt::ControlModifier)
@@ -185,8 +189,22 @@ void AView::keyPressEvent(QKeyEvent *event)
             cursorOrigin_ = cursor_pos_;
             emit cursorPositionChanged(cursor_pos_);
         }
+
         snapMouseToCursor();
+        return;
+    default:
         break;
+    }
+
+    // First try to send the event to the active tool
+    if (isToolActive())
+    {
+        if (current_tool_->onKeyPress(event))
+            return;
+    }
+
+    switch (event->key())
+    {
     // Move the cursor left
     case Qt::Key_Left:
         moveCursor(-offset,0,true);
@@ -206,11 +224,6 @@ void AView::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Down:
         moveCursor(0,offset,true);
         snapMouseToCursor();
-        break;
-    // Cancel the current action
-    case Qt::Key_Escape:
-        cancelTool();
-        cancelSelection();
         break;
 
     case Qt::Key_C: //TODO - remove this, just a test
@@ -374,16 +387,6 @@ void AView::mouseMoveEvent(QMouseEvent *event)
         endMousePan();
     }
 
-    if (isToolAvailable())
-    {
-        if (current_tool_->onMouseMove(event, cursor_pos_))
-        {
-            return;
-        }
-    }
-
-
-
     QGraphicsView::mouseMoveEvent(event);
 }
 
@@ -418,7 +421,7 @@ void AView::drawForeground(QPainter *painter, const QRectF &rect)
     if (painter == nullptr) return;
 
     // Draw the active tool
-    if (isToolActive())
+    if (isToolActive() && current_tool_->isActive())
     {
         current_tool_->paint(painter, rect);
     }
@@ -601,6 +604,20 @@ void AView::scaleRelative(double scaling)
     setScalingFactor(getScalingFactor() * scaling);
 }
 
+void AView::addTool(AToolBase *tool)
+{
+    if (tool == nullptr)
+        return;
+
+    connect(tool, SIGNAL(update()), this, SLOT(toolUpdated()));
+}
+
+void AView::toolUpdated()
+{
+    qDebug() << "tool updated";
+    repaint();
+}
+
 bool AView::startTool()
 {
     return startTool(current_tool_);
@@ -624,6 +641,8 @@ bool AView::startTool(AToolBase *tool)
 
     current_tool_ = tool;
 
+    qDebug() << "start";
+
     tool->start();
 
     return true;
@@ -631,11 +650,20 @@ bool AView::startTool(AToolBase *tool)
 
 void AView::cancelTool()
 {
-    // No tool to cancel
-    if (!isToolAvailable())
+    if (!isToolActive())
         return;
 
-    current_tool_->cancel();
+    // If the tool is in the reset state, stop it completely
+    if (current_tool_->getToolState() == TOOL_STATE::RESET)
+    {
+        current_tool_->stop();
+    }
+    // Otherwise, just signal a reset
+    // Then, pressing escape again will completely cancel the tool
+    else
+    {
+        current_tool_->reset();
+    }
 }
 
 bool AView::isToolActive()

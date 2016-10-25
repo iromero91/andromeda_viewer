@@ -6,7 +6,6 @@
 
 class ARect : public ADrawable
 {
-    Q_OBJECT
 
 public:
     ARect();

@@ -2,17 +2,42 @@
 
 #include "layers/layer_defines.h"
 
-AToolBase::AToolBase() : QObject()
+AToolBase::AToolBase(QObject *parent) : QObject(parent)
 {
+
 }
 
-/**
- * @brief AToolBase::clear
- * Reset the tool to a default state
- */
-void AToolBase::clear()
+void AToolBase::start()
 {
     reset();
+
+    onStart();
+
+}
+
+void AToolBase::stop()
+{
+    reset();
+
+    tool_state_ = TOOL_STATE::INACTIVE;
+
+    onStop();
+}
+
+void AToolBase::reset()
+{
+    tool_state_ = TOOL_STATE::RESET;
+
+    onReset();
+
+    // Let anyone watching know that the tool has updated
+    emit updated();
+}
+
+void AToolBase::finish()
+{
+    onFinish();
+    emit finished();
 }
 
 /**
@@ -21,8 +46,12 @@ void AToolBase::clear()
  */
 void AToolBase::cancel()
 {
-    tool_state_ = (int) TOOL_STATE::INACTIVE;
-    clear();
+    tool_state_ = TOOL_STATE::INACTIVE;
+
+    reset();
+
+    onCancel();
+
     emit cancelled();
 }
 
@@ -36,4 +65,50 @@ void AToolBase::paint(QPainter *painter, const QRectF &rect)
     // Reimplement in specific tool class
     Q_UNUSED(painter);
     Q_UNUSED(rect);
+}
+
+/* Event Passthrough Functions */
+bool AToolBase::onMousePress(QMouseEvent *event, QPointF cursorPos)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(cursorPos);
+
+    return false;
+}
+
+bool AToolBase::onMouseRelease(QMouseEvent *event, QPointF cursorPos)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(cursorPos);
+
+    return false;
+}
+
+bool AToolBase::onMouseMove(QPointF cursorPos)
+{
+    tool_pos_ = cursorPos;
+
+    return false;
+}
+
+bool AToolBase::onMouseDoubleClick(QMouseEvent *event, QPointF cursorPos)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(cursorPos);
+
+    return false;
+}
+
+bool AToolBase::onKeyPress(QKeyEvent *event)
+{
+    Q_UNUSED(event);
+
+    return false;
+}
+
+bool AToolBase::onKeyRelease(QKeyEvent *event)
+{
+    Q_UNUSED(event);
+
+    return false;
 }
