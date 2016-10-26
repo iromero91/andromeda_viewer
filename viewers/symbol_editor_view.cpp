@@ -15,13 +15,28 @@ SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
     addTool(&rect_tool_);
     addTool(&ellipse_tool_);
 
-    AEllipse e;
+    connect(scene_, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+}
 
-    qDebug() << "props:";
+void SymbolEditorView::selectionChanged()
+{
+    QList<QGraphicsItem*> items = scene_->selectedItems();
 
-    foreach (QString s, e.getPropertyNames())
+    ADrawable *drawable;
+
+    foreach (QGraphicsItem* item, items)
     {
-        qDebug() << s;
+        drawable = qgraphicsitem_cast<ADrawable*>(item);
+
+        if (nullptr != drawable)
+        {
+            qDebug() << "item:" << drawable->objectName();
+
+            foreach (QString s, drawable->getPropertyNames())
+            {
+                qDebug() << "prop:" << s;
+            }
+        }
     }
 }
 

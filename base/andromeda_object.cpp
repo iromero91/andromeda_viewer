@@ -2,7 +2,7 @@
 
 AndromedaObject::AndromedaObject(QObject *parent) : QObject(parent)
 {
-
+    setObjectName("AndromedaObject");
 }
 
 QList<QMetaProperty> AndromedaObject::getProperties()

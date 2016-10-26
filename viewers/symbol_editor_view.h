@@ -18,6 +18,9 @@ class SymbolEditorView : public AView
 public:
     SymbolEditorView(QWidget * parent = 0);
 
+public slots:
+    void selectionChanged(void);
+
 protected:
     void keyPressEvent(QKeyEvent *event);
 
