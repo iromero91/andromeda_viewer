@@ -1,4 +1,4 @@
-# andromeda_viewer
+# Andromeda Viewer
 
 First-pass of a rendering environment for [AndromEDA](https://github.com/andromeda-cad) EDA Tool.
 
