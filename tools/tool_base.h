@@ -32,8 +32,13 @@ public:
     TOOL_STATE getToolState(void) { return tool_state_; }
     void setToolState(TOOL_STATE state) { tool_state_ = state; }
 
-    virtual void paint(QPainter *painter, const QRectF &rect);
+    // Paint function
+    void paint(QPainter *painter, const QRectF &rect);
 
+    virtual void paintTool(QPainter *painter, const QRectF &rect) { Q_UNUSED(painter); Q_UNUSED(rect); }
+    virtual void paintHints(QPainter *painter, const QRectF &rect) { Q_UNUSED(painter); Q_UNUSED(rect); }
+
+    // Event functions
     virtual bool onMousePress(QMouseEvent *event, QPointF cursorPos);
     virtual bool onMouseRelease(QMouseEvent *event, QPointF cursorPos);
     virtual bool onMouseMove(QPointF cursorPos);
@@ -71,7 +76,7 @@ protected:
     virtual void onReset(void)      {}
     virtual void onFinish(void)     {}
 
-    QPen trace_pen_;
+    QPen hints_pen_;
     QPen tool_pen_;
     QBrush tool_brush_;
 

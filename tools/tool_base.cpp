@@ -18,10 +18,10 @@ void AToolBase::defaultPens()
     tool_pen_.setCosmetic(true);
     tool_pen_.setStyle(Qt::DashDotLine);
 
-    trace_pen_.setColor(DRAWING_TOOL_TRACE_LINE_COLOR);
-    trace_pen_.setWidthF(2.0);
-    trace_pen_.setCosmetic(true);
-    trace_pen_.setStyle(Qt::DotLine);
+    hints_pen_.setColor(DRAWING_TOOL_TRACE_LINE_COLOR);
+    hints_pen_.setWidthF(2.0);
+    hints_pen_.setCosmetic(true);
+    hints_pen_.setStyle(Qt::DotLine);
 }
 
 void AToolBase::start()
@@ -63,16 +63,13 @@ void AToolBase::cancel()
     emit cancelled();
 }
 
-/**
- * @brief AToolBase::paint
- * Paint the tool on top of the scene
- * @param painter
- */
 void AToolBase::paint(QPainter *painter, const QRectF &rect)
 {
-    // Reimplement in specific tool class
-    Q_UNUSED(painter);
-    Q_UNUSED(rect);
+    if (painter != nullptr)
+    {
+        paintTool(painter, rect);
+        paintHints(painter, rect);
+    }
 }
 
 /* Event Passthrough Functions */
@@ -102,6 +99,7 @@ bool AToolBase::onMouseMove(QPointF cursorPos)
 bool AToolBase::onMouseDoubleClick(QMouseEvent *event, QPointF cursorPos)
 {
     Q_UNUSED(event);
+
     Q_UNUSED(cursorPos);
 
     return false;

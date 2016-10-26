@@ -626,26 +626,27 @@ void AView::addTool(AToolBase *tool)
     if (tool == nullptr)
         return;
 
-    connect(tool, SIGNAL(updated()), this, SLOT(toolUpdated()));
-    connect(tool, SIGNAL(finished()), this, SLOT(toolFinished()));
-    connect(tool, SIGNAL(cancelled()), this, SLOT(toolCancelled()));
+    connect(tool, SIGNAL(updated()),    this, SLOT(toolUpdated()));
+    connect(tool, SIGNAL(finished()),   this, SLOT(toolFinished()));
+    connect(tool, SIGNAL(cancelled()),  this, SLOT(toolCancelled()));
 }
 
 void AView::toolUpdated()
 {
+    AToolBase *tool = qobject_cast<AToolBase*>(QObject::sender());
+
+    if (tool == nullptr)
+        return;
+
     // Force a scene redraw
     scene_->update();
 
-    QObject *tool = QObject::sender();
-
-    // Pass the calling tool through to the callback
-    if (tool != nullptr)
-        onToolUpdated(tool);
+    onToolUpdated(tool);
 }
 
 void AView::toolCancelled()
 {
-    QObject *tool = QObject::sender();
+    AToolBase *tool = qobject_cast<AToolBase*>(QObject::sender());
 
     if (tool != nullptr)
         onToolCancelled(tool);
@@ -653,10 +654,14 @@ void AView::toolCancelled()
 
 void AView::toolFinished()
 {
-    QObject *tool = QObject::sender();
+    // Did a tool call this?
+    AToolBase *tool = qobject_cast<AToolBase*>(QObject::sender());
 
     if (tool != nullptr)
+    {
         onToolFinished(tool);
+        resetTool(tool);
+    }
 }
 
 bool AView::startTool(AToolBase *tool)

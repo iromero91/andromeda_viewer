@@ -7,7 +7,7 @@ EllipseDrawingTool::EllipseDrawingTool(QObject *parent) : AToolBase(parent)
 
 }
 
-void EllipseDrawingTool::paint(QPainter *painter, const QRectF &rect)
+void EllipseDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
 {
     Q_UNUSED(rect);
 
@@ -17,11 +17,29 @@ void EllipseDrawingTool::paint(QPainter *painter, const QRectF &rect)
     painter->setBrush(tool_brush_);
     painter->setPen(tool_pen_);
 
-    if (getToolState() == TOOL_STATE::ELLIPSE_SET_POINT)
+    switch(getToolState())
     {
+    case TOOL_STATE::ELLIPSE_SET_POINT:
         painter->drawEllipse(center_, rx_, ry_);
-        painter->setPen(trace_pen_);
+        break;
+    default:
+        break;
+    }
+}
+
+void EllipseDrawingTool::paintHints(QPainter *painter, const QRectF &rect)
+{
+    Q_UNUSED(rect);
+
+    switch (getToolState())
+    {
+    case TOOL_STATE::ELLIPSE_SET_POINT:
+        // Draw line to current mouse position
+        painter->setPen(hints_pen_);
         painter->drawLine(center_, tool_pos_);
+        break;
+    default:
+        break;
     }
 }
 

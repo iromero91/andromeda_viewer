@@ -10,6 +10,7 @@
 SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
 {
     addTool(&poly_tool_);
+    addTool(&rect_tool_);
     addTool(&ellipse_tool_);
 }
 
@@ -30,6 +31,9 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
     case Qt::Key_E:
         startTool(&ellipse_tool_);
         break;
+    case Qt::Key_R:
+        startTool(&rect_tool_);
+        break;
     default:
         accepted = false;
         break;
@@ -46,15 +50,17 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 }
 
 
-void SymbolEditorView::onToolFinished(QObject *toolPtr)
+void SymbolEditorView::onToolFinished(AToolBase *toolPtr)
 {
     if (toolPtr == nullptr)
         return;
 
-    int pointer = (int) toolPtr;
+    void *pointer = (void *) toolPtr;
+
+    //TODO - better pointer management, using qobjectcast or similar
 
     // Pointer comparison fun
-    if (pointer == (int) &poly_tool_)
+    if (pointer == &poly_tool_)
     {
         APolyline *line = new APolyline();
 
@@ -64,7 +70,7 @@ void SymbolEditorView::onToolFinished(QObject *toolPtr)
 
         poly_tool_.reset();
     }
-    else if (pointer == (int) &ellipse_tool_)
+    else if (pointer == &ellipse_tool_)
     {
         AEllipse *ell = new AEllipse();
 
@@ -74,5 +80,15 @@ void SymbolEditorView::onToolFinished(QObject *toolPtr)
             scene_->addItem(ell);
 
         ellipse_tool_.reset();
+    }
+    else if (pointer == &rect_tool_)
+    {
+        APolyline *line = new APolyline();
+
+        rect_tool_.getPolyline(*line);
+
+        scene_->addItem(line);
+
+        rect_tool_.reset();
     }
 }

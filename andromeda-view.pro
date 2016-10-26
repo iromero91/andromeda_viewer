@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     tools/polyline_tool.cpp \
     logging/debug_handler.cpp \
     geometry/bounding_box.cpp \
-    tools/ellipse_drawing_tool.cpp
+    tools/ellipse_drawing_tool.cpp \
+    tools/polyline_drawing_tool_base.cpp \
+    tools/rect_drawing_tool.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
@@ -50,7 +52,9 @@ HEADERS  += mainwindow.h \
     tools/polyline_tool.h \
     logging/debug_handler.h \
     geometry/bounding_box.h \
-    tools/ellipse_drawing_tool.h
+    tools/ellipse_drawing_tool.h \
+    tools/polyline_drawing_tool_base.h \
+    tools/rect_drawing_tool.h
 
 FORMS    += mainwindow.ui
 

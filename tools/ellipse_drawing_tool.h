@@ -10,7 +10,9 @@ class EllipseDrawingTool : public AToolBase
 
 public:
     EllipseDrawingTool(QObject *parent = 0);
-    void paint(QPainter *painter, const QRectF &rect);
+
+    void paintTool(QPainter *painter, const QRectF &rect);
+    void paintHints(QPainter *painter, const QRectF &rect);
 
     void setCenter(QPointF point) { center_ = point; }
 

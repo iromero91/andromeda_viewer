@@ -123,9 +123,9 @@ protected:
     // Tools
     AToolBase *current_tool_ = nullptr;
 
-    virtual void onToolUpdated(QObject *toolPtr)    { Q_UNUSED(toolPtr); }
-    virtual void onToolFinished(QObject *toolPtr)   { Q_UNUSED(toolPtr); }
-    virtual void onToolCancelled(QObject *toolPtr)  { Q_UNUSED(toolPtr); }
+    virtual void onToolUpdated(AToolBase *toolPtr)    { Q_UNUSED(toolPtr); }
+    virtual void onToolFinished(AToolBase *toolPtr)   { Q_UNUSED(toolPtr); }
+    virtual void onToolCancelled(AToolBase *toolPtr)  { Q_UNUSED(toolPtr); }
 
     unsigned char cursorStyle_ = VIEW_CURSOR_CROSS_SMALL;     // Cursor style
 
