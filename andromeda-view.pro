@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     tools/ellipse_drawing_tool.cpp \
     tools/rect_drawing_tool.cpp \
     tools/polyline_drawing_tool.cpp \
-    tools/polyline_tool_base.cpp
+    tools/polyline_tool_base.cpp \
+    base/andromeda_object.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
@@ -55,7 +56,8 @@ HEADERS  += mainwindow.h \
     tools/rect_drawing_tool.h \
     tools/polyline_drawing_tool.h \
     viewers/polyline_tool_base.h \
-    tools/polyline_tool_base.h
+    tools/polyline_tool_base.h \
+    base/andromeda_object.h
 
 FORMS    += mainwindow.ui
 

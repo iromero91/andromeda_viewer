@@ -18,6 +18,95 @@
     <item row="0" column="0">
      <widget class="SymbolEditorView" name="graphicsView"/>
     </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>TOOLZ</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="clearAllButton">
+         <property name="toolTip">
+          <string>Clear the entire scene</string>
+         </property>
+         <property name="text">
+          <string>Clear All</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="deleteButton">
+         <property name="toolTip">
+          <string>Delete selected objects</string>
+         </property>
+         <property name="text">
+          <string>Delete</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="lineButton">
+         <property name="toolTip">
+          <string>Add a new line</string>
+         </property>
+         <property name="text">
+          <string>Line</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="polyButton">
+         <property name="toolTip">
+          <string>Add a polygon</string>
+         </property>
+         <property name="text">
+          <string>Poly</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="rectLine">
+         <property name="toolTip">
+          <string>Add a rectangle</string>
+         </property>
+         <property name="text">
+          <string>Rect</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="ellipseButton">
+         <property name="toolTip">
+          <string>Add an ellipse</string>
+         </property>
+         <property name="text">
+          <string>Ellipse</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">

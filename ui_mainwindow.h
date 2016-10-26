@@ -13,11 +13,16 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "viewers/symbol_editor_view.h"
 
@@ -29,6 +34,16 @@ public:
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     SymbolEditorView *graphicsView;
+    QGroupBox *groupBox;
+    QVBoxLayout *verticalLayout;
+    QPushButton *clearAllButton;
+    QPushButton *deleteButton;
+    QFrame *line;
+    QPushButton *lineButton;
+    QPushButton *polyButton;
+    QPushButton *rectLine;
+    QPushButton *ellipseButton;
+    QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -48,6 +63,56 @@ public:
 
         gridLayout->addWidget(graphicsView, 0, 0, 1, 1);
 
+        groupBox = new QGroupBox(centralWidget);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        verticalLayout = new QVBoxLayout(groupBox);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        clearAllButton = new QPushButton(groupBox);
+        clearAllButton->setObjectName(QStringLiteral("clearAllButton"));
+
+        verticalLayout->addWidget(clearAllButton);
+
+        deleteButton = new QPushButton(groupBox);
+        deleteButton->setObjectName(QStringLiteral("deleteButton"));
+
+        verticalLayout->addWidget(deleteButton);
+
+        line = new QFrame(groupBox);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line);
+
+        lineButton = new QPushButton(groupBox);
+        lineButton->setObjectName(QStringLiteral("lineButton"));
+
+        verticalLayout->addWidget(lineButton);
+
+        polyButton = new QPushButton(groupBox);
+        polyButton->setObjectName(QStringLiteral("polyButton"));
+
+        verticalLayout->addWidget(polyButton);
+
+        rectLine = new QPushButton(groupBox);
+        rectLine->setObjectName(QStringLiteral("rectLine"));
+
+        verticalLayout->addWidget(rectLine);
+
+        ellipseButton = new QPushButton(groupBox);
+        ellipseButton->setObjectName(QStringLiteral("ellipseButton"));
+
+        verticalLayout->addWidget(ellipseButton);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer);
+
+
+        gridLayout->addWidget(groupBox, 0, 1, 1, 1);
+
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -65,6 +130,31 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        groupBox->setTitle(QApplication::translate("MainWindow", "TOOLZ", 0));
+#ifndef QT_NO_TOOLTIP
+        clearAllButton->setToolTip(QApplication::translate("MainWindow", "Clear the entire scene", 0));
+#endif // QT_NO_TOOLTIP
+        clearAllButton->setText(QApplication::translate("MainWindow", "Clear All", 0));
+#ifndef QT_NO_TOOLTIP
+        deleteButton->setToolTip(QApplication::translate("MainWindow", "Delete selected objects", 0));
+#endif // QT_NO_TOOLTIP
+        deleteButton->setText(QApplication::translate("MainWindow", "Delete", 0));
+#ifndef QT_NO_TOOLTIP
+        lineButton->setToolTip(QApplication::translate("MainWindow", "Add a new line", 0));
+#endif // QT_NO_TOOLTIP
+        lineButton->setText(QApplication::translate("MainWindow", "Line", 0));
+#ifndef QT_NO_TOOLTIP
+        polyButton->setToolTip(QApplication::translate("MainWindow", "Add a polygon", 0));
+#endif // QT_NO_TOOLTIP
+        polyButton->setText(QApplication::translate("MainWindow", "Poly", 0));
+#ifndef QT_NO_TOOLTIP
+        rectLine->setToolTip(QApplication::translate("MainWindow", "Add a rectangle", 0));
+#endif // QT_NO_TOOLTIP
+        rectLine->setText(QApplication::translate("MainWindow", "Rect", 0));
+#ifndef QT_NO_TOOLTIP
+        ellipseButton->setToolTip(QApplication::translate("MainWindow", "Add an ellipse", 0));
+#endif // QT_NO_TOOLTIP
+        ellipseButton->setText(QApplication::translate("MainWindow", "Ellipse", 0));
     } // retranslateUi
 
 };

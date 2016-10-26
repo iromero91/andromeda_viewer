@@ -10,16 +10,20 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QString>
+#include <QGraphicsItem>
 
 #include "layers/layer_defines.h"
 #include "shapes/shape_defines.h"
 #include "geometry/bounding_box.h"
 
-class ADrawable : public QGraphicsItem
+#include "base/andromeda_object.h"
+
+class ADrawable : public AndromedaObject, public QGraphicsItem
 {
+    Q_OBJECT
 
 public:
-    ADrawable();
+    ADrawable(QObject *parent = 0);
 
     enum DrawableDataDescriptors
     {

@@ -16,6 +16,7 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QString>
 
 #include "tool_defines.h"
 
@@ -32,6 +33,8 @@ public:
 
     TOOL_STATE getToolState(void) { return tool_state_; }
     void setToolState(TOOL_STATE state) { tool_state_ = state; }
+
+    QString getToolName(void) { return tool_name_; }
 
     /*
      * Paint Functions:
@@ -93,6 +96,8 @@ signals:
     void updated(void);     // Emitted when the tool should be repainted
 
 protected:
+    QString tool_name_ = QString("Base Tool");
+
     // Tool state machine
     TOOL_STATE tool_state_ = TOOL_STATE::INACTIVE;
 

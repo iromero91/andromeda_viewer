@@ -2,10 +2,13 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
+#include <QGraphicsObject>
 
 #include "drawable.h"
 
-ADrawable::ADrawable() : QGraphicsItem()
+ADrawable::ADrawable(QObject *parent) :
+    AndromedaObject(parent),
+    QGraphicsItem()
 {
     /* Configure default pens */
 
