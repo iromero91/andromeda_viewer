@@ -17,7 +17,7 @@ void EllipseDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
 {
     Q_UNUSED(rect);
 
-    if (painter == nullptr)
+    if (nullptr == painter)
         return;
 
     painter->setBrush(tool_brush_);

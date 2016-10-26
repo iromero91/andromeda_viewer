@@ -74,7 +74,7 @@ void AToolBase::paint(QPainter *painter, const QRectF &rect)
 
 void AToolBase::mouseEvent(QMouseEvent *event, QPointF cursorPos)
 {
-    if (event == nullptr)
+    if (nullptr == event)
         return;
 
     if (!isActive())
@@ -105,7 +105,7 @@ void AToolBase::mouseEvent(QMouseEvent *event, QPointF cursorPos)
 
 void AToolBase::keyEvent(QKeyEvent *event, QPointF cursorPos)
 {
-    if (event == nullptr)
+    if (nullptr == event)
         return;
 
     if (!isActive())

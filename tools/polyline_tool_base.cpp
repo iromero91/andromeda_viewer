@@ -46,7 +46,7 @@ void PolylineToolBase::paintHints(QPainter *painter, const QRectF &rect)
 {
     Q_UNUSED(rect);
 
-    if (painter == nullptr)
+    if (nullptr == painter)
         return;
 
     if (getToolState() == TOOL_STATE::POLYLINE_ADD_POINT)

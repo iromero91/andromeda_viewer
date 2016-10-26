@@ -16,7 +16,7 @@ SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
 
 void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 {
-    if (event == nullptr) return;
+    if (nullptr == event) return;
 
     bool accepted = true;
 
@@ -52,7 +52,7 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 
 void SymbolEditorView::onToolFinished(AToolBase *toolPtr)
 {
-    if (toolPtr == nullptr)
+    if (nullptr == toolPtr)
         return;
 
     void *pointer = (void *) toolPtr;

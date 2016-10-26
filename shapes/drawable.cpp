@@ -40,7 +40,7 @@ void ADrawable::setLineThickness(double thickness)
 
 void ADrawable::drawBoundingBox(QPainter *painter)
 {
-    if (painter == nullptr) return;
+    if (nullptr == painter) return;
 
     painter->setPen(bounding_box_pen_);
     painter->setBrush(Qt::NoBrush);

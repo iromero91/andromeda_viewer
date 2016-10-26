@@ -66,7 +66,7 @@ void AScene::setLayerMask(uint64_t selection)
 
     foreach (QGraphicsItem *item, items())
     {
-        if (item == nullptr) return;
+        if (nullptr == item) return;
 
         itemLayer = getItemLayer(item);
 
@@ -117,7 +117,7 @@ void AScene::hideLayer(int8_t layerId)
 
 void AScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
-    if (painter == nullptr) return;
+    if (nullptr == painter) return;
 
     painter->fillRect(rect, bg_color_);
 
@@ -194,7 +194,7 @@ void AScene::drawBackground(QPainter *painter, const QRectF &rect)
  */
 int8_t AScene::getItemLayer(QGraphicsItem *item)
 {
-    if (item == nullptr) return (int8_t) LAYER_ID::NONE;
+    if (nullptr == item) return (int8_t) LAYER_ID::NONE;
 
     bool ok = false;
 
@@ -211,7 +211,7 @@ int8_t AScene::getItemLayer(QGraphicsItem *item)
  */
 void AScene::setItemLayer(QGraphicsItem *item, int8_t layer)
 {
-    if (item == nullptr) return;
+    if (nullptr == item) return;
 
     item->setData((int) DRAWABLE_KEY::ITEM_LAYER, layer);
 }
@@ -225,7 +225,7 @@ void AScene::setItemLayer(QGraphicsItem *item, int8_t layer)
  */
 void AScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
 {
-    if (item == nullptr) return;
+    if (nullptr == item) return;
 
     // If the layer is above the top layer, ignore
     if ((layer < (int) LAYER_ID::BOTTOM) || (layer > (int) LAYER_ID::TOP))
@@ -247,7 +247,7 @@ void AScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
 
 void AScene::setItemDepth(QGraphicsItem *item, bool flip)
 {
-    if (item == nullptr) return;
+    if (nullptr == item) return;
 
     setItemDepth(item, getItemLayer(item), flip);
 }

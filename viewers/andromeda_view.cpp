@@ -32,12 +32,12 @@ void AView::setScene(AScene *scene)
 
 void AView::deleteItems(QList<QGraphicsItem *> items)
 {
-    if (scene_ == nullptr) return;
+    if (nullptr == scene_) return;
 
     foreach (QGraphicsItem* item, items)
     {
         // NULL ptr
-        if (item == nullptr) continue;
+        if (nullptr == item) continue;
 
         // Item is NOT in the scene
         if (item->scene() != scene_) continue;
@@ -50,7 +50,7 @@ void AView::deleteItems(QList<QGraphicsItem *> items)
 
 void AView::deleteSelectedItems()
 {
-    if (scene_ == nullptr) return;
+    if (nullptr == scene_) return;
 
     deleteItems(scene_->selectedItems());
 }
@@ -158,7 +158,7 @@ void AView::scroll(int dx, int dy)
 
 void AView::keyPressEvent(QKeyEvent *event)
 {
-    if (event == nullptr) return;
+    if (nullptr == event) return;
 
     bool accepted = true;
 
@@ -252,7 +252,7 @@ void AView::keyReleaseEvent(QKeyEvent *event)
  */
 void AView::wheelEvent(QWheelEvent *event)
 {
-    if (scene_ == NULL || event == nullptr) return;
+    if (scene_ == NULL || nullptr == event) return;
 
     float zoom = (float) event->delta() * 0.01f;
 
@@ -270,7 +270,7 @@ void AView::wheelEvent(QWheelEvent *event)
 
 void AView::mousePressEvent(QMouseEvent *event)
 {
-    if (event == NULL || scene_ == nullptr) return;
+    if (event == NULL || nullptr == scene_) return;
 
     QPointF scenePos = mapToScene(event->pos());
 
@@ -304,7 +304,7 @@ void AView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void AView::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (scene_ == NULL || event == nullptr) return;
+    if (scene_ == NULL || nullptr == event) return;
 
     // Left mouse button is used for selection
     if (mouse_pan_active_ &&  event->button() == Qt::MiddleButton)
@@ -326,7 +326,7 @@ void AView::mouseMoveEvent(QMouseEvent *event)
 {
     static QPoint lastMousePos;
 
-    if (getScene() == NULL || event == nullptr) return;
+    if (getScene() == NULL || nullptr == event) return;
 
     // Grab the mouse position
     QPoint mousePos = event->pos();
@@ -388,7 +388,7 @@ void AView::drawBackground(QPainter *painter, const QRectF &rect)
  */
 void AView::drawForeground(QPainter *painter, const QRectF &rect)
 {
-    if (painter == nullptr) return;
+    if (nullptr == painter) return;
 
     // Draw the active tool
     if (isToolActive() && current_tool_->isActive())
@@ -404,7 +404,7 @@ void AView::drawForeground(QPainter *painter, const QRectF &rect)
 
 void AView::drawSelectionMarquee(QPainter *painter, const QRectF &rect)
 {
-    if (painter == nullptr) return;
+    if (nullptr == painter) return;
 
     QRectF selection = getSelectionMarquee();
 
@@ -440,7 +440,7 @@ QRectF AView::getSelectionMarquee()
 
 void AView::paintEvent(QPaintEvent *event)
 {
-    if (event == nullptr) return;
+    if (nullptr == event) return;
 
     // First perform scene painting
     QGraphicsView::paintEvent(event);
@@ -468,7 +468,7 @@ void AView::drawOverlay(QPainter *painter, QRect rect)
 
 void AView::drawCursor(QPainter *painter, QRect rect)
 {
-    if (painter == nullptr) return;
+    if (nullptr == painter) return;
 
     QPoint viewPos = mapFromScene(cursor_pos_);
     int x = viewPos.x();
@@ -578,14 +578,14 @@ void AView::scaleRelative(double scaling)
 
 void AView::sendMouseEventToTool(QMouseEvent *event, AToolBase *tool)
 {
-    if (event == nullptr)
+    if (nullptr == event)
         return;
 
-    if (tool == nullptr)
+    if (nullptr == tool)
         tool = current_tool_;
 
     // Still null?
-    if (tool == nullptr)
+    if (nullptr == tool)
         return;
 
     tool->mouseEvent(event, getCursorPos());
@@ -593,14 +593,14 @@ void AView::sendMouseEventToTool(QMouseEvent *event, AToolBase *tool)
 
 void AView::sendKeyEventToTool(QKeyEvent *event, AToolBase *tool)
 {
-    if (event == nullptr)
+    if (nullptr == event)
         return;
 
-    if (tool == nullptr)
+    if (nullptr == tool)
         tool = current_tool_;
 
     // Still null?
-    if (tool == nullptr)
+    if (nullptr == tool)
         return;
 
     tool->keyEvent(event, getCursorPos());
@@ -608,7 +608,7 @@ void AView::sendKeyEventToTool(QKeyEvent *event, AToolBase *tool)
 
 void AView::addTool(AToolBase *tool)
 {
-    if (tool == nullptr)
+    if (nullptr == tool)
         return;
 
     connect(tool, SIGNAL(updated()),    this, SLOT(toolUpdated()));
@@ -620,7 +620,7 @@ void AView::toolUpdated()
 {
     AToolBase *tool = qobject_cast<AToolBase*>(QObject::sender());
 
-    if (tool == nullptr)
+    if (nullptr == tool)
         return;
 
     // Force a scene redraw
@@ -651,11 +651,11 @@ void AView::toolFinished()
 
 bool AView::startTool(AToolBase *tool)
 {
-    if (tool == nullptr)
+    if (nullptr == tool)
         tool = current_tool_;
 
     // Still null?
-    if (tool == nullptr)
+    if (nullptr == tool)
         return false;
 
     // Stop the current tool
@@ -675,7 +675,7 @@ bool AView::startTool(AToolBase *tool)
  */
 void AView::stopTool(AToolBase *tool)
 {
-    if (tool == nullptr)
+    if (nullptr == tool)
         tool = current_tool_;
 
     if (tool != nullptr)
@@ -691,7 +691,7 @@ void AView::stopTool(AToolBase *tool)
  */
 void AView::resetTool(AToolBase *tool)
 {
-    if (tool == nullptr)
+    if (nullptr == tool)
         tool = current_tool_;
 
     if (tool != nullptr)
@@ -703,7 +703,7 @@ void AView::resetTool(AToolBase *tool)
 
 bool AView::isToolAvailable(AToolBase *tool)
 {
-    if (tool == nullptr)
+    if (nullptr == tool)
         tool = current_tool_;
 
     return tool != nullptr;
@@ -711,7 +711,7 @@ bool AView::isToolAvailable(AToolBase *tool)
 
 bool AView::isToolActive(AToolBase *tool)
 {
-    if (tool == nullptr)
+    if (nullptr == tool)
         tool = current_tool_;
 
     if (!isToolAvailable(tool))
@@ -804,7 +804,7 @@ void AView::finishSelection()
 
             foreach (QGraphicsItem *item, items)
             {
-                if (item == nullptr) continue;
+                if (nullptr == item) continue;
 
                 item->setSelected(select);
             }
@@ -817,7 +817,7 @@ void AView::finishSelection()
             QGraphicsItem *item = scene_->itemAt(cursor_pos_, QTransform());
 
             // NO item at location, de-select all items
-            if (item == nullptr)
+            if (nullptr == item)
             {
                 scene_->clearSelection();
             }
