@@ -7,6 +7,12 @@ EllipseDrawingTool::EllipseDrawingTool(QObject *parent) : AToolBase(parent)
 
 }
 
+void EllipseDrawingTool::setRadius(double rx, double ry)
+{
+    rx_ = rx;
+    ry_ = ry;
+}
+
 void EllipseDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
 {
     Q_UNUSED(rect);
@@ -43,53 +49,37 @@ void EllipseDrawingTool::paintHints(QPainter *painter, const QRectF &rect)
     }
 }
 
-bool EllipseDrawingTool::onMousePress(QMouseEvent *event, QPointF cursorPos)
+void EllipseDrawingTool::nextAction()
 {
-    if (event->button() == Qt::LeftButton)
+    switch (getToolState())
     {
-        switch (getToolState())
-        {
-        default:
-        case TOOL_STATE::ELLIPSE_SET_CENTER:
-            setCenter(cursorPos);
-            setToolState(TOOL_STATE::ELLIPSE_SET_POINT);
-            break;
-        case TOOL_STATE::ELLIPSE_SET_POINT:
-            finish();
-            break;
-        }
-
-        emit updated();
-
-        return true;
+    case TOOL_STATE::RESET:
+    case TOOL_STATE::ELLIPSE_SET_CENTER:
+        center_ = tool_pos_;
+        setToolState(TOOL_STATE::ELLIPSE_SET_POINT);
+        break;
+    case TOOL_STATE::ELLIPSE_SET_POINT:
+        finish();
+        break;
+    default:
+        break;
     }
-    return false;
 }
 
-bool EllipseDrawingTool::onMouseMove(QPointF cursorPos)
+void EllipseDrawingTool::onToolPosChanged()
 {
-    AToolBase::onMouseMove(cursorPos);
+    QPointF delta = tool_pos_ - center_;
 
-    if (getToolState() == TOOL_STATE::ELLIPSE_SET_POINT)
+    double x = fabs(delta.x());
+    double y = fabs(delta.y());
+
+    if (QApplication::keyboardModifiers() & Qt::ControlModifier)
     {
-        QPointF delta = cursorPos - center_;
-
-        double x = fabs(delta.x());
-        double y = fabs(delta.y());
-
-        if (QApplication::keyboardModifiers() & Qt::ControlModifier)
-        {
-            x = qMax(x,y);
-            y = x;
-        }
-
-        rx_ = x;
-        ry_ = y;
+        x = qMax(x,y);
+        y = x;
     }
 
-    emit updated();
-
-    return true;
+    setRadius(x,y);
 }
 
 void EllipseDrawingTool::getEllipse(AEllipse &ellipse)

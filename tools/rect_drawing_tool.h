@@ -1,9 +1,9 @@
 #ifndef RECT_DRAWING_TOOL_H
 #define RECT_DRAWING_TOOL_H
 
-#include "polyline_drawing_tool_base.h"
+#include "polyline_drawing_tool.h"
 
-class RectDrawingTool : public PolylineDrawingToolBase
+class RectDrawingTool : public PolylineToolBase
 {
     Q_OBJECT
 
@@ -12,8 +12,11 @@ public:
 
     bool addPoint(QPointF point);
 
+    APolyline* getPolyline(void);
+
     void paintTool(QPainter *painter, const QRectF &rect);
-    void paintHints(QPainter *painter, const QRectF &rect);
+
+    QRectF getRect(void);
 };
 
 #endif // RECT_DRAWING_TOOL_H

@@ -123,6 +123,9 @@ protected:
     // Tools
     AToolBase *current_tool_ = nullptr;
 
+    void sendMouseEventToTool(QMouseEvent *event, AToolBase *tool = nullptr);
+    void sendKeyEventToTool(QKeyEvent *event, AToolBase *tool = nullptr);
+
     virtual void onToolUpdated(AToolBase *toolPtr)    { Q_UNUSED(toolPtr); }
     virtual void onToolFinished(AToolBase *toolPtr)   { Q_UNUSED(toolPtr); }
     virtual void onToolCancelled(AToolBase *toolPtr)  { Q_UNUSED(toolPtr); }

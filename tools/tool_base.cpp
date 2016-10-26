@@ -67,54 +67,81 @@ void AToolBase::paint(QPainter *painter, const QRectF &rect)
 {
     if (painter != nullptr)
     {
-        paintTool(painter, rect);
+        paintTool(painter,  rect);
         paintHints(painter, rect);
     }
 }
 
-/* Event Passthrough Functions */
-bool AToolBase::onMousePress(QMouseEvent *event, QPointF cursorPos)
+void AToolBase::mouseEvent(QMouseEvent *event, QPointF cursorPos)
 {
-    Q_UNUSED(event);
-    Q_UNUSED(cursorPos);
+    if (event == nullptr)
+        return;
 
-    return false;
+    if (!isActive())
+        return;
+
+    setToolPos(cursorPos);
+
+    switch (event->type())
+    {
+    case QEvent::MouseButtonPress:
+        if (event->button() == Qt::LeftButton)
+        {
+            nextAction();
+        }
+        break;
+    case QEvent::MouseButtonDblClick:
+        if (event->button() == Qt::LeftButton)
+        {
+            finalAction();
+        }
+        break;
+    default:
+        break;
+    }
+
+    onMouseEvent(event);
 }
 
-bool AToolBase::onMouseRelease(QMouseEvent *event, QPointF cursorPos)
+void AToolBase::keyEvent(QKeyEvent *event, QPointF cursorPos)
 {
-    Q_UNUSED(event);
-    Q_UNUSED(cursorPos);
+    if (event == nullptr)
+        return;
 
-    return false;
-}
+    if (!isActive())
+        return;
 
-bool AToolBase::onMouseMove(QPointF cursorPos)
-{
-    tool_pos_ = cursorPos;
+    setToolPos(cursorPos);
 
-    return false;
-}
+    switch (event->type())
+    {
+    case QEvent::KeyPress:
+        switch (event->key())
+        {
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            nextAction();
+            break;
+        case Qt::Key_Escape:
+            // If the user is in the middle of this tool, reset state
+            if (isActive())
+            {
+                if (tool_state_ == TOOL_STATE::RESET)
+                {
+                    cancel();
+                }
+                else
+                {
+                    reset();
+                }
+            }
+            break;
+        default:
+            break;
+        }
+    default:
+        break;
+    }
 
-bool AToolBase::onMouseDoubleClick(QMouseEvent *event, QPointF cursorPos)
-{
-    Q_UNUSED(event);
-
-    Q_UNUSED(cursorPos);
-
-    return false;
-}
-
-bool AToolBase::onKeyPress(QKeyEvent *event)
-{
-    Q_UNUSED(event);
-
-    return false;
-}
-
-bool AToolBase::onKeyRelease(QKeyEvent *event)
-{
-    Q_UNUSED(event);
-
-    return false;
+    onKeyEvent(event);
 }

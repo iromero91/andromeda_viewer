@@ -93,11 +93,6 @@ void AView::setCursorPos(QPointF pos, bool panPastEdges)
 
     emit cursorPositionChanged(cursor_pos_);
 
-    if (isToolActive())
-    {
-        current_tool_->onMouseMove(cursor_pos_);
-    }
-
     getScene()->update();
 }
 
@@ -174,24 +169,9 @@ void AView::keyPressEvent(QKeyEvent *event)
     switch (event->key())
     {
     case Qt::Key_Escape:
-
-        if (isToolAvailable())
-        {
-            switch (current_tool_->getToolState())
-            {
-            case TOOL_STATE::INACTIVE:
-            case TOOL_STATE::RESET:
-                stopTool();
-                break;
-            default:
-                resetTool();
-                break;
-            }
-        }
-
         if (selection_active_)
             cancelSelection();
-        return;
+        break;
     case Qt::Key_Space:
         // Center the screen at the cursor location
         if (event->modifiers() == Qt::ControlModifier)
@@ -206,20 +186,7 @@ void AView::keyPressEvent(QKeyEvent *event)
         }
 
         snapMouseToCursor();
-        return;
-    default:
         break;
-    }
-
-    // First try to send the event to the active tool
-    if (isToolActive())
-    {
-        if (current_tool_->onKeyPress(event))
-            return;
-    }
-
-    switch (event->key())
-    {
     // Move the cursor left
     case Qt::Key_Left:
         moveCursor(-offset,0,true);
@@ -240,6 +207,15 @@ void AView::keyPressEvent(QKeyEvent *event)
         moveCursor(0,offset,true);
         snapMouseToCursor();
         break;
+    default:
+        break;
+    }
+
+    // Forward the event through to the selected tool
+    sendKeyEventToTool(event);
+
+    switch (event->key())
+    {
 
     case Qt::Key_C: //TODO - remove this, just a test
         setCursorStyle(getCursorStyle() == VIEW_CURSOR_CROSS_LARGE ? VIEW_CURSOR_CROSS_SMALL : VIEW_CURSOR_CROSS_LARGE);
@@ -263,13 +239,9 @@ void AView::keyPressEvent(QKeyEvent *event)
 
 void AView::keyReleaseEvent(QKeyEvent *event)
 {
-    if (isToolActive())
-    {
-        if (current_tool_->onKeyRelease(event))
-        {
-            return;
-        }
-    }
+    sendKeyEventToTool(event);
+
+    QGraphicsView::keyReleaseEvent(event);
 }
 
 /**
@@ -294,8 +266,6 @@ void AView::wheelEvent(QWheelEvent *event)
     QPoint mousePos = mapFromGlobal(cursor().pos());
 
     setCursorPos(mapToScene(mousePos));
-
-    //event->accept();
 }
 
 void AView::mousePressEvent(QMouseEvent *event)
@@ -306,14 +276,7 @@ void AView::mousePressEvent(QMouseEvent *event)
 
     setCursorPos(scenePos);
 
-    // First try sending the command to the active tool
-    if (isToolActive())
-    {
-        if (current_tool_->onMousePress(event, cursor_pos_))
-        {
-            return;
-        }
-    }
+    sendMouseEventToTool(event);
 
     switch (event->button())
     {
@@ -324,7 +287,9 @@ void AView::mousePressEvent(QMouseEvent *event)
         startPos_ = cursor_pos_;
 
         if (!isToolActive())
+        {
             startSelection();
+        }
         break;
 
     default:
@@ -334,38 +299,25 @@ void AView::mousePressEvent(QMouseEvent *event)
 
 void AView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if (isToolActive())
-    {
-        if (current_tool_->onMouseDoubleClick(event, cursor_pos_))
-        {
-            return;
-        }
-    }
+    sendMouseEventToTool(event);
 }
 
 void AView::mouseReleaseEvent(QMouseEvent *event)
 {
     if (scene_ == NULL || event == nullptr) return;
 
-    if (isToolActive())
-    {
-        if (current_tool_->onMouseRelease(event, cursor_pos_))
-        {
-            return;
-        }
-    }
-
     // Left mouse button is used for selection
-    if (event->button() == Qt::MiddleButton)
+    if (mouse_pan_active_ &&  event->button() == Qt::MiddleButton)
     {
         endMousePan();
     }
-    else if (event->button() == Qt::LeftButton)
+    else if (selection_active_ && event->button() == Qt::LeftButton)
     {
-        if (selection_active_)
-        {
-            finishSelection();
-        }
+        finishSelection();
+    }
+    else
+    {
+        sendMouseEventToTool(event);
     }
 }
 
@@ -396,11 +348,14 @@ void AView::mouseMoveEvent(QMouseEvent *event)
 
         // Set the panning flag
         lastMousePos = mousePos;
+
+        return;
     }
-    else
-    {
-        endMousePan();
-    }
+
+    endMousePan();
+
+    // Forward the event through to the active tool
+    sendMouseEventToTool(event);
 
     QGraphicsView::mouseMoveEvent(event);
 }
@@ -619,6 +574,36 @@ void AView::setScalingFactor(double scaling)
 void AView::scaleRelative(double scaling)
 {
     setScalingFactor(getScalingFactor() * scaling);
+}
+
+void AView::sendMouseEventToTool(QMouseEvent *event, AToolBase *tool)
+{
+    if (event == nullptr)
+        return;
+
+    if (tool == nullptr)
+        tool = current_tool_;
+
+    // Still null?
+    if (tool == nullptr)
+        return;
+
+    tool->mouseEvent(event, getCursorPos());
+}
+
+void AView::sendKeyEventToTool(QKeyEvent *event, AToolBase *tool)
+{
+    if (event == nullptr)
+        return;
+
+    if (tool == nullptr)
+        tool = current_tool_;
+
+    // Still null?
+    if (tool == nullptr)
+        return;
+
+    tool->keyEvent(event, getCursorPos());
 }
 
 void AView::addTool(AToolBase *tool)

@@ -1,13 +1,13 @@
 #include "rect_drawing_tool.h"
 
-RectDrawingTool::RectDrawingTool(QObject *parent) : PolylineDrawingToolBase(parent)
+RectDrawingTool::RectDrawingTool(QObject *parent) : PolylineToolBase(parent)
 {
 
 }
 
 bool RectDrawingTool::addPoint(QPointF point)
 {
-    QRectF rect(start_pos_, point);
+    QRectF rect = getRect().normalized();
 
     switch (getToolState())
     {
@@ -18,23 +18,61 @@ bool RectDrawingTool::addPoint(QPointF point)
         setToolState(TOOL_STATE::POLYLINE_ADD_POINT);
         break;
     case TOOL_STATE::POLYLINE_ADD_POINT:
-        points_.clear();
-
         if (rect.width() == 0 || rect.height() == 0)
         {
             return false;
         }
-
-        points_.append(rect.topRight());
-        points_.append(rect.bottomRight());
-        points_.append(rect.bottomLeft());
-        points_.append(rect.topLeft());
 
         // Return true to signify finished
         return true;
     }
 
     return false;
+}
+
+APolyline* RectDrawingTool::getPolyline()
+{
+    APolyline *poly = new APolyline();
+
+    QRectF rect = getRect().normalized();
+
+    poly->setStartPos(rect.topLeft());
+
+    poly->addPoint(rect.topRight());
+    poly->addPoint(rect.bottomRight());
+    poly->addPoint(rect.bottomLeft());
+    poly->addPoint(rect.topLeft());
+
+    return poly;
+}
+
+QRectF RectDrawingTool::getRect()
+{
+    QPointF delta = tool_pos_ - start_pos_;
+
+    double x = delta.x();
+    double y = delta.y();
+
+    QPointF topLeft = start_pos_;
+
+    int mods = QApplication::keyboardModifiers();
+
+    // Enforce a square
+    if (mods & Qt::ControlModifier)
+    {
+        x = fabs(x) > fabs(y) ? x : y;
+        y = x;
+    }
+
+    if (mods & Qt::ShiftModifier)
+    {
+        topLeft -= QPointF(x,y);
+
+        x *= 2;
+        y *= 2;
+    }
+
+    return QRectF(topLeft, QSizeF(x,y));
 }
 
 void RectDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
@@ -49,21 +87,6 @@ void RectDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
         painter->setPen(tool_pen_);
         painter->setBrush(tool_brush_);
 
-        painter->drawRect(QRectF(start_pos_, tool_pos_));
-    }
-}
-
-void RectDrawingTool::paintHints(QPainter *painter, const QRectF &rect)
-{
-    Q_UNUSED(rect);
-
-    if (painter == nullptr)
-        return;
-
-    if (getToolState() > TOOL_STATE::POLYLINE_SET_ORIGIN)
-    {
-        painter->setPen(hints_pen_);
-
-        painter->drawLine(start_pos_, tool_pos_);
+        painter->drawRect(getRect());
     }
 }

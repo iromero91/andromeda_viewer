@@ -15,16 +15,18 @@ public:
     void paintHints(QPainter *painter, const QRectF &rect);
 
     void setCenter(QPointF point) { center_ = point; }
-
-    bool onMousePress(QMouseEvent *event, QPointF cursorPos);
-    bool onMouseMove(QPointF cursorPos);
+    void setRadius(double rx, double ry);
 
     void getEllipse(AEllipse &ellipse);
+
+    void nextAction(void);
 
 protected:
     QPointF center_;
     double rx_ = 0;
     double ry_ = 0;
+
+    void onToolPosChanged(void);
 };
 
 #endif // ELLIPSE_DRAWING_TOOL
