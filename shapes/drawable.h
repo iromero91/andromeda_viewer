@@ -22,38 +22,37 @@ class ADrawable : public AndromedaObject, public QGraphicsItem
 {
     Q_OBJECT
 
+    // Generic drawable properties that we want exposed
+    Q_PROPERTY(int layer READ getLayer WRITE setLayer NOTIFY onLayerChanged)
 public:
     ADrawable(QObject *parent = 0);
 
-    enum DrawableDataDescriptors
-    {
-        DRAWABLE_TYPE = 0x01,
-    };
-
     void drawBoundingBox(QPainter *painter);
-
-    void setLineThickness(double thickness);
     double getLineThickness(void) { return thickness_; }
 
-    void setFilled(bool filled) { filled_ = filled; }
     bool isFilled(void) { return filled_; }
 
     // Pen functions
     QPen getLinePen(void) { return line_pen_; }
-    void setLinePen(QPen pen) { line_pen_ = pen; }
 
     QPen getBoundingBoxPen(void) { return bounding_box_pen_; }
-    void setBoundingBoxPen(QPen pen) { bounding_box_pen_ = pen; }
 
     QBrush getFillBrush(void) { return fill_brush_; }
-    void setFillBrush(QBrush brush) { fill_brush_ = brush; }
-
-    void setLayer(int8_t layer);
-    int8_t getLayer(void);
 
     // Return a list of 'anchors' for this item
     // Default, empty list
     QList<QPointF> getAnchors() { return QList<QPointF>(); }
+
+    int getLayer(void) { return layer_; }
+
+public slots:
+    void setLayer(int layer) { layer_ = layer; }
+    void setBoundingBoxPen(QPen pen) { bounding_box_pen_ = pen; }
+    void setLinePen(QPen pen) { line_pen_ = pen; }
+    void setFilled(bool filled) { filled_ = filled; }
+    void setLineThickness(double thickness);
+    void setFillBrush(QBrush brush) { fill_brush_ = brush; }
+
 
 protected:
     double thickness_ = SYMBOL_LINE_WIDTH_DEFAULT;  // Line thickness
@@ -70,6 +69,11 @@ protected:
     QPen bounding_box_pen_;
 
     QBrush fill_brush_;
+
+    int layer_;
+
+signals:
+    void onLayerChanged(int layer);
 
 };
 

@@ -1,8 +1,9 @@
 #include "layer_defines.h"
 
-uint64_t LayerIdToMask(unsigned char layerId)
+uint64_t LayerIdToMask(int layerId)
 {
-    if (layerId > 63) layerId = 0;
+    if ((layerId < (int) LAYER_ID::BOTTOM) || (layerId > (int) LAYER_ID::TOP))
+        return 0;
 
-     return (uint64_t) 1 << layerId;
+    return (uint64_t) 1 << layerId;
 }

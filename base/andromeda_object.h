@@ -2,6 +2,10 @@
 #define ANDROMEDA_OBJECT_H
 
 #include <QObject>
+#include <QStringList>
+
+#include <QMetaObject>
+#include <QMetaProperty>
 
 /**
  * @brief The AndromedaObject class
@@ -15,6 +19,9 @@ class AndromedaObject : public QObject
 
 public:
     AndromedaObject(QObject *parent = 0);
+
+    QList<QMetaProperty> getProperties(void);
+    QStringList getPropertyNames(void);
 
 };
 

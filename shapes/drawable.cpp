@@ -53,29 +53,3 @@ void ADrawable::drawBoundingBox(QPainter *painter)
 
     painter->drawRect(r);
 }
-
-/**
- * @brief ADrawable::setLayer
- * Set the associated layer for this item
- * @param layer
- */
-void ADrawable::setLayer(int8_t layer)
-{
-    setData((int) DRAWABLE_KEY::ITEM_LAYER, layer);
-}
-
-/**
- * @brief ADrawable::getLayer
- * Get the layer associated with this item
- * @return
- */
-int8_t ADrawable::getLayer()
-{
-    bool ok = false;
-
-    int8_t layer = (int8_t) data((int) DRAWABLE_KEY::ITEM_LAYER).toInt(&ok);
-
-    return ok ? layer : (int8_t) LAYER_ID::NONE;
-}
-
-

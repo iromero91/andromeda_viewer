@@ -17,16 +17,16 @@ class AScene : public QGraphicsScene
 {
     Q_OBJECT
 
+   // Q_PROPERTY(uint64_t layerMask READ name WRITE setName NOTIFY nameChanged)
+
 public:
     AScene(QObject *parent = 0);
 
     // Background functions
-    void setBackgroundColor(QColor c) { bg_color_ = c;}
     QColor getBackgroundColor() { return bg_color_; }
     void drawBackground(QPainter *painter, const QRectF &rect);
 
     // Axis functions
-    void setAxesEnabled(bool draw) { draw_axes_ = draw; }
     bool getAxesEnabled() { return draw_axes_; }
 
     // Grid functions
@@ -34,30 +34,29 @@ public:
     AGrid getGrid() { return grid_; }
 
     // Layer functions
-    void setLayerDisplayMode(int mode);
     int getLayerDisplayMode() { return layerDisplayMode_; }
 
-    bool checkLayer(int8_t layerId);
+    bool checkLayer(int layerId);
 
-    void setCurrentLayer(int8_t layer);
-    int8_t getCurrentLayer() { return currentLayer_; }
+    int getCurrentLayer() { return current_layer_; }
 
-    void setLayerMask(uint64_t layers);
     uint64_t getLayerMask() { return layerMask_; }
+
+public slots:
+    void setBackgroundColor(QColor c) { bg_color_ = c;}
+    void setAxesEnabled(bool draw) { draw_axes_ = draw; }
+    void setLayerDisplayMode(int mode);
+    void setCurrentLayer(int layer);
+    void setLayerMask(uint64_t layers);
     void showLayers(uint64_t layerMask, bool show = true);
     void hideLayers(uint64_t layerMask);
 
-    void showLayer(int8_t layerId, bool show = true);
-    void hideLayer(int8_t layerId);
+    void showLayer(int layerId, bool show = true);
+    void hideLayer(int layerId);
 
     void showAllLayers() { setLayerMask((uint64_t) LAYER_MASK::NONE); }
     void hideAllLayers() { setLayerMask((uint64_t) LAYER_MASK::ALL); }
-
-    int8_t getItemLayer(QGraphicsItem *item);
-    void setItemLayer(QGraphicsItem *item, int8_t layer);
-
-    void setItemDepth(QGraphicsItem *item, int8_t layer, bool flip = false);
-    void setItemDepth(QGraphicsItem *item, bool flip = false);
+    void setItemDepth(QGraphicsItem *item, int layer, bool flip = false);
 
 protected:
     void init();
@@ -71,9 +70,13 @@ protected:
     AGrid grid_;    // Grid object
 
     int layerDisplayMode_ = (int) LAYER_MODE::SHOW_ALL;     // How to display multiple layers
+
     uint64_t layerMask_ = (uint64_t) LAYER_MASK::ALL;       // Which layers are currently visible
 
-    int currentLayer_ = (int) LAYER_ID::TOP;     // Which layer is currently selected (top)
+    int current_layer_ = (int) LAYER_ID::TOP;     // Which layer is currently selected (top)
+
+signals:
+    void layerSelectionChanged(uint64_t layers);
 
 };
 

@@ -28,13 +28,18 @@ void AScene::setLayerDisplayMode(int mode)
     layerDisplayMode_ = mode;
 }
 
+void AScene::setCurrentLayer(int layer)
+{
+    current_layer_ = layer;
+}
+
 /**
  * @brief AScene::checkLayer
  * Check if the provided layer is visible in the scene layer selection
  * @param layerId
  * @return
  */
-bool AScene::checkLayer(int8_t layerId)
+bool AScene::checkLayer(int layerId)
 {
     // The layer mask accounts for 64 unique layers
     // Any layers outside the maskable range are for display only and are ALWAYS on
@@ -62,6 +67,8 @@ void AScene::setLayerMask(uint64_t selection)
 {
     layerMask_ = selection;
 
+    /*
+    emit layerSelectionChanged(layerMask_);
     int8_t itemLayer;
 
     foreach (QGraphicsItem *item, items())
@@ -81,6 +88,7 @@ void AScene::setLayerMask(uint64_t selection)
             item->setVisible(false);
         }
     }
+    */
 }
 
 /**
@@ -105,12 +113,12 @@ void AScene::hideLayers(uint64_t layerMask)
     showLayers(layerMask, false);
 }
 
-void AScene::showLayer(int8_t layerId, bool show)
+void AScene::showLayer(int layerId, bool show)
 {
     showLayers(LayerIdToMask(layerId), show);
 }
 
-void AScene::hideLayer(int8_t layerId)
+void AScene::hideLayer(int layerId)
 {
     showLayer(layerId, false);
 }
@@ -186,44 +194,13 @@ void AScene::drawBackground(QPainter *painter, const QRectF &rect)
 }
 
 /**
- * @brief AScene::getItemLayer
- * Return the layer ID of the selected item
- * The layer ID corresponds to how the item will be displayed in the scene
- * @param item - pointer to the item in question
- * @return the layer of the item (or LAYER::NONE if there was an error)
- */
-int8_t AScene::getItemLayer(QGraphicsItem *item)
-{
-    if (nullptr == item) return (int8_t) LAYER_ID::NONE;
-
-    bool ok = false;
-
-    int8_t layer = (int8_t) item->data((int) DRAWABLE_KEY::ITEM_LAYER).toInt(&ok);
-
-    return ok ? layer : (int8_t) LAYER_ID::NONE;
-}
-
-/**
- * @brief AScene::setItemLayer
- * Set the layer ID of the selected item
- * @param item
- * @param layer
- */
-void AScene::setItemLayer(QGraphicsItem *item, int8_t layer)
-{
-    if (nullptr == item) return;
-
-    item->setData((int) DRAWABLE_KEY::ITEM_LAYER, layer);
-}
-
-/**
  * @brief AScene::setItemDepth
  * Set the Z-Order of a given item, based on it's logical layer assignment
  * @param item is a pointer to the item
  * @param layer is the item's logical layer
  * @param flip determines whether the scene view is 'flipped' or not
  */
-void AScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
+void AScene::setItemDepth(QGraphicsItem *item, int layer, bool flip)
 {
     if (nullptr == item) return;
 
@@ -235,7 +212,7 @@ void AScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
 
     // If the layer is the selected layer, force it to the top
     else if (layer == getCurrentLayer())
-        layer = (int8_t) LAYER_ID::SELECTED;
+        layer = (int) LAYER_ID::SELECTED;
 
     //TODO improve this (simplistic) view flipping
     else if (flip)
@@ -243,11 +220,4 @@ void AScene::setItemDepth(QGraphicsItem *item, int8_t layer, bool flip)
 
     item->setZValue(layer);
 
-}
-
-void AScene::setItemDepth(QGraphicsItem *item, bool flip)
-{
-    if (nullptr == item) return;
-
-    setItemDepth(item, getItemLayer(item), flip);
 }

@@ -7,11 +7,22 @@
 
 #include <QApplication>
 
+#include "shapes/ellipse.h"
+
 SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
 {
     addTool(&poly_tool_);
     addTool(&rect_tool_);
     addTool(&ellipse_tool_);
+
+    AEllipse e;
+
+    qDebug() << "props:";
+
+    foreach (QString s, e.getPropertyNames())
+    {
+        qDebug() << s;
+    }
 }
 
 void SymbolEditorView::keyPressEvent(QKeyEvent *event)

@@ -51,10 +51,10 @@ enum class LAYER_ID : int {
     INVISIBLE = 100,
 
     // Special value corresponding to "no layer"
-    NONE = 200,
+    NONE = 110,
 };
 
-uint64_t LayerIdToMask(unsigned char layerId);
+uint64_t LayerIdToMask(int layerId);
 
 #endif // LAYER_DEFINES_H
 
