@@ -2,7 +2,7 @@
 
 RectDrawingTool::RectDrawingTool(QObject *parent) : PolylineToolBase(parent)
 {
-
+    setObjectName("RectDrawingTool");
 }
 
 bool RectDrawingTool::addPoint(QPointF point)
@@ -34,8 +34,9 @@ void RectDrawingTool::getPolyline(APolyline &line)
 {
     QRectF rect = getRect().normalized();
 
-    line.setStartPos(rect.topLeft());
+    line.clear();
 
+    line.addPoint(rect.topLeft());
     line.addPoint(rect.topRight());
     line.addPoint(rect.bottomRight());
     line.addPoint(rect.bottomLeft());

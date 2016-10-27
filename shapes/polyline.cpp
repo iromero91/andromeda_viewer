@@ -15,19 +15,68 @@ APolyline::APolyline(QObject *parent) : ADrawablePrimitive(parent)
     setObjectName("APolyline");
 }
 
-QPointF APolyline::endPoint()
+APolyline* APolyline::clone()
 {
-    if (points_.count() == 0)
-    {
-        return start_pos_;
-    }
-    else
-    {
-        return points_.last().point;
-    }
+    APolyline *line = new APolyline();
+
+    return line;
 }
 
-LWPolypoint APolyline::getPolypoint(int index)
+bool APolyline::allSegmentsAreStraight()
+{
+    foreach (LWPolypoint point, points_)
+    {
+        if (!AGeometry::ArcIsStraight(point.angle))
+            return false;
+    }
+
+    return true;
+}
+
+bool APolyline::isSelfIntersecting()
+{
+    // Two line segments are required for this test
+    if (pointCount() <= 3)
+        return false;
+
+    QPointF intersection;
+
+    for (int i=0;i<points_.count()-1;i++)
+    {
+        QLineF A(point(i), point(i+1));
+
+        for (int j=(i+2); j<(points_.count()-1); j++)
+        {
+            QLineF B(point(j), point(j+1));
+
+
+            if (A.intersect(B, &intersection) == QLineF::BoundedIntersection)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+QPointF APolyline::startPoint() const
+{
+    if (points_.count() == 0)
+        return QPointF();
+
+    return points_.first().point;
+}
+
+QPointF APolyline::endPoint() const
+{
+    if (points_.count() == 0)
+        return QPointF();
+
+    return points_.last().point;
+}
+
+LWPolypoint APolyline::polypoint(int index)
 {
     if (index >= points_.count())
     {
@@ -41,14 +90,14 @@ LWPolypoint APolyline::getPolypoint(int index)
     return points_.at(index);
 }
 
-QPointF APolyline::getPoint(int index)
+QPointF APolyline::point(int index)
 {
-    return getPolypoint(index).point;
+    return polypoint(index).point;
 }
 
-double APolyline::getAngle(int index)
+double APolyline::angle(int index)
 {
-    return getPolypoint(index).angle;
+    return polypoint(index).angle;
 }
 
 void APolyline::setPoint(int index, QPointF point)
@@ -76,12 +125,7 @@ QRectF APolyline::boundingRect() const
     if (points_.count() == 0)
         return QRectF();
 
-    ABoundingBox box(start_pos_);
-
-    for (int i=0; i<points_.count(); i++)
-    {
-        box.add(points_.at(i).point);
-    }
+    QRectF box = shape().controlPointRect();
 
     double offset = line_width_ / 2;
 
@@ -97,10 +141,18 @@ void APolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
     Q_UNUSED(widget);
 
+    if (pointCount() < 1)
+        return;
+
     QPainterPath path = shape();
 
     painter->setPen(pen(option));
-    painter->setBrush(brush(option));
+
+    // Straight line segments can't be filled
+    if (pointCount() == 2)
+        painter->setBrush(Qt::NoBrush);
+    else
+        painter->setBrush(brush(option));
 
     painter->drawPath(path);
 
@@ -108,24 +160,31 @@ void APolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         drawBoundingBox(painter);
 }
 
-bool APolyline::isClosed()
+bool APolyline::isClosed() const
 {
     // Need at least three points (including starting position)
     if (points_.count() < 2)
         return false;
 
-    return AGeometry::PointsAreCoincident(points_.last().point, start_pos_);
+    return AGeometry::PointsAreCoincident(startPoint(), endPoint());
 }
 
 QPainterPath APolyline::shape() const
 {
     QPainterPath path;
 
-    path.moveTo(start_pos_);
-
-    for (int i=0; i<points_.count(); i++)
+    if (points_.count() > 0)
     {
-        path.lineTo(points_.at(i).point);
+        path.moveTo(startPoint());
+    }
+
+    LWPolypoint p;
+
+    for (int i=1; i<points_.count(); i++)
+    {
+        p = points_.at(i);
+
+        path.lineTo(p.point);
     }
 
     return path;
@@ -133,6 +192,10 @@ QPainterPath APolyline::shape() const
 
 bool APolyline::addPoint(LWPolypoint point)
 {
+    // Account for angular rollover
+    while (point.angle < -M_PI) point.angle += (2 * M_PI);
+    while (point.angle >  M_PI) point.angle -= (2 * M_PI);
+
     // Enforce zero-angle for the first point, doesn't make sense
     if (points_.count() == 0)
     {
@@ -161,10 +224,6 @@ bool APolyline::addPoint(QPointF point, double angle)
 {
     LWPolypoint p;
     p.point = point;
-
-    while (angle < -M_PI) angle += (2 * M_PI);
-    while (angle >  M_PI) angle -= (2 * M_PI);
-
     p.angle = angle;
 
     return addPoint(p);
@@ -186,7 +245,10 @@ void APolyline::normalize()
 {
     QPointF center = centroid();
 
-    start_pos_ -= center;
+    for (int i=0; i<points_.count(); i++)
+    {
+        setPoint(i, point(i) - center);
+    }
 
     setPos(center);
 }

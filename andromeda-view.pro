@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     tools/polyline_tool_base.cpp \
     base/andromeda_object.cpp \
     shapes/drawable_base.cpp \
-    shapes/drawable_primitive.cpp
+    shapes/drawable_primitive.cpp \
+    tools/polyline_editing_tool.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
@@ -57,7 +58,8 @@ HEADERS  += mainwindow.h \
     tools/polyline_tool_base.h \
     base/andromeda_object.h \
     shapes/drawable_base.h \
-    shapes/drawable_primitive.h
+    shapes/drawable_primitive.h \
+    tools/polyline_editing_tool.h
 
 FORMS    += mainwindow.ui
 

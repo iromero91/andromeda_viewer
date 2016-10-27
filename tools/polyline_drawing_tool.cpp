@@ -3,7 +3,7 @@
 
 PolylineDrawingTool::PolylineDrawingTool(QObject *parent) : PolylineToolBase(parent)
 {
-
+    setObjectName("PolylineDrawingTool");
 }
 
 void PolylineDrawingTool::finalAction()
@@ -30,10 +30,10 @@ bool PolylineDrawingTool::addPoint(QPointF point)
         reset();
         setToolState(TOOL_STATE::POLYLINE_ADD_POINT);
 
-        polyline_.setStartPos(point);
+        polyline_.addPoint(point);
         break;
     case TOOL_STATE::POLYLINE_ADD_POINT:
-        if (polyline_.pointCount() > 1)
+        if (polyline_.pointCount() > 2)
         {
             if (AGeometry::PointsAreCoincident(point, polyline_.startPoint()))
             {

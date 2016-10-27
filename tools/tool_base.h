@@ -24,6 +24,8 @@ class AToolBase : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY( QString toolName READ getToolName )
+
 public:
     AToolBase(QObject *parent = 0);
 
@@ -34,7 +36,7 @@ public:
     TOOL_STATE getToolState(void) { return tool_state_; }
     void setToolState(TOOL_STATE state) { tool_state_ = state; }
 
-    QString getToolName(void) { return tool_name_; }
+    QString getToolName(void) { return objectName(); }
 
     /*
      * Paint Functions:
@@ -96,8 +98,6 @@ signals:
     void updated(void);     // Emitted when the tool should be repainted
 
 protected:
-    QString tool_name_ = QString("Base Tool");
-
     // Tool state machine
     TOOL_STATE tool_state_ = TOOL_STATE::INACTIVE;
 

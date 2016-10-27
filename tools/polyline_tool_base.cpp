@@ -33,7 +33,10 @@ void PolylineToolBase::paintTool(QPainter *painter, const QRectF &rect)
         {
             painter->drawLine(polyline_.endPoint(), tool_pos_);
         }
+
+        polyline_.drawBoundingBox(painter);
     }
+
 }
 
 void PolylineToolBase::paintHints(QPainter *painter, const QRectF &rect)
@@ -52,11 +55,11 @@ void PolylineToolBase::paintHints(QPainter *painter, const QRectF &rect)
 
 void PolylineToolBase::getPolyline(APolyline &line)
 {
-    line.setStartPos(polyline_.startPoint());
+    line.clear();
 
-    for (int i=0; i<polyline_.pointCount()-1; i++)
+    for (int i=0; i<polyline_.pointCount(); i++)
     {
-        line.addPoint(polyline_.getPoint(i));
+        line.addPoint(polyline_.point(i));
     }
 
     if (force_closed_)

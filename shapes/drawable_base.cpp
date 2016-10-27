@@ -14,8 +14,8 @@ ADrawableBase::ADrawableBase(QObject *parent) :
 
     // Bounding Box Pen
     bounding_box_pen_.setColor(SYMBOL_BB_COLOR);
-    bounding_box_pen_.setWidthF(0.5);
-    bounding_box_pen_.setCosmetic(true);
+    bounding_box_pen_.setWidthF(2.5);
+    //bounding_box_pen_.setCosmetic(true);
     bounding_box_pen_.setJoinStyle(Qt::RoundJoin);
     bounding_box_pen_.setCapStyle(Qt::RoundCap);
     bounding_box_pen_.setStyle(Qt::DashLine);

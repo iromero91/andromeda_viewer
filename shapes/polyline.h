@@ -27,7 +27,11 @@ class APolyline : public ADrawablePrimitive
 
 public:
     APolyline(QObject *parent = 0);
-    virtual APolyline *clone(void) { return makeClone<APolyline>(); }
+
+    //TODO this is temporarily overriden for testing
+    //TODO uncomment and return to default cloner
+    //virtual APolyline *clone(void) { return makeClone<APolyline>(); }
+    virtual APolyline *clone(void);
 
     // Painter Functions
     QRectF boundingRect() const Q_DECL_OVERRIDE;
@@ -35,32 +39,31 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
 
     //TODO this class needs fixing
-    LWPolypoint getPolypoint(int index);
-    QPointF getPoint(int index);
-    double getAngle(int index);
+    LWPolypoint polypoint(int index);
+    QPointF point(int index);
+    double angle(int index);
 
     void setPoint(int index, QPointF point);
     void setAngle(int index, double angle);
 
     // Property getters
-    bool isClosed();
-    QPointF startPoint(void) { return start_pos_; }
-    QPointF endPoint(void);
-    int pointCount(void) { return points_.count() + 1; }
+    bool isClosed() const;
+    QPointF startPoint(void) const;
+    QPointF endPoint(void) const;
+    int pointCount(void) const { return points_.count(); }
 
+    bool allSegmentsAreStraight(void);
+    bool isSelfIntersecting(void);
 
 public slots:
     void clear() { points_.clear(); }
-    void setStartPos(QPointF pos) { start_pos_ = pos; }
     bool addPoint(LWPolypoint point);
     bool addPoint(QPointF point, double angle=0);
     void close(void);
     void normalize(void);
 
-
 protected:
     // Properties unique to the polyline class
-    QPointF start_pos_;
     QList<LWPolypoint> points_;
 };
 
