@@ -12,20 +12,20 @@ class ADrawablePrimitive : public ADrawableBase
 public:
     ADrawablePrimitive(QObject *parent = 0);
 
-    Q_PROPERTY( bool filled READ filled WRITE setFilled )
+    Q_PROPERTY( bool filled READ isFilled WRITE setFilled )
     Q_PROPERTY( double lineWidth READ lineWidth WRITE setLineWidth )
     Q_PROPERTY( QColor fillColor READ fillColor WRITE setFillColor )
     Q_PROPERTY( QColor lineColor READ lineColor WRITE setLineColor )
 
     // Property getters
-    bool filled(void) { return filled_; }
-    double lineWidth(void) { return line_width_; }
-    QColor fillColor(void) { return fill_color_; }
-    QColor lineColor(void) { return line_color_; }
-    Qt::PenStyle lineStyle(void) { return line_style_; }
+    bool isFilled(void) const { return filled_; }
+    double lineWidth(void) const { return line_width_; }
+    QColor fillColor(void) const { return fill_color_; }
+    QColor lineColor(void) const { return line_color_; }
+    Qt::PenStyle lineStyle(void) const { return line_style_; }
 
-    virtual void encode(QJsonObject *json) const;
-    virtual void decode(QJsonObject *json);
+    virtual void encode(QJsonObject &json) const;
+    virtual void decode(QJsonObject &json);
 
 public slots:
     void setFilled(bool filled) { filled_ = filled; }

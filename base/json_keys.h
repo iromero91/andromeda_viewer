@@ -10,8 +10,11 @@
  */
 namespace JSON_KEY {
 
-// Graphics items
+// Item options
 const QString ITEM_LAYER = "layer";
+
+// Graphics options
+const QString FILLED = "filled";
 
 
 // Dimensions

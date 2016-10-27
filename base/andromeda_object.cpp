@@ -52,7 +52,7 @@ QJsonObject AndromedaObject::encode() const
 {
     QJsonObject json;
 
-    encode(&json);
+    encode(json);
 
     return json;
 }

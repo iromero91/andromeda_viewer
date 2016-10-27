@@ -33,15 +33,15 @@ public:
     ADrawableBase(QObject *parent = 0);
 
     // JSON params
-    virtual void decode(QJsonObject *json);
-    virtual void encode(QJsonObject *json) const;
+    virtual void decode(QJsonObject &json);
+    virtual void encode(QJsonObject &json) const;
 
     // Bounding box drawing
     void drawBoundingBox(QPainter *painter);
 
     // Property getters
     QRectF boundingRect(void) { return QRectF(); }
-    int layer(void) { return layer_; }
+    int layer(void) const { return layer_; }
 
     //QPen getBoundingBoxPen(void) { return bounding_box_pen_; }
 

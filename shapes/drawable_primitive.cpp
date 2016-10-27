@@ -8,17 +8,16 @@ ADrawablePrimitive::ADrawablePrimitive(QObject *parent) : ADrawableBase(parent)
     setAcceptHoverEvents(true);
 }
 
-void ADrawablePrimitive::encode(QJsonObject *json) const
+void ADrawablePrimitive::encode(QJsonObject &json) const
 {
-    if (nullptr == json) return;
-
     ADrawableBase::encode(json);
+
+    json[JSON_KEY::THICKNESS] = lineWidth();
+    json[JSON_KEY::FILLED] = isFilled();
 }
 
-void ADrawablePrimitive::decode(QJsonObject *json)
+void ADrawablePrimitive::decode(QJsonObject &json)
 {
-    if (nullptr == json) return;
-
     ADrawableBase::decode(json);
 }
 
@@ -56,7 +55,8 @@ QPen ADrawablePrimitive::pen(const QStyleOptionGraphicsItem *option)
 
 QBrush ADrawablePrimitive::brush(const QStyleOptionGraphicsItem *option)
 {
-    if (!filled())
+    //TODO change filled_ from a BOOL to an enumeration of allowable colors
+    if (!isFilled())
     {
         return QBrush(Qt::NoBrush);
     }

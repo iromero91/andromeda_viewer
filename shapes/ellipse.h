@@ -24,14 +24,14 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     // Property getters
-    QPointF radius(void) { return QPointF(rx_, ry_); }
-    double rx(void) { return rx_; }
-    double ry(void) { return ry_; }
+    QPointF radius(void) const { return QPointF(rx_, ry_); }
+    double rx(void) const { return rx_; }
+    double ry(void) const { return ry_; }
 
-    bool isCircular(double threshold = AGeometry::DISTANCE_EPSILON) { return fabs(rx_ - ry_) < threshold; }
+    bool isCircular(double threshold = AGeometry::DISTANCE_EPSILON) const { return fabs(rx_ - ry_) < threshold; }
 
-    virtual void encode(QJsonObject *json) const;
-    virtual void decode(QJsonObject *json);
+    virtual void encode(QJsonObject &json) const;
+    virtual void decode(QJsonObject &json);
 
 public slots:
     void setRadius(double rx, double ry);

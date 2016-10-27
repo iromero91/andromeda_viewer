@@ -34,8 +34,8 @@ public:
     QJsonObject encode(void) const;
     QString encodedString(void) const;
 
-    virtual void decode(QJsonObject *json)       { Q_UNUSED(json); }
-    virtual void encode(QJsonObject *json) const { Q_UNUSED(json); }
+    virtual void decode(QJsonObject &json)       { Q_UNUSED(json); }
+    virtual void encode(QJsonObject &json) const { Q_UNUSED(json); }
 
     // Default clone operator -> Override in child class using the same template pattern
     virtual AndromedaObject* clone(void) { return makeClone<AndromedaObject>(); }
@@ -63,7 +63,7 @@ protected:
     {
         T* cloned = new T();
 
-        QJsonObject *json = new QJsonObject();
+        QJsonObject json;
 
         encode(json);
 
