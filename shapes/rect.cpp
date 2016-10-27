@@ -2,7 +2,7 @@
 
 ARect::ARect() : ADrawable()
 {
-
+    setObjectName("AndromedaRect");
 }
 
 QRectF ARect::getRect() const

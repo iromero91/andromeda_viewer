@@ -22,6 +22,7 @@ class APolyline : public ADrawable
 
 public:
     APolyline();
+    virtual APolyline *clone(void) { return makeClone<APolyline>(); }
 
     //TODO this class needs fixing
     void setStartPos(QPointF pos) { start_pos_ = pos; }

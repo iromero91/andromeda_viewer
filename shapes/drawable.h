@@ -22,6 +22,9 @@ class ADrawable : public AndromedaObject, public QGraphicsItem
 {
     Q_OBJECT
 
+
+    Q_INTERFACES( QGraphicsItem )
+
     // Generic drawable properties that we want exposed
     Q_PROPERTY(int layer READ getLayer WRITE setLayer NOTIFY onLayerChanged)
 public:

@@ -11,6 +11,7 @@ class AEllipse : public ADrawable
 
 public:
     AEllipse();
+    virtual AEllipse *clone() { return makeClone<AEllipse>(); }
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     QPainterPath shape() const;

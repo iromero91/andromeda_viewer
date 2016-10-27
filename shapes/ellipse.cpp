@@ -4,6 +4,7 @@
 
 AEllipse::AEllipse() : ADrawable()
 {
+    setObjectName("AndromedaEllipse");
 }
 
 QRectF AEllipse::boundingRect() const
