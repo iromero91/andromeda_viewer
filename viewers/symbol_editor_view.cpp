@@ -22,19 +22,22 @@ void SymbolEditorView::selectionChanged()
 {
     QList<QGraphicsItem*> items = scene_->selectedItems();
 
-    ADrawable *drawable;
+    ADrawableBase *drawable;
 
-    foreach (QGraphicsItem* item, items)
+    if (items.count() == 1)
     {
-        drawable = qgraphicsitem_cast<ADrawable*>(item);
-
-        if (nullptr != drawable)
+        foreach (QGraphicsItem* item, items)
         {
-            qDebug() << "item:" << drawable->objectName();
+            drawable = qgraphicsitem_cast<ADrawableBase*>(item);
 
-            foreach (QString s, drawable->getPropertyNames())
+            if (nullptr != drawable)
             {
-                qDebug() << "prop:" << s;
+                qDebug() << "item:" << drawable->objectName();
+
+                foreach (QMetaProperty p, drawable->getProperties())
+                {
+                    qDebug() << "prop:" << p.name() << drawable->property(p.name());
+                }
             }
         }
     }
@@ -100,7 +103,7 @@ void SymbolEditorView::onToolFinished(AToolBase *toolPtr)
 
         ellipse_tool_.getEllipse(*ell);
 
-        if (ell->getRx() > 0 && ell->getRy() > 0)
+        if (ell->rx() > 0 && ell->ry() > 0)
             scene_->addItem(ell);
 
         ellipse_tool_.reset();

@@ -27,7 +27,6 @@ public:
     QList<QMetaProperty> getProperties(void);
     QStringList getPropertyNames(void);
 
-
     virtual void readDataFromJson(QJsonObject *object)      { Q_UNUSED(object); }
     virtual void writeDataToJson(QJsonObject *object) const { Q_UNUSED(object); }
 

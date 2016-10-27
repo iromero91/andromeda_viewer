@@ -8,6 +8,7 @@ const QColor SYMBOL_FILL_COLOR(250,250,200);
 const QColor SYMBOL_BB_COLOR(150,150,150,150);
 
 const double SYMBOL_LINE_WIDTH_DEFAULT = 1.5f;
+const double SYMBOL_LINE_WIDTH_MIN = 0.1f;
 
 #endif // SHAPES_SHAPE_DEFINES_H
 

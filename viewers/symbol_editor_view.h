@@ -5,7 +5,6 @@
 
 #include "shapes/polyline.h"
 #include "shapes/ellipse.h"
-#include "shapes/rect.h"
 
 #include "tools/polyline_drawing_tool.h"
 #include "tools/ellipse_drawing_tool.h"

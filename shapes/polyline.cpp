@@ -10,9 +10,21 @@
 
 #include <QDebug>
 
-APolyline::APolyline() : ADrawable()
+APolyline::APolyline(QObject *parent) : ADrawablePrimitive(parent)
 {
-    setObjectName("AndromedaPolyline");
+    setObjectName("APolyline");
+}
+
+QPointF APolyline::endPoint()
+{
+    if (points_.count() == 0)
+    {
+        return start_pos_;
+    }
+    else
+    {
+        return points_.last().point;
+    }
 }
 
 LWPolypoint APolyline::getPolypoint(int index)
@@ -71,10 +83,12 @@ QRectF APolyline::boundingRect() const
         box.add(points_.at(i).point);
     }
 
-    box.adjust(-thickness_,
-                -thickness_,
-                 thickness_,
-                 thickness_);
+    double offset = line_width_ / 2;
+
+    box.adjust(-offset,
+               -offset,
+                offset,
+                offset);
 
     return QRectF(box);
 }
@@ -85,47 +99,12 @@ void APolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     QPainterPath path = shape();
 
-    QPen pen = line_pen_;
-    QBrush brush = fill_brush_;
-
-    QColor c = line_pen_.color();
-
-    if (isSelected())
-        c = c.dark();
-
-    c = (option->state & QStyle::State_MouseOver) ? c.light() : c;
-
-    pen.setColor(c);
-
-    painter->setPen(pen);
-
-    /*
-    if (filled_)
-    {
-        c = brush.color();
-
-        if (isSelected())
-        {
-            c = c.dark();
-        }
-
-        brush.setColor(c);
-
-        painter->setBrush(brush);
-    }
-    */
-    if (isClosed())
-    {
-        painter->setBrush(QBrush(SYMBOL_FILL_COLOR));
-    }
-    else
-    {
-        painter->setBrush(Qt::NoBrush);
-    }
+    painter->setPen(pen(option));
+    painter->setBrush(brush(option));
 
     painter->drawPath(path);
 
-    if (drawBoundingBox_)
+    if (draw_bounding_box_)
         drawBoundingBox(painter);
 }
 

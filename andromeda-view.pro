@@ -20,10 +20,8 @@ SOURCES += main.cpp\
     viewers/andromeda_scene.cpp \
     viewers/andromeda_view.cpp \
     viewers/symbol_editor_view.cpp \
-    shapes/drawable.cpp \
     shapes/ellipse.cpp \
     shapes/polyline.cpp \
-    shapes/rect.cpp \
     grid/grid.cpp \
     layers/layer_defines.cpp \
     tools/tool_base.cpp \
@@ -33,7 +31,9 @@ SOURCES += main.cpp\
     tools/rect_drawing_tool.cpp \
     tools/polyline_drawing_tool.cpp \
     tools/polyline_tool_base.cpp \
-    base/andromeda_object.cpp
+    base/andromeda_object.cpp \
+    shapes/drawable_base.cpp \
+    shapes/drawable_primitive.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
@@ -42,10 +42,8 @@ HEADERS  += mainwindow.h \
     viewers/andromeda_view.h \
     viewers/symbol_editor_view.h \
     shapes/shape_defines.h \
-    shapes/drawable.h \
     shapes/ellipse.h \
     shapes/polyline.h \
-    shapes/rect.h \
     grid/grid.h \
     layers/layer_defines.h \
     tools/tool_defines.h \
@@ -57,7 +55,9 @@ HEADERS  += mainwindow.h \
     tools/polyline_drawing_tool.h \
     viewers/polyline_tool_base.h \
     tools/polyline_tool_base.h \
-    base/andromeda_object.h
+    base/andromeda_object.h \
+    shapes/drawable_base.h \
+    shapes/drawable_primitive.h
 
 FORMS    += mainwindow.ui
 

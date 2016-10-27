@@ -2,19 +2,21 @@
 
 #include <math.h>
 
-AEllipse::AEllipse() : ADrawable()
+AEllipse::AEllipse(QObject *parent) : ADrawablePrimitive(parent)
 {
-    setObjectName("AndromedaEllipse");
+    setObjectName("AEllipse");
 }
 
 QRectF AEllipse::boundingRect() const
 {
     QRectF rect(-rx_, -ry_, 2*rx_, 2*ry_);
 
-    rect.adjust(-thickness_,
-                -thickness_,
-                 thickness_,
-                 thickness_);
+    double offset = line_width_ / 2;
+
+    rect.adjust(-offset,
+                -offset,
+                 offset,
+                 offset);
 
     return rect;
 }
@@ -32,81 +34,25 @@ void AEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     Q_UNUSED(widget);
 
-    QPen pen = line_pen_;
-    QBrush brush = fill_brush_;
-
-    QColor c = line_pen_.color();
-
-    if (isSelected())
-        c = c.dark();
-
-    c = (option->state & QStyle::State_MouseOver) ? c.light() : c;
-
-    pen.setColor(c);
-
-    painter->setPen(pen);
-
-    /*
-    if (filled_)
-    {
-        c = brush.color();
-
-        if (isSelected())
-            c = c.dark();
-
-        brush.setColor(c);
-
-        painter->setBrush(brush);
-    }
-    else
-    {
-        painter->setBrush(Qt::NoBrush);
-    }
-    */
-    painter->setBrush(QBrush(SYMBOL_FILL_COLOR));
+    painter->setPen(pen(option));
+    painter->setBrush(brush(option));
 
     painter->drawEllipse(QPointF(0,0), rx_, ry_);
 
-    if (drawBoundingBox_)
+    if (draw_bounding_box_)
         drawBoundingBox(painter);
 
 }
 
 void AEllipse::setRadius(double rx, double ry)
 {
-    rx_ = fabs(rx);
-    ry_ = fabs(ry);
+    if (rx != 0)
+        rx_ = fabs(rx);
+
+    if (ry != 0)
+        ry_ = fabs(ry);
 
     prepareGeometryChange();
 
     update();
 }
-
-void AEllipse::setRadius(double r)
-{
-    setRadius(r,r);
-}
-
-/*
-QList<QPointF> AEllipse::getAnchors()
-{
-    QList<QPointF> anchors;
-
-    // Center
-    anchors.append(pos);
-
-    // Top
-    anchors.append(QPointF(pos.x(), pos.y() - ry_));
-
-    // Bottom
-    anchors.append(QPointF(pos.x(), pos.y() + ry_));
-
-    // Left
-    anchors.append(QPointF(pos.x() - rx_, pos.y()));
-
-    // Right
-    anchors.append(QPointF(pos.x() + rx_, pos.y()));
-
-    return anchors;
-}
-*/
