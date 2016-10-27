@@ -5,6 +5,10 @@ AndromedaObject::AndromedaObject(QObject *parent) : QObject(parent)
     setObjectName("AndromedaObject");
 }
 
+/**
+ * @brief AndromedaObject::getProperties
+ * @return a list of QMetaProperty objects associated with this AndromedaObject
+ */
 QList<QMetaProperty> AndromedaObject::getProperties()
 {
     QList<QMetaProperty> props;
@@ -26,6 +30,10 @@ QList<QMetaProperty> AndromedaObject::getProperties()
     return props;
 }
 
+/**
+ * @brief AndromedaObject::getPropertyNames
+ * @return a list of the property names associated with this object
+ */
 QStringList AndromedaObject::getPropertyNames()
 {
     QList<QMetaProperty> props = getProperties();
