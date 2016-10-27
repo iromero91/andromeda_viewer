@@ -24,7 +24,11 @@ class AToolBase : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( QString toolName READ getToolName )
+    Q_PROPERTY( QString toolName READ toolName )
+    Q_PROPERTY( QPointF toolPos READ toolPos WRITE setToolPos )
+    Q_PROPERTY( TOOL_STATE toolState READ toolState WRITE setToolState )
+    Q_PROPERTY( bool active READ isActive STORED false )
+    Q_PROPERTY( bool finished READ isFinished STORED false )
 
 public:
     AToolBase(QObject *parent = 0);
@@ -33,10 +37,9 @@ public:
     bool isActive(void) { return (tool_state_ > TOOL_STATE::INACTIVE); }
     bool isFinished(void) { return (tool_state_ == TOOL_STATE::FINISHED); }
 
-    TOOL_STATE getToolState(void) { return tool_state_; }
-    void setToolState(TOOL_STATE state) { tool_state_ = state; }
-
-    QString getToolName(void) { return objectName(); }
+    TOOL_STATE toolState(void) { return tool_state_; }
+    QPointF toolPos() { return tool_pos_; }
+    QString toolName(void) { return objectName(); }
 
     /*
      * Paint Functions:
@@ -52,7 +55,6 @@ public:
     void paint(QPainter *painter, const QRectF &rect);
     virtual void paintTool(QPainter *painter, const QRectF &rect) { Q_UNUSED(painter); Q_UNUSED(rect); }
     virtual void paintHints(QPainter *painter, const QRectF &rect) { Q_UNUSED(painter); Q_UNUSED(rect); }
-
 
 public slots:
     /*
@@ -84,9 +86,13 @@ public slots:
     void mouseEvent(QMouseEvent *event, QPointF cursorPos);
     void keyEvent(QKeyEvent *event, QPointF cursorPos);
 
-    void setToolPos(QPointF pos) { tool_pos_ = pos; onToolPosChanged(); }
-    QPointF getToolPos() { return tool_pos_; }
-
+    void setToolState(TOOL_STATE state) { tool_state_ = state; }
+    void setToolPos(QPointF pos)
+    {
+        tool_pos_ = pos;
+        onToolPosChanged();
+        emit updated();
+    }
 
 signals:
     /*

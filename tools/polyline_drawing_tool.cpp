@@ -22,7 +22,7 @@ void PolylineDrawingTool::finalAction()
 
 bool PolylineDrawingTool::addPoint(QPointF point)
 {
-    switch (getToolState())
+    switch (toolState())
     {
     default:
     case TOOL_STATE::POLYLINE_SET_ORIGIN:

@@ -9,7 +9,7 @@ bool RectDrawingTool::addPoint(QPointF point)
 {
     QRectF rect = getRect().normalized();
 
-    switch (getToolState())
+    switch (toolState())
     {
     default:
     case TOOL_STATE::POLYLINE_SET_ORIGIN:
@@ -81,7 +81,7 @@ void RectDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
     if (nullptr == painter)
         return;
 
-    if (getToolState() > TOOL_STATE::POLYLINE_SET_ORIGIN)
+    if (toolState() > TOOL_STATE::POLYLINE_SET_ORIGIN)
     {
         painter->setPen(tool_pen_);
         painter->setBrush(tool_brush_);

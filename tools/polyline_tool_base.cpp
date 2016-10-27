@@ -29,7 +29,7 @@ void PolylineToolBase::paintTool(QPainter *painter, const QRectF &rect)
     {
         painter->drawPath(polyline_.shape());
 
-        if (getToolState() == TOOL_STATE::POLYLINE_ADD_POINT)
+        if (toolState() == TOOL_STATE::POLYLINE_ADD_POINT)
         {
             painter->drawLine(polyline_.endPoint(), tool_pos_);
         }
@@ -46,7 +46,7 @@ void PolylineToolBase::paintHints(QPainter *painter, const QRectF &rect)
     if (nullptr == painter)
         return;
 
-    if (getToolState() == TOOL_STATE::POLYLINE_ADD_POINT)
+    if (toolState() == TOOL_STATE::POLYLINE_ADD_POINT)
     {
         painter->setPen(hints_pen_);
         painter->drawLine(polyline_.startPoint(), tool_pos_);

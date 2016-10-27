@@ -7,6 +7,35 @@ EllipseDrawingTool::EllipseDrawingTool(QObject *parent) : AToolBase(parent)
 
 }
 
+QRectF EllipseDrawingTool::getEllipseRect()
+{
+    QPointF delta = tool_pos_ - start_pos_;
+
+    double x = delta.x();
+    double y = delta.y();
+
+    QPointF topLeft = start_pos_;
+
+    int mods = QApplication::keyboardModifiers();
+
+    // Enforce a circle
+    if (mods & Qt::ControlModifier)
+    {
+        x = fabs(x) > fabs(y) ? x : y;
+        y = x;
+    }
+
+    if (mods & Qt::ShiftModifier)
+    {
+        topLeft -= QPointF(x,y);
+
+        x *= 2;
+        y *= 2;
+    }
+
+    return QRectF(topLeft, QSizeF(x,y)).normalized();
+}
+
 void EllipseDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
 {
     Q_UNUSED(rect);
@@ -17,10 +46,12 @@ void EllipseDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
     painter->setBrush(tool_brush_);
     painter->setPen(tool_pen_);
 
-    switch(getToolState())
+    QRectF r = getEllipseRect();
+
+    switch(toolState())
     {
     case TOOL_STATE::ELLIPSE_SET_POINT:
-        painter->drawEllipse(ellipse_.pos(), ellipse_.rx(), ellipse_.ry());
+        painter->drawEllipse(r.center(), r.width()/2, r.height()/2);
         break;
     default:
         break;
@@ -31,13 +62,16 @@ void EllipseDrawingTool::paintHints(QPainter *painter, const QRectF &rect)
 {
     Q_UNUSED(rect);
 
-    switch (getToolState())
+    QRectF r = getEllipseRect();
+
+    switch (toolState())
     {
     case TOOL_STATE::ELLIPSE_SET_POINT:
         // Draw line towards tool_pos, enscribed on the ellipse
         // TODO
         painter->setPen(hints_pen_);
-        painter->drawLine(ellipse_.pos(), tool_pos_);
+        painter->setBrush(Qt::NoBrush);
+        painter->drawRect(r);
         break;
     default:
         break;
@@ -46,7 +80,7 @@ void EllipseDrawingTool::paintHints(QPainter *painter, const QRectF &rect)
 
 void EllipseDrawingTool::nextAction()
 {
-    switch (getToolState())
+    switch (toolState())
     {
     case TOOL_STATE::RESET:
     case TOOL_STATE::ELLIPSE_SET_CENTER:
@@ -63,22 +97,13 @@ void EllipseDrawingTool::nextAction()
 
 void EllipseDrawingTool::onToolPosChanged()
 {
-    QPointF delta = tool_pos_ - ellipse_.pos();
 
-    double x = fabs(delta.x());
-    double y = fabs(delta.y());
-
-    if (QApplication::keyboardModifiers() & Qt::ControlModifier)
-    {
-        x = qMax(x,y);
-        y = x;
-    }
-
-    setRadius(x,y);
 }
 
 void EllipseDrawingTool::getEllipse(AEllipse &ellipse)
 {
-    ellipse.setPos(ellipse_.pos());
-    ellipse.setRadius(ellipse_.radius());
+    QRectF r = getEllipseRect();
+
+    ellipse.setPos(r.center());
+    ellipse.setRadius(r.width()/2, r.height()/2);
 }
