@@ -12,6 +12,7 @@
 
 APolyline::APolyline() : ADrawable()
 {
+    setObjectName("AndromedaPolyline");
 }
 
 LWPolypoint APolyline::getPolypoint(int index)

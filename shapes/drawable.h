@@ -22,6 +22,8 @@ class ADrawable : public AndromedaObject, public QGraphicsItem
 {
     Q_OBJECT
 
+    Q_INTERFACES( QGraphicsItem )
+
 public:
     ADrawable(QObject *parent = 0);
 

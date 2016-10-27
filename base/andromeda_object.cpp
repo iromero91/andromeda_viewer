@@ -2,5 +2,5 @@
 
 AndromedaObject::AndromedaObject(QObject *parent) : QObject(parent)
 {
-
+    setObjectName("AndromedaObject");
 }

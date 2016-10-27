@@ -10,6 +10,8 @@ ADrawable::ADrawable(QObject *parent) :
     AndromedaObject(parent),
     QGraphicsItem()
 {
+    setObjectName("AndromedaDrawable");
+
     /* Configure default pens */
 
     // Line pen

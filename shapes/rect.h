@@ -10,6 +10,8 @@ class ARect : public ADrawable
 public:
     ARect();
 
+    virtual ARect *clone(void) { return makeClone<ARect>(); }
+
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     QPainterPath shape() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
