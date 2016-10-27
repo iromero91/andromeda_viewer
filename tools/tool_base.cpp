@@ -4,7 +4,8 @@
 
 AToolBase::AToolBase(QObject *parent) : QObject(parent)
 {
-    setObjectName("AToolBase");
+    setObjectName(TOOL_NAME::BASE);
+
     defaultPens();
 }
 

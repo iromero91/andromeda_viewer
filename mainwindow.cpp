@@ -7,6 +7,8 @@
 
 #include <QGraphicsEllipseItem>
 
+#include <QPixmap>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -31,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->prop->setReadOnly(true);
     ui->graphicsView->setFocus();
+
+    QPixmap p = QCursor(Qt::ArrowCursor).pixmap();
+
+    qDebug() << p.width() << p.height();
 }
 
 // This is just a crazy hack to show property inspection

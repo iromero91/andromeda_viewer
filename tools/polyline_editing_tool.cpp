@@ -2,5 +2,5 @@
 
 PolylineEditingTool::PolylineEditingTool(QObject *parent) : AToolBase(parent)
 {
-    setObjectName("PolylineEditingTool");
+    setObjectName(TOOL_NAME::EDIT_POLYLINE);
 }

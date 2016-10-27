@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 
 #include "json_keys.h"
+#include "object_names.h"
 
 /**
  * @brief The AndromedaObject class

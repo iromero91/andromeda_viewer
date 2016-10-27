@@ -19,6 +19,7 @@
 #include <QString>
 
 #include "tool_defines.h"
+#include "base/object_names.h"
 
 class AToolBase : public QObject
 {

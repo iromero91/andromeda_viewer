@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     base/andromeda_object.cpp \
     shapes/drawable_base.cpp \
     shapes/drawable_primitive.cpp \
-    tools/polyline_editing_tool.cpp
+    tools/polyline_editing_tool.cpp \
+    shapes/symbol_pin.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
@@ -60,7 +61,9 @@ HEADERS  += mainwindow.h \
     shapes/drawable_base.h \
     shapes/drawable_primitive.h \
     tools/polyline_editing_tool.h \
-    base/json_keys.h
+    base/json_keys.h \
+    base/object_names.h \
+    shapes/symbol_pin.h
 
 FORMS    += mainwindow.ui
 

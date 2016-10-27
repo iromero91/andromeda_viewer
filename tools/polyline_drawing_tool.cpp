@@ -3,7 +3,7 @@
 
 PolylineDrawingTool::PolylineDrawingTool(QObject *parent) : PolylineToolBase(parent)
 {
-    setObjectName("PolylineDrawingTool");
+    setObjectName(TOOL_NAME::DRAW_POLYLINE);
 }
 
 void PolylineDrawingTool::finalAction()

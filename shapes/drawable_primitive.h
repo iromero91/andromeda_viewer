@@ -5,6 +5,11 @@
 
 #include <QColor>
 
+/**
+ * @brief The ADrawablePrimitive class describes simple shapes that should be displayed as separate items
+ * These shapes can either be added to a scene "as-is",
+ * or they can comprise more complex shapes (e.g. symbols and footprints)
+ */
 class ADrawablePrimitive : public ADrawableBase
 {
     Q_OBJECT

@@ -14,7 +14,7 @@
 
 APolyline::APolyline(QObject *parent) : ADrawablePrimitive(parent)
 {
-    setObjectName("APolyline");
+    setObjectName(OBJECT_NAME::A_DRAWABLE_POLYLINE);
 }
 
 APolyline* APolyline::clone()

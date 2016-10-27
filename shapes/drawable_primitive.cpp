@@ -2,7 +2,7 @@
 
 ADrawablePrimitive::ADrawablePrimitive(QObject *parent) : ADrawableBase(parent)
 {
-    setObjectName("ADrawablePrimitive");
+    setObjectName(OBJECT_NAME::A_DRAWABLE_PRIMITIVE);
 
     setFlags(ItemIsSelectable | ItemIsFocusable);
     setAcceptHoverEvents(true);

@@ -2,7 +2,7 @@
 
 AndromedaObject::AndromedaObject(QObject *parent) : QObject(parent)
 {
-    setObjectName("AndromedaObject");
+    setObjectName(OBJECT_NAME::A_OBJECT);
 }
 
 /**

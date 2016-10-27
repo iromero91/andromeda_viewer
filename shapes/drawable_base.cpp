@@ -10,7 +10,7 @@ ADrawableBase::ADrawableBase(QObject *parent) :
     AndromedaObject(parent),
     QGraphicsItem()
 {
-    setObjectName("ADrawableBase");
+    setObjectName(OBJECT_NAME::A_DRAWABLE_BASE);
 
     // Bounding Box Pen
     bounding_box_pen_.setColor(SYMBOL_BB_COLOR);

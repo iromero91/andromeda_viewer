@@ -2,7 +2,7 @@
 
 RectDrawingTool::RectDrawingTool(QObject *parent) : PolylineToolBase(parent)
 {
-    setObjectName("RectDrawingTool");
+    setObjectName(TOOL_NAME::DRAW_RECT);
 }
 
 bool RectDrawingTool::addPoint(QPointF point)

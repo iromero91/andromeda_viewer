@@ -4,7 +4,7 @@
 
 EllipseDrawingTool::EllipseDrawingTool(QObject *parent) : AToolBase(parent)
 {
-
+    setObjectName(TOOL_NAME::DRAW_ELLIPSE);
 }
 
 QRectF EllipseDrawingTool::getEllipseRect()
