@@ -56,6 +56,14 @@ protected:
      * virtual AChildClass *clone() { return makeClone<AChildClass>(); }
      *
      * And that's all there is to it!
+     *
+     * Why do it this way?
+     * 1. Consistency between object serialization and internal object state
+     * 2. Allows cut / copy / paste operations to be performed on text data
+     * 3. Allows undo / redo operations to be performed using the same data
+     * 4. "Shallower" copies can be arbitrarily defined by excluding certain data from the JSON object
+     * 5. It's always important to have a fifth reason
+     *
      * @return
      */
     template <typename T>
@@ -69,7 +77,7 @@ protected:
 
         cloned->decode(json);
 
-        return static_cast<T*> (cloned);
+        return cloned;
     }
 };
 
