@@ -21,14 +21,14 @@ QPen ADrawablePrimitive::pen(const QStyleOptionGraphicsItem *option)
 {
     QColor color = line_color_;
 
+    if (isSelected())
+    {
+        color = color.darker(110);
+    }
     if ((nullptr != option) &&
         (option->state & QStyle::State_MouseOver))
     {
-        color = color.light();
-    }
-    else if (isSelected())
-    {
-        color = color.dark();
+        color = color.lighter(120);
     }
 
     QPen pen(color);
@@ -49,14 +49,14 @@ QBrush ADrawablePrimitive::brush(const QStyleOptionGraphicsItem *option)
 
     QColor color = fill_color_;
 
+    if (isSelected())
+    {
+        color = color.darker(110);
+    }
     if ((nullptr != option) &&
         (option->state & QStyle::State_MouseOver))
     {
-        color = color.light();
-    }
-    else if (isSelected())
-    {
-        color = color.dark();
+        color = color.lighter(120);
     }
 
     QBrush b(color);
