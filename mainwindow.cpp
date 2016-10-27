@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowTitle("AndromEDA Viewer");
 
-    ui->textedit->setReadOnly(true);
+    ui->prop->setReadOnly(true);
     ui->graphicsView->setFocus();
 }
 
@@ -39,7 +39,9 @@ void MainWindow::selectionChanged()
 {
     QList<QGraphicsItem*> items = ui->graphicsView->scene()->selectedItems();
 
-    ui->textedit->clear();
+    ui->prop->clear();
+    ui->json->clear();
+
     if (items.count() == 1)
     {
         AndromedaObject *obj = qgraphicsitem_cast<ADrawableBase*>(items.first());
@@ -55,16 +57,15 @@ void MainWindow::selectionChanged()
                 lines.append(text);
             }
 
-            ui->textedit->clear();
-            ui->textedit->insertPlainText(lines.join("\n"));
+            ui->prop->clear();
+            ui->prop->insertPlainText(lines.join("\n"));
 
-            ui->textedit->insertPlainText("\n\nJSON:\n");
-            ui->textedit->insertPlainText(obj->encodedString());
+            ui->json->insertPlainText(obj->encodedString());
         }
     }
     else if (items.count() > 1)
     {
-        ui->textedit->insertPlainText(
+        ui->prop->insertPlainText(
                     QString::number(items.count()) +
                     QString(" items selected"));
     }

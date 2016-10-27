@@ -55,6 +55,9 @@ public:
     bool allSegmentsAreStraight(void);
     bool isSelfIntersecting(void);
 
+    virtual void encode(QJsonObject &json) const;
+    virtual void decode(QJsonObject &json);
+
 public slots:
     void clear() { points_.clear(); }
     bool addPoint(LWPolypoint point);

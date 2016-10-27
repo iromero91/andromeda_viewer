@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.4.1
+** Created by: Qt User Interface Compiler version 5.4.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -35,9 +35,6 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QGridLayout *gridLayout;
-    QPlainTextEdit *textedit;
-    QLabel *label;
-    SymbolEditorView *graphicsView;
     QGroupBox *groupBox;
     QVBoxLayout *verticalLayout;
     QPushButton *clearAllButton;
@@ -48,6 +45,11 @@ public:
     QPushButton *rectLine;
     QPushButton *ellipseButton;
     QSpacerItem *verticalSpacer;
+    QPlainTextEdit *json;
+    SymbolEditorView *graphicsView;
+    QPlainTextEdit *prop;
+    QLabel *label;
+    QLabel *label_2;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -62,22 +64,6 @@ public:
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        textedit = new QPlainTextEdit(centralWidget);
-        textedit->setObjectName(QStringLiteral("textedit"));
-        textedit->setMaximumSize(QSize(150, 16777215));
-
-        gridLayout->addWidget(textedit, 1, 0, 1, 1);
-
-        label = new QLabel(centralWidget);
-        label->setObjectName(QStringLiteral("label"));
-
-        gridLayout->addWidget(label, 0, 0, 1, 1);
-
-        graphicsView = new SymbolEditorView(centralWidget);
-        graphicsView->setObjectName(QStringLiteral("graphicsView"));
-
-        gridLayout->addWidget(graphicsView, 0, 1, 2, 1);
-
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
         verticalLayout = new QVBoxLayout(groupBox);
@@ -128,6 +114,33 @@ public:
 
         gridLayout->addWidget(groupBox, 0, 2, 2, 1);
 
+        json = new QPlainTextEdit(centralWidget);
+        json->setObjectName(QStringLiteral("json"));
+        json->setMaximumSize(QSize(200, 16777215));
+
+        gridLayout->addWidget(json, 3, 0, 1, 1);
+
+        graphicsView = new SymbolEditorView(centralWidget);
+        graphicsView->setObjectName(QStringLiteral("graphicsView"));
+
+        gridLayout->addWidget(graphicsView, 0, 1, 4, 1);
+
+        prop = new QPlainTextEdit(centralWidget);
+        prop->setObjectName(QStringLiteral("prop"));
+        prop->setMaximumSize(QSize(200, 16777215));
+
+        gridLayout->addWidget(prop, 1, 0, 1, 1);
+
+        label = new QLabel(centralWidget);
+        label->setObjectName(QStringLiteral("label"));
+
+        gridLayout->addWidget(label, 0, 0, 1, 1);
+
+        label_2 = new QLabel(centralWidget);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        gridLayout->addWidget(label_2, 2, 0, 1, 1);
+
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -145,7 +158,6 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-        label->setText(QApplication::translate("MainWindow", "Property Inspector", 0));
         groupBox->setTitle(QApplication::translate("MainWindow", "TOOLZ", 0));
 #ifndef QT_NO_TOOLTIP
         clearAllButton->setToolTip(QApplication::translate("MainWindow", "Clear the entire scene", 0));
@@ -171,6 +183,8 @@ public:
         ellipseButton->setToolTip(QApplication::translate("MainWindow", "Add an ellipse", 0));
 #endif // QT_NO_TOOLTIP
         ellipseButton->setText(QApplication::translate("MainWindow", "Ellipse", 0));
+        label->setText(QApplication::translate("MainWindow", "Property Inspector", 0));
+        label_2->setText(QApplication::translate("MainWindow", "JSON Inspector", 0));
     } // retranslateUi
 
 };

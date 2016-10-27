@@ -8,6 +8,8 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
+#include <QJsonArray>
+
 #include <QDebug>
 
 APolyline::APolyline(QObject *parent) : ADrawablePrimitive(parent)
@@ -22,11 +24,43 @@ APolyline* APolyline::clone()
     return line;
 }
 
+void APolyline::encode(QJsonObject &json) const
+{
+    ADrawablePrimitive::encode(json);
+
+    // Points
+    QJsonArray jPoints;
+    QJsonObject jPoint;
+    LWPolypoint p;
+    for (int i=0;i<points_.count();i++)
+    {
+        jPoint = QJsonObject();
+
+        p = points_.at(i);
+
+        jPoint[JSON_KEY::POS_X] = p.point.x();
+        jPoint[JSON_KEY::POS_Y] = p.point.y();
+
+        if ((i > 0) && (AGeometry::ArcIsCurved(p.angle)))
+            jPoint[JSON_KEY::ANGLE] = p.angle;
+
+        jPoints.append(jPoint);
+    }
+
+    json[JSON_KEY::POINTS] = jPoints;
+}
+
+void APolyline::decode(QJsonObject &json)
+{
+    ADrawablePrimitive::decode(json);
+}
+
 bool APolyline::allSegmentsAreStraight()
 {
-    foreach (LWPolypoint point, points_)
+    // Ignore the first point's angle
+    for (int i=1;i<points_.count();i++)
     {
-        if (!AGeometry::ArcIsStraight(point.angle))
+        if (AGeometry::ArcIsCurved(points_.at(i).angle))
             return false;
     }
 

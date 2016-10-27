@@ -6,3 +6,4 @@ debug/
 *.Debug
 **.autosave
 *.user
+**.cpp.*

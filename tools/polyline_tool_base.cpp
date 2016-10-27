@@ -48,7 +48,13 @@ void PolylineToolBase::paintHints(QPainter *painter, const QRectF &rect)
 
     if (toolState() == TOOL_STATE::POLYLINE_ADD_POINT)
     {
-        painter->setPen(hints_pen_);
+        QPen p = hints_pen_;
+
+        // Shift + double-click closes the line
+        if (QApplication::keyboardModifiers() & Qt::ShiftModifier)
+            p.setColor(DRAWING_TOOL_CLOSE_LINE_COLOR);
+
+        painter->setPen(p);
         painter->drawLine(polyline_.startPoint(), tool_pos_);
     }
 }

@@ -7,7 +7,9 @@
 const QColor DRAWING_TOOL_OUTLINE_COLOR(100,100,255,200);
 
 // Color of line between last point and mouse
-const QColor DRAWING_TOOL_TRACE_LINE_COLOR(130,200,150,200);
+const QColor DRAWING_TOOL_TRACE_LINE_COLOR(130,200,200,200);
+// Color of line if next action will close the object
+const QColor DRAWING_TOOL_CLOSE_LINE_COLOR(130,200,150,200);
 
 //Enumerated states for all drawing tools
 enum class TOOL_STATE : int {

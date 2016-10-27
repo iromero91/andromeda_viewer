@@ -16,6 +16,8 @@ const QString ITEM_LAYER = "layer";
 // Graphics options
 const QString FILLED = "filled";
 
+// Polygons
+const QString POINTS = "points";
 
 // Dimensions
 const QString RADIUS = "radius";
