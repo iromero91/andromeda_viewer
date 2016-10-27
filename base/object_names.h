@@ -9,11 +9,15 @@ const QString A_OBJECT = "AndromedaObject";
 // Drawable base
 const QString A_DRAWABLE_BASE = "ADrawableBase";
 
-// Drawable primitives
+// Primitive drawable items
 const QString A_DRAWABLE_PRIMITIVE = "ADrawablePrimitive";
 const QString A_DRAWABLE_ELLIPSE = "ADrawableEllipse";
 const QString A_DRAWABLE_POLYLINE = "ADrawablePolyline";
 const QString A_DRAWABLE_SYMBOL_PIN = "ADrawabableSymbolPin";
+
+// Complex drawable items
+const QString A_DRAWABLE_COMPLEX = "ADrawableComplex";
+
 }
 
 namespace TOOL_NAME

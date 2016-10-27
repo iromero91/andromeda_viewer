@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     shapes/drawable_base.cpp \
     shapes/drawable_primitive.cpp \
     tools/polyline_editing_tool.cpp \
-    shapes/symbol_pin.cpp
+    shapes/symbol_pin.cpp \
+    shapes/drawable_complex.cpp
 
 HEADERS  += mainwindow.h \
     layers/pcb_layers.h \
@@ -63,7 +64,8 @@ HEADERS  += mainwindow.h \
     tools/polyline_editing_tool.h \
     base/json_keys.h \
     base/object_names.h \
-    shapes/symbol_pin.h
+    shapes/symbol_pin.h \
+    shapes/drawable_complex.h
 
 FORMS    += mainwindow.ui
 
