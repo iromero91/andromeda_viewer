@@ -47,7 +47,7 @@ protected:
      * @return
      */
     template <typename T>
-    T* makeClone()
+    T* makeClone(void)
     {
         T* cloned = new T();
 
