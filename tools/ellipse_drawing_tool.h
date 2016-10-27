@@ -14,17 +14,15 @@ public:
     void paintTool(QPainter *painter, const QRectF &rect);
     void paintHints(QPainter *painter, const QRectF &rect);
 
-    void setCenter(QPointF point) { center_ = point; }
-    void setRadius(double rx, double ry);
+    void setCenter(QPointF point) { ellipse_.setPos(point); }
+    void setRadius(double rx, double ry) { ellipse_.setRadius(rx, ry); }
 
-    void getEllipse(AEllipse &ellipse);
+    virtual void getEllipse(AEllipse &ellipse);
 
     void nextAction(void);
 
 protected:
-    QPointF center_;
-    double rx_ = 0;
-    double ry_ = 0;
+    AEllipse ellipse_;
 
     void onToolPosChanged(void);
 };

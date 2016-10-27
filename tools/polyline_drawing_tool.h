@@ -3,6 +3,8 @@
 
 #include "polyline_tool_base.h"
 
+#include "shapes/polyline.h"
+
 class PolylineDrawingTool : public PolylineToolBase
 {
     Q_OBJECT

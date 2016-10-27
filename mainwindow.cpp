@@ -20,6 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->graphicsView,SIGNAL(cursorPositionChanged(QPointF)),this,SLOT(cursorPosChanged(QPointF)));
 
+    connect(ui->ellipseButton, SIGNAL(released()), ui->graphicsView, SLOT(drawEllipse()));
+    connect(ui->rectLine, SIGNAL(released()), ui->graphicsView, SLOT(drawRect()));
+    connect(ui->polyButton, SIGNAL(released()), ui->graphicsView, SLOT(drawPolyline()));
+
     setWindowTitle("AndromEDA Viewer");
 }
 

@@ -12,11 +12,15 @@ public:
 
     bool addPoint(QPointF point);
 
-    APolyline* getPolyline(void);
+    void getPolyline(APolyline &line);
 
     void paintTool(QPainter *painter, const QRectF &rect);
 
     QRectF getRect(void);
+
+protected:
+    // Starting position for the rectangle
+    QPointF start_pos_;
 };
 
 #endif // RECT_DRAWING_TOOL_H

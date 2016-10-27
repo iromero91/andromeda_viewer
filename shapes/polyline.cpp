@@ -169,3 +169,24 @@ bool APolyline::addPoint(QPointF point, double angle)
 
     return addPoint(p);
 }
+
+void APolyline::close()
+{
+    if (isClosed()) return;
+
+    addPoint(startPoint());
+}
+
+/**
+ * @brief APolyline::normalize
+ * Recenter the polyline at the bounding box centroid
+ * Adjust each point accordingly
+ */
+void APolyline::normalize()
+{
+    QPointF center = centroid();
+
+    start_pos_ -= center;
+
+    setPos(center);
+}

@@ -7,7 +7,7 @@ PolylineToolBase::PolylineToolBase(QObject *parent) : AToolBase(parent)
 
 void PolylineToolBase::onReset()
 {
-    points_.clear();
+    polyline_.clear();
 }
 
 void PolylineToolBase::nextAction()
@@ -22,22 +22,16 @@ void PolylineToolBase::paintTool(QPainter *painter, const QRectF &rect)
 {
     Q_UNUSED(rect);
 
-    if (points_.count() > 0)
+    painter->setPen(tool_pen_);
+    painter->setBrush(Qt::NoBrush);
+
+    if (polyline_.shape().intersects(rect))
     {
-        painter->setPen(tool_pen_);
+        painter->drawPath(polyline_.shape());
 
-        QPainterPath path(start_pos_);
-
-        foreach (QPointF point, points_)
+        if (getToolState() == TOOL_STATE::POLYLINE_ADD_POINT)
         {
-            path.lineTo(point);
-        }
-
-        path.lineTo(tool_pos_);
-
-        if (path.intersects(rect))
-        {
-            painter->drawPath(path);
+            painter->drawLine(polyline_.endPoint(), tool_pos_);
         }
     }
 }
@@ -52,20 +46,24 @@ void PolylineToolBase::paintHints(QPainter *painter, const QRectF &rect)
     if (getToolState() == TOOL_STATE::POLYLINE_ADD_POINT)
     {
         painter->setPen(hints_pen_);
-        painter->drawLine(start_pos_, tool_pos_);
+        painter->drawLine(polyline_.startPoint(), tool_pos_);
     }
 }
 
-APolyline* PolylineToolBase::getPolyline()
+void PolylineToolBase::getPolyline(APolyline &line)
 {
-    APolyline *poly = new APolyline();
+    line.setStartPos(polyline_.startPoint());
 
-    poly->setStartPos(start_pos_);
-
-    foreach (QPointF p, points_)
+    for (int i=0; i<polyline_.pointCount()-1; i++)
     {
-        poly->addPoint(p);
+        line.addPoint(polyline_.getPoint(i));
     }
 
-    return poly;
+    if (force_closed_)
+    {
+        line.close();
+    }
+
+    // Re-center the polyline around its own center
+    line.normalize();
 }

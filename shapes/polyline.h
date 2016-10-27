@@ -22,8 +22,8 @@ class APolyline : public ADrawablePrimitive
 
     Q_PROPERTY( bool closed READ isClosed STORED false )
     Q_PROPERTY( int pointCount READ pointCount STORED false )
-    Q_PROPERTY( QPointF startPoint READ startPoint )
-    Q_PROPERTY( QPointF endPoint READ endPoint )
+    Q_PROPERTY( QPointF startPoint READ startPoint STORED false )
+    Q_PROPERTY( QPointF endPoint READ endPoint STORED false )
 
 public:
     APolyline(QObject *parent = 0);
@@ -35,9 +35,6 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
 
     //TODO this class needs fixing
-    void setStartPos(QPointF pos) { start_pos_ = pos; }
-    QPointF getStartPos(void) { return start_pos_; }
-
     LWPolypoint getPolypoint(int index);
     QPointF getPoint(int index);
     double getAngle(int index);
@@ -54,8 +51,11 @@ public:
 
 public slots:
     void clear() { points_.clear(); }
+    void setStartPos(QPointF pos) { start_pos_ = pos; }
     bool addPoint(LWPolypoint point);
     bool addPoint(QPointF point, double angle=0);
+    void close(void);
+    void normalize(void);
 
 
 protected:

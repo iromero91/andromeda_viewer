@@ -91,7 +91,9 @@ void SymbolEditorView::onToolFinished(AToolBase *toolPtr)
     // Pointer comparison fun
     if (pointer == &poly_tool_)
     {
-        APolyline *line = poly_tool_.getPolyline();
+        APolyline *line = new APolyline();
+
+        poly_tool_.getPolyline(*line);
 
         scene_->addItem(line);
 
@@ -110,7 +112,9 @@ void SymbolEditorView::onToolFinished(AToolBase *toolPtr)
     }
     else if (pointer == &rect_tool_)
     {
-        APolyline *line = rect_tool_.getPolyline();
+        APolyline *line = new APolyline();
+
+        rect_tool_.getPolyline(*line);
 
         scene_->addItem(line);
 

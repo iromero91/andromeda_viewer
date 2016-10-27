@@ -30,20 +30,18 @@ bool RectDrawingTool::addPoint(QPointF point)
     return false;
 }
 
-APolyline* RectDrawingTool::getPolyline()
+void RectDrawingTool::getPolyline(APolyline &line)
 {
-    APolyline *poly = new APolyline();
-
     QRectF rect = getRect().normalized();
 
-    poly->setStartPos(rect.topLeft());
+    line.setStartPos(rect.topLeft());
 
-    poly->addPoint(rect.topRight());
-    poly->addPoint(rect.bottomRight());
-    poly->addPoint(rect.bottomLeft());
-    poly->addPoint(rect.topLeft());
+    line.addPoint(rect.topRight());
+    line.addPoint(rect.bottomRight());
+    line.addPoint(rect.bottomLeft());
+    line.addPoint(rect.topLeft());
 
-    return poly;
+    line.normalize();
 }
 
 QRectF RectDrawingTool::getRect()

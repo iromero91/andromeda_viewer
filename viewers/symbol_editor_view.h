@@ -20,6 +20,11 @@ public:
 public slots:
     void selectionChanged(void);
 
+    //TODO these are just hacky. To be remove
+    void drawRect(void)     { startTool(&rect_tool_); }
+    void drawEllipse(void)  { startTool(&ellipse_tool_); }
+    void drawPolyline(void) { startTool(&poly_tool_); }
+
 protected:
     void keyPressEvent(QKeyEvent *event);
 

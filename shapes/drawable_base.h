@@ -45,6 +45,7 @@ public:
     // Return a list of 'anchors' for this item
     // Default, empty list
 
+    virtual QPointF centroid(void) { return boundingRect().center(); }
     //TODO
     //QList<QPointF> getAnchors() { return QList<QPointF>(); }
 

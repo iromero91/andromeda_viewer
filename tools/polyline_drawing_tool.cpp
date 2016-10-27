@@ -10,7 +10,7 @@ void PolylineDrawingTool::finalAction()
 {
     if (QApplication::keyboardModifiers() & Qt::ShiftModifier)
     {
-        addPoint(start_pos_);
+        addPoint(polyline_.startPoint());
     }
     else
     {
@@ -30,35 +30,35 @@ bool PolylineDrawingTool::addPoint(QPointF point)
         reset();
         setToolState(TOOL_STATE::POLYLINE_ADD_POINT);
 
-        start_pos_ = point;
+        polyline_.setStartPos(point);
         break;
     case TOOL_STATE::POLYLINE_ADD_POINT:
-        if (points_.count() > 1)
+        if (polyline_.pointCount() > 1)
         {
-            if (AGeometry::PointsAreCoincident(point, start_pos_))
+            if (AGeometry::PointsAreCoincident(point, polyline_.startPoint()))
             {
                 // Close the polygon and finish
-                points_.append(start_pos_);
+                polyline_.close();
                 return true;
             }
         }
 
-        if (points_.count() > 0)
+        if (polyline_.pointCount() > 0)
         {
-            if (AGeometry::PointsAreCoincident(point, points_.last()))
+            if (AGeometry::PointsAreCoincident(point, polyline_.endPoint()))
             {
                 return false;
             }
         }
         else
         {
-            if (AGeometry::PointsAreCoincident(point, start_pos_))
+            if (AGeometry::PointsAreCoincident(point, polyline_.startPoint()))
             {
                 return false;
             }
         }
 
-        points_.append(point);
+        polyline_.addPoint(point);
         break;
     }
 

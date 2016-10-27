@@ -11,7 +11,7 @@ class PolylineToolBase : public AToolBase
 public:
     PolylineToolBase(QObject *parent = 0);
 
-    virtual APolyline* getPolyline(void);
+    virtual void getPolyline(APolyline &line);
 
     virtual bool addPoint(QPointF point) { Q_UNUSED(point); return false; }
 
@@ -21,10 +21,13 @@ public:
     void paintHints(QPainter *painter, const QRectF &rect);
 
 protected:
+    APolyline polyline_;
+
+    bool allow_self_intersection_ = false;
+    bool force_closed_ = false;
+
     void onReset(void);
 
-    QPointF start_pos_;
-    QList<QPointF> points_;
 };
 
 #endif // POLYLINE_TOOL_BASE_KH

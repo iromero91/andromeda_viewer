@@ -7,12 +7,6 @@ EllipseDrawingTool::EllipseDrawingTool(QObject *parent) : AToolBase(parent)
 
 }
 
-void EllipseDrawingTool::setRadius(double rx, double ry)
-{
-    rx_ = rx;
-    ry_ = ry;
-}
-
 void EllipseDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
 {
     Q_UNUSED(rect);
@@ -26,7 +20,7 @@ void EllipseDrawingTool::paintTool(QPainter *painter, const QRectF &rect)
     switch(getToolState())
     {
     case TOOL_STATE::ELLIPSE_SET_POINT:
-        painter->drawEllipse(center_, rx_, ry_);
+        painter->drawEllipse(ellipse_.pos(), ellipse_.rx(), ellipse_.ry());
         break;
     default:
         break;
@@ -40,9 +34,10 @@ void EllipseDrawingTool::paintHints(QPainter *painter, const QRectF &rect)
     switch (getToolState())
     {
     case TOOL_STATE::ELLIPSE_SET_POINT:
-        // Draw line to current mouse position
+        // Draw line towards tool_pos, enscribed on the ellipse
+        // TODO
         painter->setPen(hints_pen_);
-        painter->drawLine(center_, tool_pos_);
+        painter->drawLine(ellipse_.pos(), tool_pos_);
         break;
     default:
         break;
@@ -55,7 +50,7 @@ void EllipseDrawingTool::nextAction()
     {
     case TOOL_STATE::RESET:
     case TOOL_STATE::ELLIPSE_SET_CENTER:
-        center_ = tool_pos_;
+        setCenter(tool_pos_);
         setToolState(TOOL_STATE::ELLIPSE_SET_POINT);
         break;
     case TOOL_STATE::ELLIPSE_SET_POINT:
@@ -68,7 +63,7 @@ void EllipseDrawingTool::nextAction()
 
 void EllipseDrawingTool::onToolPosChanged()
 {
-    QPointF delta = tool_pos_ - center_;
+    QPointF delta = tool_pos_ - ellipse_.pos();
 
     double x = fabs(delta.x());
     double y = fabs(delta.y());
@@ -84,6 +79,6 @@ void EllipseDrawingTool::onToolPosChanged()
 
 void EllipseDrawingTool::getEllipse(AEllipse &ellipse)
 {
-    ellipse.setPos(center_);
-    ellipse.setRadius(rx_, ry_);
+    ellipse.setPos(ellipse_.pos());
+    ellipse.setRadius(ellipse_.radius());
 }
