@@ -38,3 +38,22 @@ void ADrawableBase::drawBoundingBox(QPainter *painter)
 
     painter->drawRect(boundingRect());
 }
+
+void ADrawableBase::encode(QJsonObject *json) const
+{
+    if (nullptr == json) return;
+
+    AndromedaObject::encode(json);
+
+    // Layer
+    //json[JSON_KEY::ITEM_LAYER] = layer();
+}
+
+void ADrawableBase::decode(QJsonObject *json)
+{
+    if (nullptr == json) return;
+
+    AndromedaObject::encode(json);
+
+    //TODO
+}

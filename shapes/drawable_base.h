@@ -22,7 +22,6 @@ class ADrawableBase : public AndromedaObject, public QGraphicsItem
 {
     Q_OBJECT
 
-
     Q_INTERFACES( QGraphicsItem )
 
     // Generic drawable properties that we want exposed
@@ -32,6 +31,10 @@ class ADrawableBase : public AndromedaObject, public QGraphicsItem
 
 public:
     ADrawableBase(QObject *parent = 0);
+
+    // JSON params
+    virtual void decode(QJsonObject *json);
+    virtual void encode(QJsonObject *json) const;
 
     // Bounding box drawing
     void drawBoundingBox(QPainter *painter);

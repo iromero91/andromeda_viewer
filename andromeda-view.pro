@@ -59,7 +59,8 @@ HEADERS  += mainwindow.h \
     base/andromeda_object.h \
     shapes/drawable_base.h \
     shapes/drawable_primitive.h \
-    tools/polyline_editing_tool.h
+    tools/polyline_editing_tool.h \
+    base/json_keys.h
 
 FORMS    += mainwindow.ui
 

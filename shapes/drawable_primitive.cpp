@@ -8,6 +8,20 @@ ADrawablePrimitive::ADrawablePrimitive(QObject *parent) : ADrawableBase(parent)
     setAcceptHoverEvents(true);
 }
 
+void ADrawablePrimitive::encode(QJsonObject *json) const
+{
+    if (nullptr == json) return;
+
+    ADrawableBase::encode(json);
+}
+
+void ADrawablePrimitive::decode(QJsonObject *json)
+{
+    if (nullptr == json) return;
+
+    ADrawableBase::decode(json);
+}
+
 void ADrawablePrimitive::setLineWidth(double lineWidth)
 {
     lineWidth = qMax(lineWidth, SYMBOL_LINE_WIDTH_MIN);

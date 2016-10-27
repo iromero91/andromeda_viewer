@@ -57,6 +57,9 @@ void MainWindow::selectionChanged()
 
             ui->textedit->clear();
             ui->textedit->insertPlainText(lines.join("\n"));
+
+            ui->textedit->insertPlainText("\n\nJSON:\n");
+            ui->textedit->insertPlainText(obj->encodedString());
         }
     }
     else if (items.count() > 1)

@@ -6,6 +6,9 @@
 #include <QMetaObject>
 #include <QMetaProperty>
 #include <QJsonObject>
+#include <QJsonDocument>
+
+#include "json_keys.h"
 
 /**
  * @brief The AndromedaObject class
@@ -27,8 +30,12 @@ public:
     QList<QMetaProperty> getProperties(void);
     QStringList getPropertyNames(void);
 
-    virtual void readDataFromJson(QJsonObject *object)      { Q_UNUSED(object); }
-    virtual void writeDataToJson(QJsonObject *object) const { Q_UNUSED(object); }
+    // Serialize this object data toJSON
+    QJsonObject encode(void) const;
+    QString encodedString(void) const;
+
+    virtual void decode(QJsonObject *json)       { Q_UNUSED(json); }
+    virtual void encode(QJsonObject *json) const { Q_UNUSED(json); }
 
     // Default clone operator -> Override in child class using the same template pattern
     virtual AndromedaObject* clone(void) { return makeClone<AndromedaObject>(); }
@@ -58,9 +65,9 @@ protected:
 
         QJsonObject *json = new QJsonObject();
 
-        writeDataToJson(json);
+        encode(json);
 
-        cloned->readDataFromJson(json);
+        cloned->decode(json);
 
         return static_cast<T*> (cloned);
     }

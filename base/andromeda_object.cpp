@@ -47,3 +47,20 @@ QStringList AndromedaObject::getPropertyNames()
 
     return names;
 }
+
+QJsonObject AndromedaObject::encode() const
+{
+    QJsonObject json;
+
+    encode(&json);
+
+    return json;
+}
+
+QString AndromedaObject::encodedString() const
+{
+    QJsonObject json = encode();
+    QJsonDocument doc(json);
+
+    return doc.toJson(QJsonDocument::Compact);
+}

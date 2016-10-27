@@ -7,6 +7,20 @@ AEllipse::AEllipse(QObject *parent) : ADrawablePrimitive(parent)
     setObjectName("AEllipse");
 }
 
+void AEllipse::decode(QJsonObject *json)
+{
+    if (nullptr == json) return;
+
+    ADrawablePrimitive::decode(json);
+}
+
+void AEllipse::encode(QJsonObject *json) const
+{
+    if (nullptr == json) return;
+
+    ADrawablePrimitive::encode(json);
+}
+
 QRectF AEllipse::boundingRect() const
 {
     QRectF rect(-rx_, -ry_, 2*rx_, 2*ry_);

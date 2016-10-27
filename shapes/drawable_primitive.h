@@ -24,6 +24,9 @@ public:
     QColor lineColor(void) { return line_color_; }
     Qt::PenStyle lineStyle(void) { return line_style_; }
 
+    virtual void encode(QJsonObject *json) const;
+    virtual void decode(QJsonObject *json);
+
 public slots:
     void setFilled(bool filled) { filled_ = filled; }
     void setLineWidth(double lineWidth);
