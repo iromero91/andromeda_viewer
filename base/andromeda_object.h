@@ -25,7 +25,7 @@ public:
     virtual void readDataFromJson(QJsonObject *object)      { Q_UNUSED(object); }
     virtual void writeDataToJson(QJsonObject *object) const { Q_UNUSED(object); }
 
-    // Pure virtual clone function (needs to be overridden in
+    // Default clone operator -> Override in child class using the same template pattern
     virtual AndromedaObject* clone(void) { return makeClone<AndromedaObject>(); }
 
 protected:
