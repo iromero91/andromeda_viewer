@@ -5,8 +5,6 @@
 #include <QJsonObject>
 #include <QDebug>
 
-//#define andromedaClone(x) (static_cast<x*>makeClone<x>(new x()));
-
 /**
  * @brief The AndromedaObject class
  * This is designed to be the base class of "any" andromeda object
