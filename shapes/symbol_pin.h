@@ -10,7 +10,7 @@ class ASymbolPin : public ADrawablePrimitive
 public:
     ASymbolPin(QObject *parent = 0);
 
-    Q_PROPERTY( QString name READ name WRITE setName )
+    Q_PROPERTY( QString label READ label WRITE setLabel )
     Q_PROPERTY( double length READ length WRITE setLength )
     Q_PROPERTY( int orientation READ orientation WRITE setOrientation )
 
@@ -27,8 +27,8 @@ public:
     };
 
     // Property getters
-    QString name(void) const { return name_; }
-    double length(void) const { return length_; }
+    QString label(void) const   { return label_; }
+    double length(void) const   { return length_; }
     int orientation(void) const { return orientation_; }
 
     // JSON data
@@ -39,13 +39,13 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 public slots:
-    void setName(QString name);
+    void setLabel(QString label);
     void setLength(double length);
     void setOrientation(int orientation);
 
 protected:
-    // The pin name
-    QString name_;
+    // The pin label
+    QString label_;
     // Pin length
     double length_ = 100; //TODO - define a default length
     // Pin orientation

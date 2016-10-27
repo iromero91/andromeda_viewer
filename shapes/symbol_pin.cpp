@@ -8,17 +8,31 @@ ASymbolPin::ASymbolPin(QObject *parent) : ADrawablePrimitive(parent)
 void ASymbolPin::encode(QJsonObject &json) const
 {
     ADrawablePrimitive::encode(json);
+
+    json[JSON_KEY::LABEL] = label();
+    json[JSON_KEY::LENGTH] = length();
+    json[JSON_KEY::ORIENTATION] = orientation();
 }
 
 void ASymbolPin::decode(QJsonObject &json)
 {
     ADrawablePrimitive::decode(json);
+
+    // Extract pin data (use current values in case of bad data)
+    if (json.contains(JSON_KEY::LABEL))
+        setLabel(json.value(JSON_KEY::LABEL).toString(label()));
+
+    if (json.contains(JSON_KEY::LENGTH))
+        setLength(json.value(JSON_KEY::LABEL).toDouble(length()));
+
+    if (json.contains(JSON_KEY::ORIENTATION))
+        setOrientation(json.value(JSON_KEY::ORIENTATION).toInt(orientation()));
 }
 
-void ASymbolPin::setName(QString name)
+void ASymbolPin::setLabel(QString label)
 {
     //TODO better logic here
-    name_ = name;
+    label_ = label;
 }
 
 void ASymbolPin::setLength(double length)

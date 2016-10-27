@@ -45,6 +45,14 @@ void ADrawableBase::encode(QJsonObject &json) const
 
     // Layer
     json[JSON_KEY::ITEM_LAYER] = layer();
+
+    // Position
+    QJsonObject jPos;
+
+    jPos[JSON_KEY::POS_X] = pos().x();
+    jPos[JSON_KEY::POS_Y] = pos().y();
+
+    json[JSON_KEY::POS] = jPos;
 }
 
 void ADrawableBase::decode(QJsonObject &json)

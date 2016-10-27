@@ -28,6 +28,9 @@ void APolyline::encode(QJsonObject &json) const
 {
     ADrawablePrimitive::encode(json);
 
+    // Remove 'position' key
+    json.remove(JSON_KEY::POS);
+
     // Points
     QJsonArray jPoints;
     QJsonObject jPoint;

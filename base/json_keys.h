@@ -23,15 +23,21 @@ const QString POINTS = "points";
 const QString RADIUS = "radius";
 const QString RADIUS_X = "rx";
 const QString RADIUS_Y = "ry";
+const QString POS = "pos";
 const QString POS_X = "x";
 const QString POS_Y = "y";
 const QString WIDTH = "width";
 const QString HEIGHT = "height";
 const QString THICKNESS = "thickness";
+const QString LENGTH = "length";
 
 // Angles
 const QString ANGLE = "angle";
 const QString ROTATION = "rotation";
+const QString ORIENTATION= "orientation";
+
+// Pin options
+const QString LABEL = "label";
 
 }
 
