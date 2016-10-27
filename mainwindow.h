@@ -18,6 +18,8 @@ public:
 public slots:
     void cursorPosChanged(QPointF pos);
 
+    void selectionChanged();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -14,33 +14,6 @@ SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
     addTool(&poly_tool_);
     addTool(&rect_tool_);
     addTool(&ellipse_tool_);
-
-    connect(scene_, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-}
-
-void SymbolEditorView::selectionChanged()
-{
-    QList<QGraphicsItem*> items = scene_->selectedItems();
-
-    ADrawableBase *drawable;
-
-    if (items.count() == 1)
-    {
-        foreach (QGraphicsItem* item, items)
-        {
-            drawable = qgraphicsitem_cast<ADrawableBase*>(item);
-
-            if (nullptr != drawable)
-            {
-                qDebug() << "item:" << drawable->objectName();
-
-                foreach (QMetaProperty p, drawable->getProperties())
-                {
-                    qDebug() << "prop:" << p.name() << drawable->property(p.name());
-                }
-            }
-        }
-    }
 }
 
 void SymbolEditorView::keyPressEvent(QKeyEvent *event)

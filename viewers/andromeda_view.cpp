@@ -21,6 +21,8 @@ AView::AView(QWidget *parent) : QGraphicsView(parent)
 
     // Add a default scene
     setScene(new AScene());
+
+    connect(scene_, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 }
 
 void AView::setScene(AScene *scene)

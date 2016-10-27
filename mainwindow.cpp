@@ -3,6 +3,8 @@
 #include "viewers/andromeda_scene.h"
 #include "viewers/andromeda_view.h"
 
+#include "base/andromeda_object.h"
+
 #include <QGraphicsEllipseItem>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -18,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Uncomment to set dark background
     //ui->graphicsView->getScene()->setBackgroundColor(QColor(25,25,25));
 
+    connect(ui->graphicsView->scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(ui->graphicsView,SIGNAL(cursorPositionChanged(QPointF)),this,SLOT(cursorPosChanged(QPointF)));
 
     connect(ui->ellipseButton, SIGNAL(released()), ui->graphicsView, SLOT(drawEllipse()));
@@ -25,6 +28,43 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->polyButton, SIGNAL(released()), ui->graphicsView, SLOT(drawPolyline()));
 
     setWindowTitle("AndromEDA Viewer");
+
+    ui->textedit->setReadOnly(true);
+    ui->graphicsView->setFocus();
+}
+
+// This is just a crazy hack to show property inspection
+// Please delete this :/
+void MainWindow::selectionChanged()
+{
+    QList<QGraphicsItem*> items = ui->graphicsView->scene()->selectedItems();
+
+    ui->textedit->clear();
+    if (items.count() == 1)
+    {
+        AndromedaObject *obj = qgraphicsitem_cast<ADrawableBase*>(items.first());
+
+        if (nullptr != obj)
+        {
+            QStringList lines;
+            QString text = "";
+
+            foreach (QMetaProperty p, obj->getProperties())
+            {
+                text = QString(p.name()) + " : " + obj->property(p.name()).toString();
+                lines.append(text);
+            }
+
+            ui->textedit->clear();
+            ui->textedit->insertPlainText(lines.join("\n"));
+        }
+    }
+    else if (items.count() > 1)
+    {
+        ui->textedit->insertPlainText(
+                    QString::number(items.count()) +
+                    QString(" items selected"));
+    }
 }
 
 void MainWindow::cursorPosChanged(QPointF pos)

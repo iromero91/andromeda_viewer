@@ -85,6 +85,8 @@ public slots:
     void toolFinished(void);
     void toolCancelled(void);
 
+    virtual void onSelectionChanged(void) {}
+
 signals:
     // Called when the user cursor changes (in scene coordinates)
     void cursorPositionChanged(QPointF pos);

@@ -18,8 +18,6 @@ public:
     SymbolEditorView(QWidget * parent = 0);
 
 public slots:
-    void selectionChanged(void);
-
     //TODO these are just hacky. To be remove
     void drawRect(void)     { startTool(&rect_tool_); }
     void drawEllipse(void)  { startTool(&ellipse_tool_); }

@@ -18,6 +18,12 @@ public:
 
     QRectF getRect(void);
 
+    void paintHints(QPainter *painter, const QRectF &rect)
+    {
+        Q_UNUSED(painter);
+        Q_UNUSED(rect);
+    }
+
 protected:
     // Starting position for the rectangle
     QPointF start_pos_;

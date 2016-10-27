@@ -17,8 +17,10 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
@@ -33,6 +35,8 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QGridLayout *gridLayout;
+    QPlainTextEdit *textedit;
+    QLabel *label;
     SymbolEditorView *graphicsView;
     QGroupBox *groupBox;
     QVBoxLayout *verticalLayout;
@@ -58,10 +62,21 @@ public:
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        textedit = new QPlainTextEdit(centralWidget);
+        textedit->setObjectName(QStringLiteral("textedit"));
+        textedit->setMaximumSize(QSize(150, 16777215));
+
+        gridLayout->addWidget(textedit, 1, 0, 1, 1);
+
+        label = new QLabel(centralWidget);
+        label->setObjectName(QStringLiteral("label"));
+
+        gridLayout->addWidget(label, 0, 0, 1, 1);
+
         graphicsView = new SymbolEditorView(centralWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
 
-        gridLayout->addWidget(graphicsView, 0, 0, 1, 1);
+        gridLayout->addWidget(graphicsView, 0, 1, 2, 1);
 
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
@@ -111,7 +126,7 @@ public:
         verticalLayout->addItem(verticalSpacer);
 
 
-        gridLayout->addWidget(groupBox, 0, 1, 1, 1);
+        gridLayout->addWidget(groupBox, 0, 2, 2, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -130,6 +145,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        label->setText(QApplication::translate("MainWindow", "Property Inspector", 0));
         groupBox->setTitle(QApplication::translate("MainWindow", "TOOLZ", 0));
 #ifndef QT_NO_TOOLTIP
         clearAllButton->setToolTip(QApplication::translate("MainWindow", "Clear the entire scene", 0));
