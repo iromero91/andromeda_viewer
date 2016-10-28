@@ -39,6 +39,9 @@ const QString ORIENTATION= "orientation";
 // Pin options
 const QString LABEL = "label";
 
+// Schematic symbols
+const QString PINS = "pins";
+
 }
 
 #endif // JSON_KEYS_H

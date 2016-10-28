@@ -34,8 +34,8 @@ public:
     virtual APolyline *clone(void);
 
     // Painter Functions
-    QRectF boundingRect() const Q_DECL_OVERRIDE;
-    QPainterPath shape() const;
+    QRectF boundingRect(void) const Q_DECL_OVERRIDE;
+    QPainterPath shape(void) const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
 
     //TODO this class needs fixing
@@ -47,7 +47,7 @@ public:
     void setAngle(int index, double angle);
 
     // Property getters
-    bool isClosed() const;
+    bool isClosed(void) const;
     QPointF startPoint(void) const;
     QPointF endPoint(void) const;
     int pointCount(void) const { return points_.count(); }

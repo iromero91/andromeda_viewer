@@ -33,16 +33,37 @@ void ASymbolPin::setLabel(QString label)
 {
     //TODO better logic here
     label_ = label;
+
+    prepareGeometryChange();
 }
 
 void ASymbolPin::setLength(double length)
 {
     //TODO better logic here (min / max length, etc)
     length_ = fabs(length);
+
+    prepareGeometryChange();
+}
+
+/**
+ * @brief ASymbolPin::rotate
+ * Rotates the pin in the specified direction
+ * @param ccw is bool, true = counter-clockwise (default), false = clockwise
+ */
+void ASymbolPin::rotate(bool ccw)
+{
+    int orient = orientation();
+
+    orient += ccw ? 1 : -1;
+
+    orient = (orient % (int) Orientation::INVALID);
+
+    setOrientation(orient);
 }
 
 void ASymbolPin::setOrientation(int orientation)
 {
+    //TODO - some more complex functionality here?
     switch (orientation)
     {
     case (int) Orientation::LEFT:
@@ -54,6 +75,8 @@ void ASymbolPin::setOrientation(int orientation)
     default:
         break;
     }
+
+    prepareGeometryChange();
 }
 
 void ASymbolPin::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -61,4 +84,22 @@ void ASymbolPin::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     Q_UNUSED(widget);
 
     if (nullptr == painter || nullptr == option) return;
+
+    //TODO
+}
+
+QRectF ASymbolPin::boundingRect() const
+{
+    QRectF rect;
+    //TODO
+
+    return rect;
+}
+
+QPainterPath ASymbolPin::shape() const
+{
+    QPainterPath path;
+    //TODO
+
+    return path;
 }

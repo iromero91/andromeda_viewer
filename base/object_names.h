@@ -17,6 +17,7 @@ const QString A_DRAWABLE_SYMBOL_PIN = "ADrawabableSymbolPin";
 
 // Complex drawable items
 const QString A_DRAWABLE_COMPLEX = "ADrawableComplex";
+const QString A_SCHEMATIC_SYMBOL = "ASchematicSymbol";
 
 }
 

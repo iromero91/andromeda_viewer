@@ -48,7 +48,7 @@ QStringList AndromedaObject::getPropertyNames()
     return names;
 }
 
-QJsonObject AndromedaObject::encode() const
+QJsonObject AndromedaObject::encoded() const
 {
     QJsonObject json;
 
@@ -59,8 +59,37 @@ QJsonObject AndromedaObject::encode() const
 
 QString AndromedaObject::encodedString() const
 {
-    QJsonObject json = encode();
+    QJsonObject json = encoded();
     QJsonDocument doc(json);
 
     return doc.toJson(QJsonDocument::Compact);
+}
+
+/**
+ * @brief AndromedaObject::copyFrom
+ * Copy the properties from <other> object to <this> object (via JSON)
+ * Any compatible properties will be applied to <this>
+ * @param other is a pointer to <other> AndromedaObject
+ */
+void AndromedaObject::copyFrom(AndromedaObject *other)
+{
+    if (nullptr == other) return;
+
+    QJsonObject json = other->encoded();
+
+    decode(json);
+}
+
+/**
+ * @brief AndromedaObject::copyTo
+ * Copy the properties from <this> object to <other> object (via JSON)
+ * @param other is a pointer to <other> AndromedaObject
+ */
+void AndromedaObject::copyTo(AndromedaObject *other)
+{
+    if (nullptr == other) return;
+
+    QJsonObject json = encoded();
+
+    other->decode(json);
 }

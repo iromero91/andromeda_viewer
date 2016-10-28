@@ -32,8 +32,8 @@ public:
     QStringList getPropertyNames(void);
 
     // Serialize this object data toJSON
-    QJsonObject encode(void) const;
-    QString encodedString(void) const;
+    virtual QJsonObject encoded(void)   const;
+    virtual QString encodedString(void) const;
 
     virtual void decode(QJsonObject &json)       { Q_UNUSED(json); }
     virtual void encode(QJsonObject &json) const { Q_UNUSED(json); }
@@ -41,7 +41,6 @@ public:
     // Default clone operator -> Override in child class using the same template pattern
     virtual AndromedaObject* clone(void) { return makeClone<AndromedaObject>(); }
 
-protected:
 
     /**
      * @brief makeClone
@@ -80,6 +79,13 @@ protected:
 
         return cloned;
     }
+
+    // Copy functions
+    void copyFrom(AndromedaObject *other);
+    void copyTo(AndromedaObject *other);
+
+protected:
+
 };
 
 #endif //ANDROMEDA_OBJECT_H

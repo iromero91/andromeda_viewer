@@ -24,6 +24,7 @@ public:
         DOWN,
         RIGHT,
         UP,
+        INVALID,
     };
 
     // Property getters
@@ -36,12 +37,15 @@ public:
     virtual void decode(QJsonObject &json);
 
     // Drawing function
+    QRectF boundingRect(void) const Q_DECL_OVERRIDE;
+    QPainterPath shape(void) const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 public slots:
     void setLabel(QString label);
     void setLength(double length);
     void setOrientation(int orientation);
+    void rotate(bool ccw = true);
 
 protected:
     // The pin label
