@@ -33,7 +33,7 @@ public:
     ADrawableBase(QObject *parent = 0);
 
     // JSON params
-    virtual void decode(QJsonObject &json);
+    virtual void decode(QJsonObject &json, bool undoable = false);
     virtual void encode(QJsonObject &json) const;
 
     // Bounding box drawing

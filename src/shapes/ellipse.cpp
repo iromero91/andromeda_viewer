@@ -7,9 +7,9 @@ AEllipse::AEllipse(QObject *parent) : ADrawablePrimitive(parent)
     setObjectName(OBJECT_NAME::A_DRAWABLE_ELLIPSE);
 }
 
-void AEllipse::decode(QJsonObject &json)
+void AEllipse::decode(QJsonObject &json, bool undoable)
 {
-    ADrawablePrimitive::decode(json);
+    ADrawablePrimitive::decode(json, undoable);
 
     // Decode radius
     QJsonValue jRadius = json[JSON_KEY::RADIUS];

@@ -4,6 +4,8 @@
 #include <QUndoCommand>
 #include <QJsonObject>
 
+#include "json_object_base.h"
+
 /**
  * @brief The AndromedaJsonUndoAction class
  * This class provides AndromedaObject undo/redo functionality via the JSON serialization
@@ -25,9 +27,23 @@
 class AndromedaJsonUndoAction : public QUndoCommand
 {
 public:
-    AndromedaJsonUndoAction(QString text, QJsonObject jBefore, QJsonObject jAfter);
+    AndromedaJsonUndoAction(QString text, AJsonCloneableObject* object, QJsonObject jBefore, QJsonObject jAfter);
+
+    virtual void undo(void);
+    virtual void redo(void);
+
+    virtual bool mergeWith(const QUndoCommand *other);
+
+    // Getters
+    AJsonCloneableObject* object(void) const { return object_; }
+    QJsonObject before(void) const;
+    QJsonObject after(void) const;
 
 protected:
+    // Pointer to the object to perform the UNDO / REDO action upon
+    AJsonCloneableObject* object_;
+
+    // Before and after states
     QByteArray before_;
     QByteArray after_;
 };

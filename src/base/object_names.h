@@ -3,6 +3,7 @@
 
 namespace OBJECT_NAME
 {
+const QString A_JSON_OBJECT = "AJsonCloneable";
 // Base object class
 const QString A_OBJECT = "AndromedaObject";
 

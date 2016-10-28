@@ -17,13 +17,13 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "src/viewers/symbol_editor_view.h"
@@ -45,11 +45,17 @@ public:
     QPushButton *rectLine;
     QPushButton *ellipseButton;
     QSpacerItem *verticalSpacer;
-    QPlainTextEdit *json;
     SymbolEditorView *graphicsView;
-    QPlainTextEdit *prop;
-    QLabel *label;
-    QLabel *label_2;
+    QTabWidget *tabWidget;
+    QWidget *tab;
+    QGridLayout *gridLayout_2;
+    QPlainTextEdit *propText;
+    QWidget *tab_2;
+    QGridLayout *gridLayout_3;
+    QPlainTextEdit *jsonText;
+    QWidget *tab_3;
+    QGridLayout *gridLayout_4;
+    QPlainTextEdit *undoText;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -57,7 +63,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1065, 618);
+        MainWindow->resize(1065, 731);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -114,32 +120,55 @@ public:
 
         gridLayout->addWidget(groupBox, 0, 2, 2, 1);
 
-        json = new QPlainTextEdit(centralWidget);
-        json->setObjectName(QStringLiteral("json"));
-        json->setMaximumSize(QSize(200, 16777215));
-
-        gridLayout->addWidget(json, 3, 0, 1, 1);
-
         graphicsView = new SymbolEditorView(centralWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
 
-        gridLayout->addWidget(graphicsView, 0, 1, 4, 1);
+        gridLayout->addWidget(graphicsView, 0, 1, 3, 1);
 
-        prop = new QPlainTextEdit(centralWidget);
-        prop->setObjectName(QStringLiteral("prop"));
-        prop->setMaximumSize(QSize(200, 16777215));
+        tabWidget = new QTabWidget(centralWidget);
+        tabWidget->setObjectName(QStringLiteral("tabWidget"));
+        tabWidget->setMaximumSize(QSize(250, 16777215));
+        tab = new QWidget();
+        tab->setObjectName(QStringLiteral("tab"));
+        gridLayout_2 = new QGridLayout(tab);
+        gridLayout_2->setSpacing(6);
+        gridLayout_2->setContentsMargins(11, 11, 11, 11);
+        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
+        propText = new QPlainTextEdit(tab);
+        propText->setObjectName(QStringLiteral("propText"));
+        propText->setReadOnly(true);
 
-        gridLayout->addWidget(prop, 1, 0, 1, 1);
+        gridLayout_2->addWidget(propText, 0, 0, 1, 1);
 
-        label = new QLabel(centralWidget);
-        label->setObjectName(QStringLiteral("label"));
+        tabWidget->addTab(tab, QString());
+        tab_2 = new QWidget();
+        tab_2->setObjectName(QStringLiteral("tab_2"));
+        gridLayout_3 = new QGridLayout(tab_2);
+        gridLayout_3->setSpacing(6);
+        gridLayout_3->setContentsMargins(11, 11, 11, 11);
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        jsonText = new QPlainTextEdit(tab_2);
+        jsonText->setObjectName(QStringLiteral("jsonText"));
+        jsonText->setReadOnly(true);
 
-        gridLayout->addWidget(label, 0, 0, 1, 1);
+        gridLayout_3->addWidget(jsonText, 0, 0, 1, 1);
 
-        label_2 = new QLabel(centralWidget);
-        label_2->setObjectName(QStringLiteral("label_2"));
+        tabWidget->addTab(tab_2, QString());
+        tab_3 = new QWidget();
+        tab_3->setObjectName(QStringLiteral("tab_3"));
+        gridLayout_4 = new QGridLayout(tab_3);
+        gridLayout_4->setSpacing(6);
+        gridLayout_4->setContentsMargins(11, 11, 11, 11);
+        gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
+        undoText = new QPlainTextEdit(tab_3);
+        undoText->setObjectName(QStringLiteral("undoText"));
+        undoText->setReadOnly(true);
 
-        gridLayout->addWidget(label_2, 2, 0, 1, 1);
+        gridLayout_4->addWidget(undoText, 0, 0, 1, 1);
+
+        tabWidget->addTab(tab_3, QString());
+
+        gridLayout->addWidget(tabWidget, 0, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -151,6 +180,9 @@ public:
         MainWindow->setStatusBar(statusBar);
 
         retranslateUi(MainWindow);
+
+        tabWidget->setCurrentIndex(2);
+
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -183,8 +215,9 @@ public:
         ellipseButton->setToolTip(QApplication::translate("MainWindow", "Add an ellipse", 0));
 #endif // QT_NO_TOOLTIP
         ellipseButton->setText(QApplication::translate("MainWindow", "Ellipse", 0));
-        label->setText(QApplication::translate("MainWindow", "Property Inspector", 0));
-        label_2->setText(QApplication::translate("MainWindow", "JSON Inspector", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Properties", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "JSON", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Undo Stack", 0));
     } // retranslateUi
 
 };

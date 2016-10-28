@@ -55,9 +55,9 @@ void ADrawableBase::encode(QJsonObject &json) const
     json[JSON_KEY::POS] = jPos;
 }
 
-void ADrawableBase::decode(QJsonObject &json)
+void ADrawableBase::decode(QJsonObject &json, bool undoable)
 {
-    AndromedaObject::encode(json);
+    AndromedaObject::decode(json, undoable);
 
     //TODO
 }

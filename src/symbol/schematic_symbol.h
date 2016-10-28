@@ -21,8 +21,8 @@ public:
     int pinCount(void) const { return pins_.count(); }
     QString name(void) const { return name_; }
 
-    void encode(QJsonObject &json) const;
-    void decode(QJsonObject &json);
+    virtual void encode(QJsonObject &json) const;
+    virtual void decode(QJsonObject &json, bool undoable = false);
 
 public slots:
     ASymbolPin* addPin(ASymbolPin *pin = nullptr);

@@ -30,7 +30,7 @@ public:
     Qt::PenStyle lineStyle(void) const { return line_style_; }
 
     virtual void encode(QJsonObject &json) const;
-    virtual void decode(QJsonObject &json);
+    virtual void decode(QJsonObject &json, bool undoable = false);
 
 public slots:
     void setFilled(bool filled) { filled_ = filled; }

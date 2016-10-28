@@ -21,9 +21,9 @@ void ADrawableComplex::encode(QJsonObject &json) const
 
 }
 
-void ADrawableComplex::decode(QJsonObject &json)
+void ADrawableComplex::decode(QJsonObject &json, bool undoable)
 {
-    ADrawableBase::decode(json);
+    ADrawableBase::decode(json, undoable);
 
     if (json.value(JSON_KEY::FLIP).isDouble())
         setFlip(json.value(JSON_KEY::FLIP).toInt(flip()));

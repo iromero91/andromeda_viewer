@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1065</width>
-    <height>618</height>
+    <height>731</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -104,41 +104,62 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="QPlainTextEdit" name="json">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>16777215</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1" rowspan="4">
+    <item row="0" column="1" rowspan="3">
      <widget class="SymbolEditorView" name="graphicsView"/>
     </item>
-    <item row="1" column="0">
-     <widget class="QPlainTextEdit" name="prop">
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabWidget">
       <property name="maximumSize">
        <size>
-        <width>200</width>
+        <width>250</width>
         <height>16777215</height>
        </size>
       </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Property Inspector</string>
+      <property name="currentIndex">
+       <number>2</number>
       </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>JSON Inspector</string>
-      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Properties</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QPlainTextEdit" name="propText">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>JSON</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QPlainTextEdit" name="jsonText">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Undo Stack</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="QPlainTextEdit" name="undoText">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>

@@ -31,12 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowTitle("AndromEDA Viewer");
 
-    ui->prop->setReadOnly(true);
     ui->graphicsView->setFocus();
-
-    QPixmap p = QCursor(Qt::ArrowCursor).pixmap();
-
-    qDebug() << p.width() << p.height();
 }
 
 // This is just a crazy hack to show property inspection
@@ -45,8 +40,9 @@ void MainWindow::selectionChanged()
 {
     QList<QGraphicsItem*> items = ui->graphicsView->scene()->selectedItems();
 
-    ui->prop->clear();
-    ui->json->clear();
+    ui->propText->clear();
+    ui->jsonText->clear();
+    ui->undoText->clear();
 
     if (items.count() == 1)
     {
@@ -63,15 +59,14 @@ void MainWindow::selectionChanged()
                 lines.append(text);
             }
 
-            ui->prop->clear();
-            ui->prop->insertPlainText(lines.join("\n"));
+            ui->propText->insertPlainText(lines.join("\n"));
 
-            ui->json->insertPlainText(obj->encodedString());
+            ui->jsonText->insertPlainText(obj->encodedString());
         }
     }
     else if (items.count() > 1)
     {
-        ui->prop->insertPlainText(
+        ui->propText->insertPlainText(
                     QString::number(items.count()) +
                     QString(" items selected"));
     }

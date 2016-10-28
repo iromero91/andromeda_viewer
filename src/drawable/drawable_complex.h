@@ -27,7 +27,7 @@ public:
     };
 
     void encode(QJsonObject &json) const;
-    void decode(QJsonObject &json);
+    void decode(QJsonObject &json, bool undoable = false);
 
 public slots:
     void setFlip(int flip);

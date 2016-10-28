@@ -1,16 +1,14 @@
 #ifndef ANDROMEDA_OBJECT_H
 #define ANDROMEDA_OBJECT_H
 
-#include <QObject>
 #include <QStringList>
 #include <QMetaObject>
 #include <QMetaProperty>
-#include <QJsonObject>
-#include <QJsonDocument>
 #include <QUndoStack>
 
+#include "andromeda_undo.h"
+#include "json_object_base.h"
 #include "json_keys.h"
-#include "object_names.h"
 
 /**
  * @brief The AndromedaObject class
@@ -21,27 +19,36 @@
  * This allows a copy operator (which QObject prohibits) which will provide as much or as little functionality as the defined JSON operation
  */
 
-class AndromedaObject : public QObject
+class AndromedaObject : public AJsonCloneableObject
 {
     Q_OBJECT
 
 public:
     AndromedaObject(QObject *parent = 0);
-    virtual ~AndromedaObject(void) {}
-
-    QList<QMetaProperty> getProperties(void);
-    QStringList getPropertyNames(void);
-
-    // Serialize this object data toJSON
-    virtual QJsonObject encoded(void)   const;
-    virtual QString encodedString(void) const;
-
-    virtual void decode(QJsonObject &json)       { Q_UNUSED(json); }
-    virtual void encode(QJsonObject &json) const { Q_UNUSED(json); }
 
     // Default clone operator -> Override in child class using the same template pattern
     virtual AndromedaObject* clone(void) { return makeClone<AndromedaObject>(); }
 
+    QList<QMetaProperty> getProperties(void);
+    QStringList getPropertyNames(void);
+
+    virtual void decode(QJsonObject &json, bool undoable = true);
+
+    // Copy functions
+    void copyFrom(AndromedaObject *other);
+    void copyTo(AndromedaObject *other);
+
+    // Invertible JSON function for granular undo stacking
+    void applyInvertibleAction(QString title, QString key, QJsonValue before, QJsonValue after);
+    void applyInvertibleAction(QString title, QString key, QJsonValue value);
+
+public slots:
+    virtual bool undo(void);    // Perform to perform top item on undo stack
+    virtual bool redo(void);    // Attempt to perform top item on redo stack
+
+protected:
+    // Stack for holding UNDO / REDO commands for this object
+    QUndoStack undo_stack_;
 
     /**
      * @brief makeClone
@@ -65,7 +72,7 @@ public:
      * 4. "Shallower" copies can be arbitrarily defined by excluding certain data from the JSON object
      * 5. It's always important to have a fifth reason
      *
-     * @return
+     * @return a new object of the same type, with identical properties
      */
     template <typename T>
     T* makeClone(void)
@@ -76,16 +83,11 @@ public:
 
         encode(json);
 
-        cloned->decode(json);
+        // The CLONE operation should be non-invertible
+        cloned->decode(json, false);
 
         return cloned;
     }
-
-    // Copy functions
-    void copyFrom(AndromedaObject *other);
-    void copyTo(AndromedaObject *other);
-
-protected:
 
 };
 

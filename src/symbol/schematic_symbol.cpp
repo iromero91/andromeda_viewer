@@ -53,9 +53,9 @@ void ASchematicSymbol::encode(QJsonObject &json) const
     json[JSON_KEY::PINS] = jPins;
 }
 
-void ASchematicSymbol::decode(QJsonObject &json)
+void ASchematicSymbol::decode(QJsonObject &json, bool undoable)
 {
-    ADrawableComplex::decode(json);
+    ADrawableComplex::decode(json, undoable);
 }
 
 /**

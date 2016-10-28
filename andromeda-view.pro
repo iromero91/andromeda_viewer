@@ -51,7 +51,8 @@ HEADERS += \
     src/drawable/drawable_base.h \
     src/drawable/drawable_complex.h \
     src/drawable/drawable_primitive.h \
-    src/base/andromeda_undo.h
+    src/base/andromeda_undo.h \
+    src/base/json_object_base.h
 
 SOURCES += \
     src/base/andromeda_object.cpp \
@@ -79,4 +80,5 @@ SOURCES += \
     src/drawable/drawable_base.cpp \
     src/drawable/drawable_complex.cpp \
     src/drawable/drawable_primitive.cpp \
-    src/base/andromeda_undo.cpp
+    src/base/andromeda_undo.cpp \
+    src/base/json_object_base.cpp

@@ -1,8 +1,81 @@
 #include "andromeda_object.h"
 
-AndromedaObject::AndromedaObject(QObject *parent) : QObject(parent)
+AndromedaObject::AndromedaObject(QObject *parent) : AJsonCloneableObject(parent)
 {
     setObjectName(OBJECT_NAME::A_OBJECT);
+}
+
+/**
+ * @brief AndromedaObject::decode
+ * Decode JSON object, and add it to the undo stack (if applicable)
+ * @param json is a JSON object to be decoded
+ * @param undoable determines if this action is "undoable"
+ *
+ * NOTE: Care must be taken that the base AndromedaObject::decode() function is called
+ * BEFORE the actual change is made. Otherwise, the encoded() function will include
+ * the new changes.
+ */
+void AndromedaObject::decode(QJsonObject &json, bool undoable)
+{
+    // If we want to be able to invert the object, add the current state and the new JSON
+    if (undoable)
+    {
+        QJsonObject state = encoded();
+
+        QUndoCommand *undo = new AndromedaJsonUndoAction(QString("json-action"), //TODO fix this
+                                                         this,  // Pointer to this object
+                                                         state, // State of this object BEFORE the action is applied
+                                                         json); // JSON responsible for changing the state
+
+        undo_stack_.push(undo);
+    }
+}
+
+/**
+ * @brief AndromedaObject::applyInvertible
+ * Apply an invertible operation for a single JSON key to the undo stack
+ * This allows for granular UNDO / REDO operations to be pushed to the stack
+ * e.g. change a pin label from "Pin_A" to "Pin_B", only the LABEL value will be pushed
+ *
+ * It also allows for restoring of deleted data without having to refresh the entire object
+ *
+ * Multiple invertible operations can be chained using the macro functionality of the undo stack
+ *
+ * @param title is the title of this action
+ * @param key is the JSON key for the data being changed
+ * @param before is the value of the key BEFORE the change
+ * @param after is the value of the key AFTER tha change
+ */
+void AndromedaObject::applyInvertibleAction(QString title, QString key, QJsonValue before, QJsonValue after)
+{
+    QJsonObject jBefore, jAfter;
+
+    jBefore[key] = before;
+    jAfter[key]  = after;
+
+    QUndoCommand *undo = new AndromedaJsonUndoAction(title,
+                                                     this,
+                                                     jBefore,
+                                                     jAfter);
+
+    undo_stack_.push(undo);
+}
+
+/**
+ * @brief AndromedaObject::applyInvertibleAction
+ * Apply an invertible action, but infer the "before" state rather than stating it
+ * @param title is the title of this action
+ * @param key is the JSON key for the data being changed
+ * @param json is the new JSON value
+ */
+void AndromedaObject::applyInvertibleAction(QString title, QString key, QJsonValue value)
+{
+    QJsonObject jData = encoded();
+
+    // Exctrac the current value for the provided key
+    QJsonValue jValueBefore = jData.value(key);
+
+    applyInvertibleAction(title, key, jValueBefore, value);
 }
 
 /**
@@ -48,23 +121,6 @@ QStringList AndromedaObject::getPropertyNames()
     return names;
 }
 
-QJsonObject AndromedaObject::encoded() const
-{
-    QJsonObject json;
-
-    encode(json);
-
-    return json;
-}
-
-QString AndromedaObject::encodedString() const
-{
-    QJsonObject json = encoded();
-    QJsonDocument doc(json);
-
-    return doc.toJson(QJsonDocument::Compact);
-}
-
 /**
  * @brief AndromedaObject::copyFrom
  * Copy the properties from <other> object to <this> object (via JSON)
@@ -92,4 +148,22 @@ void AndromedaObject::copyTo(AndromedaObject *other)
     QJsonObject json = encoded();
 
     other->decode(json);
+}
+
+bool AndromedaObject::undo()
+{
+    if (!undo_stack_.canUndo()) return false;
+
+    undo_stack_.redo();
+
+    return true;
+}
+
+bool AndromedaObject::redo()
+{
+    if (!undo_stack_.canRedo()) return false;
+
+    undo_stack_.redo();
+
+    return true;
 }

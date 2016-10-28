@@ -53,9 +53,9 @@ void APolyline::encode(QJsonObject &json) const
     json[JSON_KEY::POINTS] = jPoints;
 }
 
-void APolyline::decode(QJsonObject &json)
+void APolyline::decode(QJsonObject &json, bool undoable)
 {
-    ADrawablePrimitive::decode(json);
+    ADrawablePrimitive::decode(json, undoable);
 }
 
 bool APolyline::allSegmentsAreStraight()

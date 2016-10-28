@@ -14,9 +14,9 @@ void ASymbolPin::encode(QJsonObject &json) const
     json[JSON_KEY::ORIENTATION] = orientation();
 }
 
-void ASymbolPin::decode(QJsonObject &json)
+void ASymbolPin::decode(QJsonObject &json, bool undoable)
 {
-    ADrawablePrimitive::decode(json);
+    ADrawablePrimitive::decode(json, undoable);
 
     // Extract pin data (use current values in case of bad data)
     if (json.contains(JSON_KEY::LABEL))

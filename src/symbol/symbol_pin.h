@@ -34,7 +34,7 @@ public:
 
     // JSON data
     virtual void encode(QJsonObject &json) const;
-    virtual void decode(QJsonObject &json);
+    virtual void decode(QJsonObject &json, bool undoable = false);
 
     // Drawing function
     QRectF boundingRect(void) const Q_DECL_OVERRIDE;
