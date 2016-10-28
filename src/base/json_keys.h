@@ -42,6 +42,8 @@ const QString LABEL = "label";
 // Schematic symbols
 const QString PINS = "pins";
 
+const QString FLIP = "flip";
+
 }
 
 #endif // JSON_KEYS_H

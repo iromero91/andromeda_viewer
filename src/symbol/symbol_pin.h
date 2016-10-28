@@ -1,7 +1,7 @@
 #ifndef SYMBOL_PIN_H
 #define SYMBOL_PIN_H
 
-#include "drawable_primitive.h"
+#include "src/drawable/drawable_primitive.h"
 
 class ASymbolPin : public ADrawablePrimitive
 {

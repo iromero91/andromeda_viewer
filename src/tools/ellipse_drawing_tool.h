@@ -1,8 +1,9 @@
 #ifndef ELLIPSE_DRAWING_TOOL
 #define ELLIPSE_DRAWING_TOOL
 
+#include "src/shapes/ellipse.h"
+
 #include "tool_base.h"
-#include "shapes/ellipse.h"
 
 class EllipseDrawingTool : public AToolBase
 {

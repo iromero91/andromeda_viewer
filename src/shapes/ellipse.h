@@ -2,9 +2,9 @@
 #define SHAPES_ELLIPSE_H
 
 #include <QPainterPath>
-#include "geometry/geometry.h"
 
-#include "drawable_primitive.h"
+#include "src/geometry/geometry.h"
+#include "src/drawable/drawable_primitive.h"
 
 class AEllipse : public ADrawablePrimitive
 {

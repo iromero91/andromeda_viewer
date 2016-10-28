@@ -13,63 +13,70 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = andromeda-view
 TEMPLATE = app
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    layers/pcb_layers.cpp \
-    geometry/geometry.cpp \
-    viewers/andromeda_scene.cpp \
-    viewers/andromeda_view.cpp \
-    viewers/symbol_editor_view.cpp \
-    shapes/ellipse.cpp \
-    shapes/polyline.cpp \
-    grid/grid.cpp \
-    layers/layer_defines.cpp \
-    tools/tool_base.cpp \
-    logging/debug_handler.cpp \
-    geometry/bounding_box.cpp \
-    tools/ellipse_drawing_tool.cpp \
-    tools/rect_drawing_tool.cpp \
-    tools/polyline_drawing_tool.cpp \
-    tools/polyline_tool_base.cpp \
-    base/andromeda_object.cpp \
-    shapes/drawable_base.cpp \
-    shapes/drawable_primitive.cpp \
-    tools/polyline_editing_tool.cpp \
-    shapes/symbol_pin.cpp \
-    shapes/drawable_complex.cpp \
-    shapes/schematic_symbol.cpp
 
-HEADERS  += mainwindow.h \
-    layers/pcb_layers.h \
-    geometry/geometry.h \
-    viewers/andromeda_scene.h \
-    viewers/andromeda_view.h \
-    viewers/symbol_editor_view.h \
-    shapes/shape_defines.h \
-    shapes/ellipse.h \
-    shapes/polyline.h \
-    grid/grid.h \
-    layers/layer_defines.h \
-    tools/tool_defines.h \
-    tools/tool_base.h \
-    logging/debug_handler.h \
-    geometry/bounding_box.h \
-    tools/ellipse_drawing_tool.h \
-    tools/rect_drawing_tool.h \
-    tools/polyline_drawing_tool.h \
-    viewers/polyline_tool_base.h \
-    tools/polyline_tool_base.h \
-    base/andromeda_object.h \
-    shapes/drawable_base.h \
-    shapes/drawable_primitive.h \
-    tools/polyline_editing_tool.h \
-    base/json_keys.h \
-    base/object_names.h \
-    shapes/symbol_pin.h \
-    shapes/drawable_complex.h \
-    shapes/schematic_symbol.h
-
-FORMS    += mainwindow.ui
+FORMS    += \
+    ui/mainwindow.ui
 
 RESOURCES += \
-    fonts.qrc
+    resources/fonts.qrc
+
+HEADERS += \
+    src/base/andromeda_object.h \
+    src/base/json_keys.h \
+    src/base/object_names.h \
+    src/geometry/bounding_box.h \
+    src/geometry/geometry.h \
+    src/grid/grid.h \
+    src/layers/layer_defines.h \
+    src/layers/pcb_layers.h \
+    src/logging/debug_handler.h \
+    src/shapes/ellipse.h \
+    src/shapes/polyline.h \
+    src/shapes/shape_defines.h \
+    src/tools/ellipse_drawing_tool.h \
+    src/tools/polyline_drawing_tool.h \
+    src/tools/polyline_editing_tool.h \
+    src/tools/polyline_tool_base.h \
+    src/tools/rect_drawing_tool.h \
+    src/tools/tool_base.h \
+    src/tools/tool_defines.h \
+    src/viewers/andromeda_scene.h \
+    src/viewers/andromeda_view.h \
+    src/viewers/polyline_tool_base.h \
+    src/viewers/symbol_editor_view.h \
+    src/mainwindow.h \
+    ui/ui_mainwindow.h \
+    src/symbol/schematic_symbol.h \
+    src/symbol/symbol_pin.h \
+    src/drawable/drawable_base.h \
+    src/drawable/drawable_complex.h \
+    src/drawable/drawable_primitive.h \
+    src/base/andromeda_undo.h
+
+SOURCES += \
+    src/base/andromeda_object.cpp \
+    src/geometry/bounding_box.cpp \
+    src/geometry/geometry.cpp \
+    src/grid/grid.cpp \
+    src/layers/layer_defines.cpp \
+    src/layers/pcb_layers.cpp \
+    src/logging/debug_handler.cpp \
+    src/shapes/ellipse.cpp \
+    src/shapes/polyline.cpp \
+    src/tools/ellipse_drawing_tool.cpp \
+    src/tools/polyline_drawing_tool.cpp \
+    src/tools/polyline_editing_tool.cpp \
+    src/tools/polyline_tool_base.cpp \
+    src/tools/rect_drawing_tool.cpp \
+    src/tools/tool_base.cpp \
+    src/viewers/andromeda_scene.cpp \
+    src/viewers/andromeda_view.cpp \
+    src/viewers/symbol_editor_view.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/symbol/schematic_symbol.cpp \
+    src/symbol/symbol_pin.cpp \
+    src/drawable/drawable_base.cpp \
+    src/drawable/drawable_complex.cpp \
+    src/drawable/drawable_primitive.cpp \
+    src/base/andromeda_undo.cpp

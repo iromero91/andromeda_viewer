@@ -9,9 +9,9 @@
 
 #include <stdint.h>
 
-#include "grid/grid.h"
-#include "layers/layer_defines.h"
-#include "shapes/shape_defines.h"
+#include "src/grid/grid.h"
+#include "src/layers/layer_defines.h"
+#include "src/shapes/shape_defines.h"
 
 class AScene : public QGraphicsScene
 {

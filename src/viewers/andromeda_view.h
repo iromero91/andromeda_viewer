@@ -8,8 +8,9 @@
 #include <QPaintEvent>
 #include <QCursor>
 
+#include "src/tools/tool_base.h"
+
 #include "andromeda_scene.h"
-#include "tools/tool_base.h"
 
 #define ANDROMEDA_VIEW_MAX_SCALING 100.0f
 #define ANDROMEDA_VIEW_MIN_SCALING 0.001f

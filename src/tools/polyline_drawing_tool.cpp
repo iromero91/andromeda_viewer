@@ -1,5 +1,6 @@
+#include "src/geometry/geometry.h"
+
 #include "polyline_drawing_tool.h"
-#include "geometry/geometry.h"
 
 PolylineDrawingTool::PolylineDrawingTool(QObject *parent) : PolylineToolBase(parent)
 {

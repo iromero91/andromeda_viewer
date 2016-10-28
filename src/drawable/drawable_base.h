@@ -12,11 +12,11 @@
 #include <QString>
 #include <QGraphicsItem>
 
-#include "layers/layer_defines.h"
-#include "shapes/shape_defines.h"
-#include "geometry/bounding_box.h"
+#include "src/layers/layer_defines.h"
+#include "src/shapes/shape_defines.h"
+#include "src/geometry/bounding_box.h"
 
-#include "base/andromeda_object.h"
+#include "src/base/andromeda_object.h"
 
 class ADrawableBase : public AndromedaObject, public QGraphicsItem
 {

@@ -1,8 +1,9 @@
 #ifndef POLYLINE_EDITING_TOOL_H
 #define POLYLINE_EDITING_TOOL_H
 
+#include "src/shapes/polyline.h"
+
 #include "tool_base.h"
-#include "shapes/polyline.h"
 
 class PolylineEditingTool : public AToolBase
 {

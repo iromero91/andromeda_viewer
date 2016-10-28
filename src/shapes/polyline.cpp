@@ -1,5 +1,5 @@
 #include "polyline.h"
-#include "geometry/geometry.h"
+#include "src/geometry/geometry.h"
 
 #include <qmath.h>
 

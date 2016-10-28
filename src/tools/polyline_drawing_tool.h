@@ -1,9 +1,9 @@
 #ifndef POLYLINE_DRAWING_TOOL_H
 #define POLYLINE_DRAWING_TOOL_H
 
-#include "polyline_tool_base.h"
+#include "src/shapes/polyline.h"
 
-#include "shapes/polyline.h"
+#include "polyline_tool_base.h"
 
 class PolylineDrawingTool : public PolylineToolBase
 {

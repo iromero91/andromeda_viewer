@@ -1,6 +1,6 @@
-#include "tool_base.h"
+#include "src/layers/layer_defines.h"
 
-#include "layers/layer_defines.h"
+#include "tool_base.h"
 
 AToolBase::AToolBase(QObject *parent) : QObject(parent)
 {

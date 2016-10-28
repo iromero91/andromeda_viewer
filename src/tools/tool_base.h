@@ -18,8 +18,9 @@
 #include <QKeyEvent>
 #include <QString>
 
+#include "src/base/object_names.h"
+
 #include "tool_defines.h"
-#include "base/object_names.h"
 
 class AToolBase : public QObject
 {

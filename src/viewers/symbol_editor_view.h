@@ -1,14 +1,14 @@
 #ifndef SYMBOL_EDITOR_VIEW_H
 #define SYMBOL_EDITOR_VIEW_H
 
+#include "src/shapes/polyline.h"
+#include "src/shapes/ellipse.h"
+
+#include "src/tools/polyline_drawing_tool.h"
+#include "src/tools/ellipse_drawing_tool.h"
+#include "src/tools/rect_drawing_tool.h"
+
 #include "andromeda_view.h"
-
-#include "shapes/polyline.h"
-#include "shapes/ellipse.h"
-
-#include "tools/polyline_drawing_tool.h"
-#include "tools/ellipse_drawing_tool.h"
-#include "tools/rect_drawing_tool.h"
 
 class SymbolEditorView : public AView
 {

@@ -3,11 +3,10 @@
 
 #include <QPointF>
 #include <QList>
-
 #include <QGraphicsItem>
 #include <QPainterPath>
 
-#include "drawable_primitive.h"
+#include "src/drawable/drawable_primitive.h"
 
 //TODO fix this, is hacky
 typedef struct

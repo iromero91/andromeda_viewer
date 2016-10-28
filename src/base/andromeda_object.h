@@ -7,6 +7,7 @@
 #include <QMetaProperty>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QUndoStack>
 
 #include "json_keys.h"
 #include "object_names.h"

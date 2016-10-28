@@ -1,10 +1,12 @@
-#include "andromeda_view.h"
-#include "grid/grid.h"
-
 #include <QApplication>
 #include <QScrollBar>
 #include <QGraphicsItem>
 #include <QDebug>
+
+#include "src/grid/grid.h"
+
+#include "andromeda_view.h"
+
 
 AView::AView(QWidget *parent) : QGraphicsView(parent)
 {

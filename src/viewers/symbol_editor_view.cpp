@@ -1,13 +1,11 @@
-#include "symbol_editor_view.h"
-
-#include "geometry/geometry.h"
-
+#include <QApplication>
 #include <QDebug>
 #include <QLineF>
 
-#include <QApplication>
+#include "src/geometry/geometry.h"
+#include "src/shapes/ellipse.h"
 
-#include "shapes/ellipse.h"
+#include "symbol_editor_view.h"
 
 SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
 {

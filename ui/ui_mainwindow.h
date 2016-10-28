@@ -26,7 +26,7 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
-#include "src/viewers/symbol_editor_view.h"
+#include "viewers/symbol_editor_view.h"
 
 QT_BEGIN_NAMESPACE
 

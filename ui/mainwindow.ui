@@ -160,7 +160,7 @@
   <customwidget>
    <class>SymbolEditorView</class>
    <extends>QGraphicsView</extends>
-   <header>viewers/symbol_editor_view.h</header>
+   <header>src/viewers/symbol_editor_view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
