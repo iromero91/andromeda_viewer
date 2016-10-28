@@ -62,6 +62,27 @@ void MainWindow::selectionChanged()
             ui->propText->insertPlainText(lines.join("\n"));
 
             ui->jsonText->insertPlainText(obj->encodedString());
+
+            QUndoStack *undo = obj->undoStack();
+
+            if (nullptr != undo)
+            {
+                // Undo stack
+                QString u = "Items: ";
+
+                u += QString::number(undo->count());
+
+                u += "\n";
+                u += "Index: ";
+                u += QString::number(undo->index());
+
+                //TODO display the top item at the stack
+                if (undo->count() > 0)
+                {
+                }
+
+                ui->undoText->insertPlainText(u);
+            }
         }
     }
     else if (items.count() > 1)

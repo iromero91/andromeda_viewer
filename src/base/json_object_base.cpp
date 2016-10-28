@@ -29,7 +29,7 @@ QString AJsonCloneableObject::encodedString() const
     QJsonObject json = encoded();
     QJsonDocument doc(json);
 
-    return doc.toJson(QJsonDocument::Compact);
+    return doc.toJson(); // QJsonDocument::Compact);
 }
 
 /**

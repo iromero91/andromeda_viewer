@@ -42,13 +42,20 @@ public:
     void applyInvertibleAction(QString title, QString key, QJsonValue before, QJsonValue after);
     void applyInvertibleAction(QString title, QString key, QJsonValue value);
 
+    // Various getters
+    bool isUndoEnabled(void) { return undo_enabled_; }
+    QUndoStack* undoStack(void) { return &undo_stack_; }
+
 public slots:
     virtual bool undo(void);    // Perform to perform top item on undo stack
     virtual bool redo(void);    // Attempt to perform top item on redo stack
+    void setUndoEnabled(bool enabled) { undo_enabled_ = enabled; }
+
 
 protected:
     // Stack for holding UNDO / REDO commands for this object
     QUndoStack undo_stack_;
+    bool undo_enabled_ = true;
 
     /**
      * @brief makeClone

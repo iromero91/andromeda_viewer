@@ -18,7 +18,7 @@ AndromedaObject::AndromedaObject(QObject *parent) : AJsonCloneableObject(parent)
 void AndromedaObject::decode(QJsonObject &json, bool undoable)
 {
     // If we want to be able to invert the object, add the current state and the new JSON
-    if (undoable)
+    if (undoable && undo_enabled_)
     {
         QJsonObject state = encoded();
 
@@ -48,6 +48,8 @@ void AndromedaObject::decode(QJsonObject &json, bool undoable)
  */
 void AndromedaObject::applyInvertibleAction(QString title, QString key, QJsonValue before, QJsonValue after)
 {
+    if (!undo_enabled_) return;
+
     QJsonObject jBefore, jAfter;
 
     jBefore[key] = before;
@@ -70,6 +72,8 @@ void AndromedaObject::applyInvertibleAction(QString title, QString key, QJsonVal
  */
 void AndromedaObject::applyInvertibleAction(QString title, QString key, QJsonValue value)
 {
+    if (!undo_enabled_) return;
+
     QJsonObject jData = encoded();
 
     // Exctrac the current value for the provided key
@@ -150,8 +154,15 @@ void AndromedaObject::copyTo(AndromedaObject *other)
     other->decode(json);
 }
 
+/**
+ * @brief AndromedaObject::undo
+ * (Attempt to) undo the item at current stack index
+ * @return
+ */
 bool AndromedaObject::undo()
 {
+    if (!undo_enabled_) return false;
+
     if (!undo_stack_.canUndo()) return false;
 
     undo_stack_.redo();
@@ -159,8 +170,15 @@ bool AndromedaObject::undo()
     return true;
 }
 
+/**
+ * @brief AndromedaObject::redo
+ * (Attempt to) redo the item at current stack index
+ * @return
+ */
 bool AndromedaObject::redo()
 {
+    if (!undo_enabled_) return false;
+
     if (!undo_stack_.canRedo()) return false;
 
     undo_stack_.redo();

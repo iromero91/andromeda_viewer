@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.4.2
+** Created by: Qt User Interface Compiler version 5.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -22,6 +22,7 @@
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QVBoxLayout>
@@ -35,17 +36,7 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QGridLayout *gridLayout;
-    QGroupBox *groupBox;
-    QVBoxLayout *verticalLayout;
-    QPushButton *clearAllButton;
-    QPushButton *deleteButton;
-    QFrame *line;
-    QPushButton *lineButton;
-    QPushButton *polyButton;
-    QPushButton *rectLine;
-    QPushButton *ellipseButton;
-    QSpacerItem *verticalSpacer;
-    SymbolEditorView *graphicsView;
+    QSplitter *splitter;
     QTabWidget *tabWidget;
     QWidget *tab;
     QGridLayout *gridLayout_2;
@@ -56,6 +47,17 @@ public:
     QWidget *tab_3;
     QGridLayout *gridLayout_4;
     QPlainTextEdit *undoText;
+    SymbolEditorView *graphicsView;
+    QGroupBox *groupBox;
+    QVBoxLayout *verticalLayout;
+    QPushButton *clearAllButton;
+    QPushButton *deleteButton;
+    QFrame *line;
+    QPushButton *lineButton;
+    QPushButton *polyButton;
+    QPushButton *rectLine;
+    QPushButton *ellipseButton;
+    QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -70,64 +72,13 @@ public:
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        groupBox = new QGroupBox(centralWidget);
-        groupBox->setObjectName(QStringLiteral("groupBox"));
-        verticalLayout = new QVBoxLayout(groupBox);
-        verticalLayout->setSpacing(6);
-        verticalLayout->setContentsMargins(11, 11, 11, 11);
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        clearAllButton = new QPushButton(groupBox);
-        clearAllButton->setObjectName(QStringLiteral("clearAllButton"));
-
-        verticalLayout->addWidget(clearAllButton);
-
-        deleteButton = new QPushButton(groupBox);
-        deleteButton->setObjectName(QStringLiteral("deleteButton"));
-
-        verticalLayout->addWidget(deleteButton);
-
-        line = new QFrame(groupBox);
-        line->setObjectName(QStringLiteral("line"));
-        line->setFrameShape(QFrame::HLine);
-        line->setFrameShadow(QFrame::Sunken);
-
-        verticalLayout->addWidget(line);
-
-        lineButton = new QPushButton(groupBox);
-        lineButton->setObjectName(QStringLiteral("lineButton"));
-
-        verticalLayout->addWidget(lineButton);
-
-        polyButton = new QPushButton(groupBox);
-        polyButton->setObjectName(QStringLiteral("polyButton"));
-
-        verticalLayout->addWidget(polyButton);
-
-        rectLine = new QPushButton(groupBox);
-        rectLine->setObjectName(QStringLiteral("rectLine"));
-
-        verticalLayout->addWidget(rectLine);
-
-        ellipseButton = new QPushButton(groupBox);
-        ellipseButton->setObjectName(QStringLiteral("ellipseButton"));
-
-        verticalLayout->addWidget(ellipseButton);
-
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout->addItem(verticalSpacer);
-
-
-        gridLayout->addWidget(groupBox, 0, 2, 2, 1);
-
-        graphicsView = new SymbolEditorView(centralWidget);
-        graphicsView->setObjectName(QStringLiteral("graphicsView"));
-
-        gridLayout->addWidget(graphicsView, 0, 1, 3, 1);
-
-        tabWidget = new QTabWidget(centralWidget);
+        splitter = new QSplitter(centralWidget);
+        splitter->setObjectName(QStringLiteral("splitter"));
+        splitter->setOrientation(Qt::Horizontal);
+        tabWidget = new QTabWidget(splitter);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setMaximumSize(QSize(250, 16777215));
+        tabWidget->setMinimumSize(QSize(250, 0));
+        tabWidget->setMaximumSize(QSize(450, 16777215));
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
         gridLayout_2 = new QGridLayout(tab);
@@ -167,8 +118,65 @@ public:
         gridLayout_4->addWidget(undoText, 0, 0, 1, 1);
 
         tabWidget->addTab(tab_3, QString());
+        splitter->addWidget(tabWidget);
+        graphicsView = new SymbolEditorView(splitter);
+        graphicsView->setObjectName(QStringLiteral("graphicsView"));
+        splitter->addWidget(graphicsView);
 
-        gridLayout->addWidget(tabWidget, 0, 0, 1, 1);
+        gridLayout->addWidget(splitter, 0, 0, 1, 1);
+
+        groupBox = new QGroupBox(centralWidget);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        verticalLayout = new QVBoxLayout(groupBox);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        clearAllButton = new QPushButton(groupBox);
+        clearAllButton->setObjectName(QStringLiteral("clearAllButton"));
+        clearAllButton->setEnabled(false);
+
+        verticalLayout->addWidget(clearAllButton);
+
+        deleteButton = new QPushButton(groupBox);
+        deleteButton->setObjectName(QStringLiteral("deleteButton"));
+        deleteButton->setEnabled(false);
+
+        verticalLayout->addWidget(deleteButton);
+
+        line = new QFrame(groupBox);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line);
+
+        lineButton = new QPushButton(groupBox);
+        lineButton->setObjectName(QStringLiteral("lineButton"));
+        lineButton->setEnabled(false);
+
+        verticalLayout->addWidget(lineButton);
+
+        polyButton = new QPushButton(groupBox);
+        polyButton->setObjectName(QStringLiteral("polyButton"));
+
+        verticalLayout->addWidget(polyButton);
+
+        rectLine = new QPushButton(groupBox);
+        rectLine->setObjectName(QStringLiteral("rectLine"));
+
+        verticalLayout->addWidget(rectLine);
+
+        ellipseButton = new QPushButton(groupBox);
+        ellipseButton->setObjectName(QStringLiteral("ellipseButton"));
+
+        verticalLayout->addWidget(ellipseButton);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer);
+
+
+        gridLayout->addWidget(groupBox, 0, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -181,7 +189,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -190,6 +198,9 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Properties", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "JSON", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Undo Stack", 0));
         groupBox->setTitle(QApplication::translate("MainWindow", "TOOLZ", 0));
 #ifndef QT_NO_TOOLTIP
         clearAllButton->setToolTip(QApplication::translate("MainWindow", "Clear the entire scene", 0));
@@ -215,9 +226,6 @@ public:
         ellipseButton->setToolTip(QApplication::translate("MainWindow", "Add an ellipse", 0));
 #endif // QT_NO_TOOLTIP
         ellipseButton->setText(QApplication::translate("MainWindow", "Ellipse", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Properties", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "JSON", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Undo Stack", 0));
     } // retranslateUi
 
 };
