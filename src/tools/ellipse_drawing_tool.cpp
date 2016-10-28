@@ -21,8 +21,9 @@ QRectF EllipseDrawingTool::getEllipseRect()
     // Enforce a circle
     if (mods & Qt::ControlModifier)
     {
-        x = fabs(x) > fabs(y) ? x : y;
-        y = x;
+        double dim = qMax(fabs(x), fabs(y));
+        x = dim * (x > 0 ? 1 : -1);
+        y = dim * (y > 0 ? 1 : -1);
     }
 
     if (mods & Qt::ShiftModifier)
