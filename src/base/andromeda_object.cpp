@@ -165,7 +165,10 @@ bool AndromedaObject::undo()
 
     if (!undo_stack_.canUndo()) return false;
 
-    undo_stack_.redo();
+    // Don't push undo actions to the stack
+    undo_enabled_ = false;
+    undo_stack_.undo();
+    undo_enableD_ = true;
 
     return true;
 }
@@ -181,7 +184,10 @@ bool AndromedaObject::redo()
 
     if (!undo_stack_.canRedo()) return false;
 
+    // Don't push redo actions to the stack
+    undo_enabled_ = false;    
     undo_stack_.redo();
+    undo_enabled_ = true;
 
     return true;
 }

@@ -1,5 +1,0 @@
-#ifndef POLYLINE_TOOL_BASE_H
-#define POLYLINE_TOOL_BASE_H
-
-#endif // POLYLINE_TOOL_BASE_H
-
