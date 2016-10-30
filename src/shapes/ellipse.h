@@ -31,7 +31,7 @@ public:
     bool isCircular(double threshold = AGeometry::DISTANCE_EPSILON) const { return fabs(rx_ - ry_) < threshold; }
 
     virtual void encode(QJsonObject &json) const;
-    virtual void decode(QJsonObject &json, bool undoable = false);
+    virtual void decode(QJsonObject &json, bool undoable = true);
 
 public slots:
     void setRadius(double rx, double ry);

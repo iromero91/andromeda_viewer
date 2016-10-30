@@ -55,7 +55,7 @@ public:
     bool isSelfIntersecting(void);
 
     virtual void encode(QJsonObject &json) const;
-    virtual void decode(QJsonObject &json, bool undoable = false);
+    virtual void decode(QJsonObject &json, bool undoable = true);
 
 public slots:
     void clear() { points_.clear(); }

@@ -33,6 +33,8 @@ public:
     QStringList getPropertyNames(void);
 
     virtual void decode(QJsonObject &json, bool undoable = true);
+    virtual void encode(QJsonObject &json) const { Q_UNUSED(json); }
+
 
     // Copy functions
     void copyFrom(AndromedaObject *other);
