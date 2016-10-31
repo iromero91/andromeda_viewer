@@ -1,14 +1,16 @@
-#ifndef JSON_KEYS_H
-#define JSON_KEYS_H
+#ifndef OBJ_KEYS_H
+#define OBJ_KEYS_H
 
 #include <QString>
+#include <QJsonObject>
+#include <QPointF>
 
 /**
  * "Enumerated" keys for JSON reading / writing
  * It is safer to pass const values than continually re-type strings manually
  *
  */
-namespace JSON_KEY {
+namespace OBJ_KEY {
 
 // Item options
 const QString ITEM_LAYER = "layer";
@@ -46,5 +48,8 @@ const QString FLIP = "flip";
 
 }
 
-#endif // JSON_KEYS_H
+// Convert a point to a QJsonObject
+QJsonObject JsonFromPoint(QPointF point);
+bool JsonToPoint(QJsonObject json, QPointF &point);
+#endif // OBJ_KEYS_H
 

@@ -7,8 +7,8 @@
 #include <QUndoStack>
 
 #include "andromeda_undo.h"
-#include "json_object_base.h"
-#include "json_keys.h"
+#include "undoable_object_base.h"
+#include "object_keys.h"
 
 /**
  * @brief The AndromedaObject class
@@ -19,7 +19,7 @@
  * This allows a copy operator (which QObject prohibits) which will provide as much or as little functionality as the defined JSON operation
  */
 
-class AndromedaObject : public AJsonCloneableObject
+class AndromedaObject : public AUndoableObject
 {
     Q_OBJECT
 
@@ -41,8 +41,8 @@ public:
     void copyTo(AndromedaObject *other);
 
     // Invertible JSON function for granular undo stacking
-    void applyInvertibleAction(QString title, QString key, QJsonValue before, QJsonValue after);
-    void applyInvertibleAction(QString title, QString key, QJsonValue value);
+    void setUndoAction(QString title, QString key, QJsonValue before, QJsonValue after);
+    void setUndoAction(QString title, QString key, QJsonValue value);
 
     // Various getters
     bool isUndoEnabled(void) { return undo_enabled_; }
@@ -58,6 +58,8 @@ protected:
     // Stack for holding UNDO / REDO commands for this object
     QUndoStack undo_stack_;
     bool undo_enabled_ = true;
+
+    void pushUndoAction(QUndoCommand *action);
 
     /**
      * @brief makeClone

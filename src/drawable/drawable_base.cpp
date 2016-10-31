@@ -44,15 +44,15 @@ void ADrawableBase::encode(QJsonObject &json) const
     AndromedaObject::encode(json);
 
     // Layer
-    json[JSON_KEY::ITEM_LAYER] = layer();
+    json[OBJ_KEY::ITEM_LAYER] = layer();
 
     // Position
     QJsonObject jPos;
 
-    jPos[JSON_KEY::POS_X] = pos().x();
-    jPos[JSON_KEY::POS_Y] = pos().y();
+    jPos[OBJ_KEY::POS_X] = pos().x();
+    jPos[OBJ_KEY::POS_Y] = pos().y();
 
-    json[JSON_KEY::POS] = jPos;
+    json[OBJ_KEY::POS] = jPos;
 }
 
 void ADrawableBase::decode(QJsonObject &json, bool undoable)
@@ -60,4 +60,33 @@ void ADrawableBase::decode(QJsonObject &json, bool undoable)
     AndromedaObject::decode(json, undoable);
 
     //TODO
+}
+
+void ADrawableBase::setPos(QPointF point)
+{
+    // Ignore the same position
+    if (point == pos()) return;
+
+    //TODO - remove hard coded action title
+    setUndoAction("Move",
+                  OBJ_KEY::POS,
+                  JsonFromPoint(pos()),
+                  JsonFromPoint(point));
+
+    QGraphicsItem::setPos(point);
+}
+
+void ADrawableBase::setPos(double x, double y)
+{
+    setPos(QPointF(x,y));
+}
+
+void ADrawableBase::setX(double x)
+{
+    setPos(x, this->y());
+}
+
+void ADrawableBase::setY(double y)
+{
+    setPos(this->x(), y);
 }

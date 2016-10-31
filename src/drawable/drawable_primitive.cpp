@@ -12,13 +12,15 @@ void ADrawablePrimitive::encode(QJsonObject &json) const
 {
     ADrawableBase::encode(json);
 
-    json[JSON_KEY::THICKNESS] = lineWidth();
-    json[JSON_KEY::FILLED] = isFilled();
+    json[OBJ_KEY::THICKNESS] = lineWidth();
+    json[OBJ_KEY::FILLED] = isFilled();
 }
 
 void ADrawablePrimitive::decode(QJsonObject &json, bool undoable)
 {
     ADrawableBase::decode(json, undoable);
+
+
 }
 
 void ADrawablePrimitive::setLineWidth(double lineWidth)

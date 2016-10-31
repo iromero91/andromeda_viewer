@@ -3,7 +3,7 @@
 #include <QStringList>
 
 AndromedaJsonUndoAction::AndromedaJsonUndoAction(QString text,
-                                                 AJsonCloneableObject *object,
+                                                 AUndoableObject *object,
                                                  QJsonObject jBefore,
                                                  QJsonObject jAfter) : QUndoCommand(text)
 {
@@ -11,13 +11,8 @@ AndromedaJsonUndoAction::AndromedaJsonUndoAction(QString text,
 
     object_ = object;
 
-    QJsonDocument doc;
-
-    doc.setObject(jBefore);
-    before_ = doc.toBinaryData();
-
-    doc.setObject(jAfter);
-    after_ = doc.toBinaryData();
+    before_ = jBefore;
+    after_ = jAfter;
 }
 
 /**
@@ -44,34 +39,6 @@ void AndromedaJsonUndoAction::redo()
     QJsonObject jAfter = after();
 
     object_->decode(jAfter, false);
-}
-
-QJsonObject AndromedaJsonUndoAction::before() const
-{
-    QJsonDocument jDoc = QJsonDocument::fromBinaryData(before_);
-
-    QJsonObject jObj;
-
-    if (!jDoc.isNull())
-    {
-        jObj = jDoc.object();
-    }
-
-    return jObj;
-}
-
-QJsonObject AndromedaJsonUndoAction::after() const
-{
-    QJsonDocument jDoc = QJsonDocument::fromBinaryData(after_);
-
-    QJsonObject jObj;
-
-    if (!jDoc.isNull())
-    {
-        jObj = jDoc.object();
-    }
-
-    return jObj;
 }
 
 /**

@@ -22,7 +22,6 @@ RESOURCES += \
 
 HEADERS += \
     src/base/andromeda_object.h \
-    src/base/json_keys.h \
     src/base/object_names.h \
     src/geometry/bounding_box.h \
     src/geometry/geometry.h \
@@ -45,14 +44,15 @@ HEADERS += \
     src/viewers/polyline_tool_base.h \
     src/viewers/symbol_editor_view.h \
     src/mainwindow.h \
-    ui/ui_mainwindow.h \
     src/symbol/schematic_symbol.h \
     src/symbol/symbol_pin.h \
     src/drawable/drawable_base.h \
     src/drawable/drawable_complex.h \
     src/drawable/drawable_primitive.h \
     src/base/andromeda_undo.h \
-    src/base/json_object_base.h
+    src/shapes/object_properties.h \
+    src/base/undoable_object_base.h \
+    src/base/object_keys.h
 
 SOURCES += \
     src/base/andromeda_object.cpp \
@@ -81,4 +81,5 @@ SOURCES += \
     src/drawable/drawable_complex.cpp \
     src/drawable/drawable_primitive.cpp \
     src/base/andromeda_undo.cpp \
-    src/base/json_object_base.cpp
+    src/base/undoable_object_base.cpp \
+    src/base/object_keys.cpp

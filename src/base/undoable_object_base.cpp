@@ -1,16 +1,16 @@
-#include "json_object_base.h"
+#include "undoable_object_base.h"
 
-AJsonCloneableObject::AJsonCloneableObject(QObject *parent) : QObject(parent)
+AUndoableObject::AUndoableObject(QObject *parent) : QObject(parent)
 {
     setObjectName(OBJECT_NAME::A_JSON_OBJECT);
 }
 
 /**
- * @brief AJsonCloneableObject::encoded
+ * @brief AUndoableObject::encoded
  * Encode this object to JSON
  * @return a QJsonObject
  */
-QJsonObject AJsonCloneableObject::encoded() const
+QJsonObject AUndoableObject::encoded() const
 {
     QJsonObject json;
 
@@ -20,11 +20,11 @@ QJsonObject AJsonCloneableObject::encoded() const
 }
 
 /**
- * @brief AJsonCloneableObject::encodedString
+ * @brief AUndoableObject::encodedString
  * Encodde this object to a JSON string
  * @return a string representation of the JSON object
  */
-QString AJsonCloneableObject::encodedString() const
+QString AUndoableObject::encodedString() const
 {
     QJsonObject json = encoded();
     QJsonDocument doc(json);
@@ -33,11 +33,11 @@ QString AJsonCloneableObject::encodedString() const
 }
 
 /**
- * @brief AJsonCloneableObject::encodedRaw
+ * @brief AUndoableObject::encodedRaw
  * Return a binary encoding of the JSON object
  * @return
  */
-QByteArray AJsonCloneableObject::encodedRaw() const
+QByteArray AUndoableObject::encodedRaw() const
 {
     QJsonObject json = encoded();
     QJsonDocument doc(json);

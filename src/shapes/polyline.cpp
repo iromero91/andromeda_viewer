@@ -29,7 +29,7 @@ void APolyline::encode(QJsonObject &json) const
     ADrawablePrimitive::encode(json);
 
     // Remove 'position' key
-    json.remove(JSON_KEY::POS);
+    json.remove(OBJ_KEY::POS);
 
     // Points
     QJsonArray jPoints;
@@ -41,16 +41,16 @@ void APolyline::encode(QJsonObject &json) const
 
         p = points_.at(i);
 
-        jPoint[JSON_KEY::POS_X] = p.point.x();
-        jPoint[JSON_KEY::POS_Y] = p.point.y();
+        jPoint[OBJ_KEY::POS_X] = p.point.x();
+        jPoint[OBJ_KEY::POS_Y] = p.point.y();
 
         if ((i > 0) && (AGeometry::ArcIsCurved(p.angle)))
-            jPoint[JSON_KEY::ANGLE] = p.angle;
+            jPoint[OBJ_KEY::ANGLE] = p.angle;
 
         jPoints.append(jPoint);
     }
 
-    json[JSON_KEY::POINTS] = jPoints;
+    json[OBJ_KEY::POINTS] = jPoints;
 }
 
 void APolyline::decode(QJsonObject &json, bool undoable)
@@ -288,4 +288,5 @@ void APolyline::normalize()
     }
 
     setPos(center);
+    //moveTo(center);
 }

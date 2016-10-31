@@ -9,9 +9,9 @@ void ASymbolPin::encode(QJsonObject &json) const
 {
     ADrawablePrimitive::encode(json);
 
-    json[JSON_KEY::LABEL] = label();
-    json[JSON_KEY::LENGTH] = length();
-    json[JSON_KEY::ORIENTATION] = orientation();
+    json[OBJ_KEY::LABEL] = label();
+    json[OBJ_KEY::LENGTH] = length();
+    json[OBJ_KEY::ORIENTATION] = orientation();
 }
 
 void ASymbolPin::decode(QJsonObject &json, bool undoable)
@@ -19,14 +19,14 @@ void ASymbolPin::decode(QJsonObject &json, bool undoable)
     ADrawablePrimitive::decode(json, undoable);
 
     // Extract pin data (use current values in case of bad data)
-    if (json.contains(JSON_KEY::LABEL))
-        setLabel(json.value(JSON_KEY::LABEL).toString(label()));
+    if (json.contains(OBJ_KEY::LABEL))
+        setLabel(json.value(OBJ_KEY::LABEL).toString(label()));
 
-    if (json.contains(JSON_KEY::LENGTH))
-        setLength(json.value(JSON_KEY::LABEL).toDouble(length()));
+    if (json.contains(OBJ_KEY::LENGTH))
+        setLength(json.value(OBJ_KEY::LABEL).toDouble(length()));
 
-    if (json.contains(JSON_KEY::ORIENTATION))
-        setOrientation(json.value(JSON_KEY::ORIENTATION).toInt(orientation()));
+    if (json.contains(OBJ_KEY::ORIENTATION))
+        setOrientation(json.value(OBJ_KEY::ORIENTATION).toInt(orientation()));
 }
 
 void ASymbolPin::setLabel(QString label)

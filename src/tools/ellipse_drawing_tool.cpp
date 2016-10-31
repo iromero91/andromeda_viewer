@@ -106,5 +106,6 @@ void EllipseDrawingTool::getEllipse(AEllipse &ellipse)
     QRectF r = getEllipseRect();
 
     ellipse.setPos(r.center());
+    //ellipse.moveTo(r.center());
     ellipse.setRadius(r.width()/2, r.height()/2);
 }

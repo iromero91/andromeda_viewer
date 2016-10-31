@@ -12,11 +12,11 @@ void ADrawableComplex::encode(QJsonObject &json) const
     // Flipped nature of this object
     if (flip() != (int) Flip::NONE)
     {
-        json[JSON_KEY::FLIP] = flip();
+        json[OBJ_KEY::FLIP] = flip();
     }
     else
     {
-        json.remove(JSON_KEY::FLIP);
+        json.remove(OBJ_KEY::FLIP);
     }
 
 }
@@ -25,8 +25,8 @@ void ADrawableComplex::decode(QJsonObject &json, bool undoable)
 {
     ADrawableBase::decode(json, undoable);
 
-    if (json.value(JSON_KEY::FLIP).isDouble())
-        setFlip(json.value(JSON_KEY::FLIP).toInt(flip()));
+    if (json.value(OBJ_KEY::FLIP).isDouble())
+        setFlip(json.value(OBJ_KEY::FLIP).toInt(flip()));
 }
 
 void ADrawableComplex::setFlip(int flip)

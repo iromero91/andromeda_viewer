@@ -50,7 +50,7 @@ void ASchematicSymbol::encode(QJsonObject &json) const
         jPins.append(pin->encoded());
     }
 
-    json[JSON_KEY::PINS] = jPins;
+    json[OBJ_KEY::PINS] = jPins;
 }
 
 void ASchematicSymbol::decode(QJsonObject &json, bool undoable)

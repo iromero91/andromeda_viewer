@@ -1,6 +1,8 @@
 #include "andromeda_object.h"
 
-AndromedaObject::AndromedaObject(QObject *parent) : AJsonCloneableObject(parent)
+#include <QDebug>
+
+AndromedaObject::AndromedaObject(QObject *parent) : AUndoableObject(parent)
 {
     setObjectName(OBJECT_NAME::A_OBJECT);
 }
@@ -32,7 +34,7 @@ void AndromedaObject::decode(QJsonObject &json, bool undoable)
 }
 
 /**
- * @brief AndromedaObject::applyInvertible
+ * @brief AndromedaObject::setUndoAction
  * Apply an invertible operation for a single JSON key to the undo stack
  * This allows for granular UNDO / REDO operations to be pushed to the stack
  * e.g. change a pin label from "Pin_A" to "Pin_B", only the LABEL value will be pushed
@@ -46,9 +48,11 @@ void AndromedaObject::decode(QJsonObject &json, bool undoable)
  * @param before is the value of the key BEFORE the change
  * @param after is the value of the key AFTER tha change
  */
-void AndromedaObject::applyInvertibleAction(QString title, QString key, QJsonValue before, QJsonValue after)
+void AndromedaObject::setUndoAction(QString title, QString key, QJsonValue before, QJsonValue after)
 {
     if (!undo_enabled_) return;
+
+    qDebug() << "undo" << title << key;
 
     QJsonObject jBefore, jAfter;
 
@@ -60,17 +64,17 @@ void AndromedaObject::applyInvertibleAction(QString title, QString key, QJsonVal
                                                      jBefore,
                                                      jAfter);
 
-    undo_stack_.push(undo);
+    pushUndoAction(undo);
 }
 
 /**
- * @brief AndromedaObject::applyInvertibleAction
+ * @brief AndromedaObject::setUndoAction
  * Apply an invertible action, but infer the "before" state rather than stating it
  * @param title is the title of this action
  * @param key is the JSON key for the data being changed
  * @param json is the new JSON value
  */
-void AndromedaObject::applyInvertibleAction(QString title, QString key, QJsonValue value)
+void AndromedaObject::setUndoAction(QString title, QString key, QJsonValue value)
 {
     if (!undo_enabled_) return;
 
@@ -79,7 +83,16 @@ void AndromedaObject::applyInvertibleAction(QString title, QString key, QJsonVal
     // Exctrac the current value for the provided key
     QJsonValue jValueBefore = jData.value(key);
 
-    applyInvertibleAction(title, key, jValueBefore, value);
+    setUndoAction(title, key, jValueBefore, value);
+}
+
+void AndromedaObject::pushUndoAction(QUndoCommand *action)
+{
+    if (!undo_enabled_) return;
+
+    //TODO - notify parent object that there is a new undo action
+
+    undo_stack_.push(action);
 }
 
 /**
@@ -168,7 +181,7 @@ bool AndromedaObject::undo()
     // Don't push undo actions to the stack
     undo_enabled_ = false;
     undo_stack_.undo();
-    undo_enableD_ = true;
+    undo_enabled_ = true;
 
     return true;
 }

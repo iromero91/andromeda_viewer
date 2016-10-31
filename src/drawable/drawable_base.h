@@ -56,6 +56,12 @@ public slots:
     void setLayer(int layer);
     void setBoundingBoxPen(QPen pen) { bounding_box_pen_ = pen; }
 
+    void setPos(QPointF point);
+    void setPos(double x, double y);
+
+    void setX(double x);
+    void setY(double y);
+
 signals:
     void layerChanged(int layer);
 
@@ -65,7 +71,6 @@ protected:
     QPen bounding_box_pen_;
 
     int layer_ = (int)  LAYER_ID::NONE;
-
 };
 
 #endif // DRAWABLE_BASE_H
