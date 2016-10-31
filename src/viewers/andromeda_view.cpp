@@ -410,7 +410,7 @@ void AView::drawForeground(QPainter *painter, const QRectF &rect)
     if (nullptr == painter) return;
 
     // Draw the active tool
-    if (isToolActive() && current_tool_->isActive())
+    if (isToolActive())
     {
         current_tool_->paint(painter, rect);
     }
@@ -645,7 +645,8 @@ void AView::toolUpdated()
     // Force a scene redraw
     scene_->update();
 
-    onToolUpdated(tool);
+    repaint();
+    //onToolUpdated(tool);
 }
 
 void AView::toolCancelled()
@@ -683,6 +684,8 @@ bool AView::startTool(AToolBase *tool)
     current_tool_ = tool;
 
     tool->start();
+
+    tool->setToolPos(cursorPos());
 
     return true;
 }

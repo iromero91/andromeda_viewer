@@ -10,9 +10,12 @@ class ASymbolPin : public ADrawablePrimitive
 public:
     ASymbolPin(QObject *parent = 0);
 
+    // Clone operator
+    virtual ASymbolPin* clone(void) { return makeClone<ASymbolPin>(); }
+
     Q_PROPERTY( QString label READ label WRITE setLabel )
     Q_PROPERTY( double length READ length WRITE setLength )
-    Q_PROPERTY( int orientation READ orientation WRITE setOrientation )
+    Q_PROPERTY( unsigned int orientation READ orientation WRITE setOrientation )
 
     /**
      * @brief The Orientation enum lists allowable pin orientations
@@ -30,7 +33,7 @@ public:
     // Property getters
     QString label(void) const   { return label_; }
     double length(void) const   { return length_; }
-    int orientation(void) const { return orientation_; }
+    unsigned orientation(void) const { return orientation_; }
 
     // JSON data
     virtual void encode(AJsonObject &data) const;
@@ -44,7 +47,7 @@ public:
 public slots:
     void setLabel(QString label);
     void setLength(double length);
-    void setOrientation(int orientation);
+    void setOrientation(unsigned int orientation);
     void rotate(bool ccw = true);
     QPointF endPoint(void) const;
     QPointF endDelta(void) const;
@@ -55,7 +58,7 @@ protected:
     // Pin length
     double length_ = 100; //TODO - define a default length
     // Pin orientation
-    int orientation_ = (int) Orientation::LEFT;
+    unsigned int orientation_ = (int) Orientation::LEFT;
 
 };
 

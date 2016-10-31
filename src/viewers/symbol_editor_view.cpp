@@ -14,42 +14,46 @@ SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
     addTool(&poly_tool_);
     addTool(&rect_tool_);
     addTool(&ellipse_tool_);
+    addTool(&pin_tool_);
 }
 
 void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 {
     if (nullptr == event) return;
 
-    ASymbolPin *pin;
-
     bool accepted = true;
 
-    switch (event->key())
+    if (isToolActive())
     {
-    case Qt::Key_X: // Delete
-        deleteSelectedItems();
-        break;
-    case Qt::Key_D:
-        duplicateItems();
-        break;
-    case Qt::Key_L:
-        startTool(&poly_tool_);
-        break;
-    case Qt::Key_E:
-        startTool(&ellipse_tool_);
-        break;
-    case Qt::Key_R:
-        startTool(&rect_tool_);
-        break;
-    case Qt::Key_P:
-        pin = new ASymbolPin();
-        scene_->addItem(pin);
-        pin->setPos(cursorPos());
-        pin->update();
-        break;
-    default:
-        accepted = false;
-        break;
+        sendKeyEventToTool(event);
+    }
+    else
+    {
+        // Tool activation keys
+        switch (event->key())
+        {
+        case Qt::Key_X: // Delete
+            deleteSelectedItems();
+            break;
+        case Qt::Key_D:
+            duplicateItems();
+            break;
+        case Qt::Key_L:
+            startTool(&poly_tool_);
+            break;
+        case Qt::Key_E:
+            startTool(&ellipse_tool_);
+            break;
+        case Qt::Key_R:
+            startTool(&rect_tool_);
+            break;
+        case Qt::Key_P:
+            startTool(&pin_tool_);
+            break;
+        default:
+            accepted = false;
+            break;
+        }
     }
 
     // If not used, pass upstream
@@ -103,5 +107,13 @@ void SymbolEditorView::onToolFinished(AToolBase *toolPtr)
         scene_->addItem(line);
 
         rect_tool_.reset();
+    }
+    else if (pointer == &pin_tool_)
+    {
+        ASymbolPin *pin = pin_tool_.getPin();
+
+        scene_->addItem(pin);
+
+        pin_tool_.reset();
     }
 }

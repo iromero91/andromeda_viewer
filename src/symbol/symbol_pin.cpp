@@ -2,6 +2,8 @@
 
 #include "src/geometry/bounding_box.h"
 
+#include <QDebug>
+
 ASymbolPin::ASymbolPin(QObject *parent) : ADrawablePrimitive(parent)
 {
     setObjectName(OBJECT_NAME::A_DRAWABLE_SYMBOL_PIN);
@@ -13,7 +15,7 @@ void ASymbolPin::encode(AJsonObject &data) const
 
     data[OBJ_KEY::LABEL] = label();
     data[OBJ_KEY::LENGTH] = length();
-    data[OBJ_KEY::ORIENTATION] = orientation();
+    data[OBJ_KEY::ORIENTATION] = (int) orientation();
 }
 
 void ASymbolPin::decode(AJsonObject &data, bool undoable)
@@ -74,7 +76,7 @@ void ASymbolPin::setLength(double length)
  */
 void ASymbolPin::rotate(bool ccw)
 {
-    int orient = orientation();
+    unsigned int orient = orientation();
 
     orient += ccw ? 1 : -1;
 
@@ -83,7 +85,7 @@ void ASymbolPin::rotate(bool ccw)
     setOrientation(orient);
 }
 
-void ASymbolPin::setOrientation(int orientation)
+void ASymbolPin::setOrientation(unsigned int orientation)
 {
     // Ignore same value
     if (orientation == orientation_) return;

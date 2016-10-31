@@ -54,7 +54,8 @@ HEADERS += \
     src/base/undoable_object_base.h \
     src/base/object_keys.h \
     src/base/object_encoding.h \
-    src/base/action_keys.h
+    src/base/action_keys.h \
+    src/tools/pin_drawing_tool.h
 
 SOURCES += \
     src/base/andromeda_object.cpp \
@@ -85,4 +86,5 @@ SOURCES += \
     src/base/andromeda_undo.cpp \
     src/base/undoable_object_base.cpp \
     src/base/object_keys.cpp \
-    src/base/object_encoding.cpp
+    src/base/object_encoding.cpp \
+    src/tools/pin_drawing_tool.cpp

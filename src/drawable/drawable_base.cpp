@@ -54,6 +54,11 @@ void ADrawableBase::decode(AJsonObject &data, bool undoable)
 {
     AndromedaObject::decode(data, undoable);
 
+    QPointF point;
+
+    if (data.getPoint(OBJ_KEY::POS, point))
+        setPos(point);
+
     //TODO
 }
 

@@ -7,6 +7,7 @@
 #include "src/tools/polyline_drawing_tool.h"
 #include "src/tools/ellipse_drawing_tool.h"
 #include "src/tools/rect_drawing_tool.h"
+#include "src/tools/pin_drawing_tool.h"
 
 #include "src/symbol/schematic_symbol.h"
 
@@ -34,6 +35,7 @@ protected:
     PolylineDrawingTool poly_tool_;
     RectDrawingTool rect_tool_;
     EllipseDrawingTool ellipse_tool_;
+    PinDrawingTool pin_tool_;
 
     // Tool callbacks
     void onToolFinished(AToolBase *toolPtr);

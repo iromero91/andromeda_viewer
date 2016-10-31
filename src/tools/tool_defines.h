@@ -24,6 +24,9 @@ enum class TOOL_STATE : int {
     // Ellipse drawing tools
     ELLIPSE_SET_CENTER = 20,
     ELLIPSE_SET_POINT,
+
+    // Pin drawing tools
+    PIN_SET_POS = 0x30,
 };
 
 #endif // TOOL_DEFINES_H

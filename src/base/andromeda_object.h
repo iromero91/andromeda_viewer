@@ -35,7 +35,6 @@ public:
     virtual void decode(AJsonObject &data, bool undoable = true);
     virtual void encode(AJsonObject &data) const { Q_UNUSED(data); }
 
-
     // Copy functions
     void copyFrom(AndromedaObject *other);
     void copyTo(AndromedaObject *other);
