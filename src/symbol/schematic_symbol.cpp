@@ -36,9 +36,13 @@ ASymbolPin* ASchematicSymbol::addPin(ASymbolPin *pin)
     return newPin;
 }
 
-void ASchematicSymbol::encode(QJsonObject &json) const
+void ASchematicSymbol::encode(AJsonObject &data) const
 {
-    ADrawableComplex::encode(json);
+    ADrawableComplex::encode(data);
+
+    // Encode the name of the symbol
+    data[OBJ_KEY::NAME] = name_;
+    data[OBJ_KEY::REF] = ref_des_;
 
     // Encode all the pins
     QJsonArray jPins;
@@ -50,12 +54,12 @@ void ASchematicSymbol::encode(QJsonObject &json) const
         jPins.append(pin->encoded());
     }
 
-    json[OBJ_KEY::PINS] = jPins;
+    data[OBJ_KEY::PINS] = jPins;
 }
 
-void ASchematicSymbol::decode(QJsonObject &json, bool undoable)
+void ASchematicSymbol::decode(AJsonObject &data, bool undoable)
 {
-    ADrawableComplex::decode(json, undoable);
+    ADrawableComplex::decode(data, undoable);
 
     // TODO
 }

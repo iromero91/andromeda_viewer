@@ -52,7 +52,8 @@ HEADERS += \
     src/base/andromeda_undo.h \
     src/shapes/object_properties.h \
     src/base/undoable_object_base.h \
-    src/base/object_keys.h
+    src/base/object_keys.h \
+    src/base/object_encoding.h
 
 SOURCES += \
     src/base/andromeda_object.cpp \
@@ -82,4 +83,5 @@ SOURCES += \
     src/drawable/drawable_primitive.cpp \
     src/base/andromeda_undo.cpp \
     src/base/undoable_object_base.cpp \
-    src/base/object_keys.cpp
+    src/base/object_keys.cpp \
+    src/base/object_encoding.cpp

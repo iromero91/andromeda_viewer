@@ -5,32 +5,45 @@ ASymbolPin::ASymbolPin(QObject *parent) : ADrawablePrimitive(parent)
     setObjectName(OBJECT_NAME::A_DRAWABLE_SYMBOL_PIN);
 }
 
-void ASymbolPin::encode(QJsonObject &json) const
+void ASymbolPin::encode(AJsonObject &data) const
 {
-    ADrawablePrimitive::encode(json);
+    ADrawablePrimitive::encode(data);
 
-    json[OBJ_KEY::LABEL] = label();
-    json[OBJ_KEY::LENGTH] = length();
-    json[OBJ_KEY::ORIENTATION] = orientation();
+    data[OBJ_KEY::LABEL] = label();
+    data[OBJ_KEY::LENGTH] = length();
+    data[OBJ_KEY::ORIENTATION] = orientation();
 }
 
-void ASymbolPin::decode(QJsonObject &json, bool undoable)
+void ASymbolPin::decode(AJsonObject &data, bool undoable)
 {
-    ADrawablePrimitive::decode(json, undoable);
+    ADrawablePrimitive::decode(data, undoable);
 
-    // Extract pin data (use current values in case of bad data)
-    if (json.contains(OBJ_KEY::LABEL))
-        setLabel(json.value(OBJ_KEY::LABEL).toString(label()));
+    QString text;
+    double d;
+    int i;
 
-    if (json.contains(OBJ_KEY::LENGTH))
-        setLength(json.value(OBJ_KEY::LABEL).toDouble(length()));
+    // Extract pin label
+    if (data.getString(OBJ_KEY::LABEL, text))
+    {
+        setLabel(text);
+    }
 
-    if (json.contains(OBJ_KEY::ORIENTATION))
-        setOrientation(json.value(OBJ_KEY::ORIENTATION).toInt(orientation()));
+    if (data.getDouble(OBJ_KEY::LENGTH, d))
+    {
+        setLength(d);
+    }
+
+    if (data.getInt(OBJ_KEY::ORIENTATION, i))
+    {
+        setOrientation(i);
+    }
 }
 
 void ASymbolPin::setLabel(QString label)
 {
+    // Ignore same value
+    if (label == label_) return;
+
     //TODO better logic here
     label_ = label;
 
@@ -39,6 +52,9 @@ void ASymbolPin::setLabel(QString label)
 
 void ASymbolPin::setLength(double length)
 {
+    // Ignore same value
+    if (length == length_) return;
+
     //TODO better logic here (min / max length, etc)
     length_ = fabs(length);
 
@@ -63,6 +79,9 @@ void ASymbolPin::rotate(bool ccw)
 
 void ASymbolPin::setOrientation(int orientation)
 {
+    // Ignore same value
+    if (orientation == orientation_) return;
+
     //TODO - some more complex functionality here?
     switch (orientation)
     {

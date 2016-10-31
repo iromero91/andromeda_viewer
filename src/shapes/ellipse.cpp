@@ -7,12 +7,15 @@ AEllipse::AEllipse(QObject *parent) : ADrawablePrimitive(parent)
     setObjectName(OBJECT_NAME::A_DRAWABLE_ELLIPSE);
 }
 
-void AEllipse::decode(QJsonObject &json, bool undoable)
+void AEllipse::decode(AJsonObject &data, bool undoable)
 {
-    ADrawablePrimitive::decode(json, undoable);
+    ADrawablePrimitive::decode(data, undoable);
 
+    //TODO
+
+    /*
     // Decode radius
-    QJsonValue jRadius = json[OBJ_KEY::RADIUS];
+    QJsonValue jRadius = data[OBJ_KEY::RADIUS];
 
     // Extract ellipse radius
 
@@ -32,24 +35,16 @@ void AEllipse::decode(QJsonObject &json, bool undoable)
         if (rx.isDouble() && ry.isDouble())
             setRadius(rx.toDouble(), ry.toDouble());
     }
+    */
 }
 
-void AEllipse::encode(QJsonObject &json) const
+void AEllipse::encode(AJsonObject &data) const
 {
-    ADrawablePrimitive::encode(json);
+    ADrawablePrimitive::encode(data);
 
-    if (isCircular())
-    {
-        json[OBJ_KEY::RADIUS] = rx();
-    }
-    else
-    {
-        QJsonObject jRadius;
-        jRadius[OBJ_KEY::RADIUS_X] = rx();
-        jRadius[OBJ_KEY::RADIUS_Y] = ry();
+    //TODO only encode one radius value if the ellipse is circular
 
-        json[OBJ_KEY::RADIUS] = jRadius;
-    }
+    data.addPoint(OBJ_KEY::RADIUS, QPointF(rx(), ry()));
 }
 
 QRectF AEllipse::boundingRect() const

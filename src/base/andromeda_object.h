@@ -32,8 +32,8 @@ public:
     QList<QMetaProperty> getProperties(void);
     QStringList getPropertyNames(void);
 
-    virtual void decode(QJsonObject &json, bool undoable = true);
-    virtual void encode(QJsonObject &json) const { Q_UNUSED(json); }
+    virtual void decode(AJsonObject &data, bool undoable = true);
+    virtual void encode(AJsonObject &data) const { Q_UNUSED(data); }
 
 
     // Copy functions
@@ -90,12 +90,12 @@ protected:
     {
         T* cloned = new T();
 
-        QJsonObject json;
+        AJsonObject data;
 
-        encode(json);
+        encode(data);
 
         // The CLONE operation should be non-invertible
-        cloned->decode(json, false);
+        cloned->decode(data, false);
 
         return cloned;
     }

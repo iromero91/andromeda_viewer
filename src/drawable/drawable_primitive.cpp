@@ -8,17 +8,17 @@ ADrawablePrimitive::ADrawablePrimitive(QObject *parent) : ADrawableBase(parent)
     setAcceptHoverEvents(true);
 }
 
-void ADrawablePrimitive::encode(QJsonObject &json) const
+void ADrawablePrimitive::encode(AJsonObject &data) const
 {
-    ADrawableBase::encode(json);
+    ADrawableBase::encode(data);
 
-    json[OBJ_KEY::THICKNESS] = lineWidth();
-    json[OBJ_KEY::FILLED] = isFilled();
+    data[OBJ_KEY::THICKNESS] = lineWidth();
+    data[OBJ_KEY::FILLED] = isFilled();
 }
 
-void ADrawablePrimitive::decode(QJsonObject &json, bool undoable)
+void ADrawablePrimitive::decode(AJsonObject &data, bool undoable)
 {
-    ADrawableBase::decode(json, undoable);
+    ADrawableBase::decode(data, undoable);
 
 
 }

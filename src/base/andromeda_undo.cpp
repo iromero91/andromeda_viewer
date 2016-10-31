@@ -4,8 +4,8 @@
 
 AndromedaJsonUndoAction::AndromedaJsonUndoAction(QString text,
                                                  AUndoableObject *object,
-                                                 QJsonObject jBefore,
-                                                 QJsonObject jAfter) : QUndoCommand(text)
+                                                 AJsonObject jBefore,
+                                                 AJsonObject jAfter) : QUndoCommand(text)
 {
     setText(text);
 
@@ -23,7 +23,7 @@ void AndromedaJsonUndoAction::undo()
 {
     if (nullptr == object_) return;
 
-    QJsonObject jBefore = before();
+    AJsonObject jBefore = before();
 
     object_->decode(jBefore, false);
 }
@@ -36,7 +36,7 @@ void AndromedaJsonUndoAction::redo()
 {
     if (nullptr == object_) return;
 
-    QJsonObject jAfter = after();
+    AJsonObject jAfter = after();
 
     object_->decode(jAfter, false);
 }
@@ -60,8 +60,8 @@ bool AndromedaJsonUndoAction::mergeWith(const QUndoCommand *other)
         return false;
 
     // Extract the AFTER JSON objects
-    QJsonObject jThis = after();
-    QJsonObject jOther = aOther->after();
+    AJsonObject jThis = after();
+    AJsonObject jOther = aOther->after();
 
     // Copy across the data
     foreach (QString key, jOther.keys())

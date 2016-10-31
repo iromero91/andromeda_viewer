@@ -17,17 +17,17 @@ AndromedaObject::AndromedaObject(QObject *parent) : AUndoableObject(parent)
  * BEFORE the actual change is made. Otherwise, the encoded() function will include
  * the new changes.
  */
-void AndromedaObject::decode(QJsonObject &json, bool undoable)
+void AndromedaObject::decode(AJsonObject &data, bool undoable)
 {
     // If we want to be able to invert the object, add the current state and the new JSON
     if (undoable && undo_enabled_)
     {
-        QJsonObject state = encoded();
+        AJsonObject state = encoded();
 
         QUndoCommand *undo = new AndromedaJsonUndoAction(QString("json-action"), //TODO fix this
                                                          this,  // Pointer to this object
                                                          state, // State of this object BEFORE the action is applied
-                                                         json); // JSON responsible for changing the state
+                                                         data); // JSON responsible for changing the state
 
         undo_stack_.push(undo);
     }
@@ -54,7 +54,7 @@ void AndromedaObject::setUndoAction(QString title, QString key, QJsonValue befor
 
     qDebug() << "undo" << title << key;
 
-    QJsonObject jBefore, jAfter;
+    AJsonObject jBefore, jAfter;
 
     jBefore[key] = before;
     jAfter[key]  = after;
@@ -78,7 +78,7 @@ void AndromedaObject::setUndoAction(QString title, QString key, QJsonValue value
 {
     if (!undo_enabled_) return;
 
-    QJsonObject jData = encoded();
+    AJsonObject jData = encoded();
 
     // Exctrac the current value for the provided key
     QJsonValue jValueBefore = jData.value(key);
@@ -148,7 +148,7 @@ void AndromedaObject::copyFrom(AndromedaObject *other)
 {
     if (nullptr == other) return;
 
-    QJsonObject json = other->encoded();
+    AJsonObject json = other->encoded();
 
     decode(json);
 }
@@ -162,7 +162,7 @@ void AndromedaObject::copyTo(AndromedaObject *other)
 {
     if (nullptr == other) return;
 
-    QJsonObject json = encoded();
+    AJsonObject json = encoded();
 
     other->decode(json);
 }

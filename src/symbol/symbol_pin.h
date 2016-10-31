@@ -33,8 +33,8 @@ public:
     int orientation(void) const { return orientation_; }
 
     // JSON data
-    virtual void encode(QJsonObject &json) const;
-    virtual void decode(QJsonObject &json, bool undoable = true);
+    virtual void encode(AJsonObject &data) const;
+    virtual void decode(AJsonObject &data, bool undoable = true);
 
     // Drawing function
     QRectF boundingRect(void) const Q_DECL_OVERRIDE;

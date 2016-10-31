@@ -29,8 +29,8 @@ public:
     QColor lineColor(void) const { return line_color_; }
     Qt::PenStyle lineStyle(void) const { return line_style_; }
 
-    virtual void encode(QJsonObject &json) const;
-    virtual void decode(QJsonObject &json, bool undoable = true);
+    virtual void encode(AJsonObject &data) const;
+    virtual void decode(AJsonObject &data, bool undoable = true);
 
 public slots:
     void setFilled(bool filled) { filled_ = filled; }

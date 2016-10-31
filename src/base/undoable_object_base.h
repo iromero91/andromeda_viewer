@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+#include "object_encoding.h"
 #include "object_names.h"
 
 /**
@@ -29,10 +30,10 @@ public:
     virtual ~AUndoableObject(void) {}
 
     // virtual JSON serialization functions
-    virtual void decode(QJsonObject &json, bool undoable = true) { Q_UNUSED(json); Q_UNUSED(undoable) }
-    virtual void encode(QJsonObject &json) const { Q_UNUSED(json); }
+    virtual void decode(AJsonObject &data, bool undoable = true) { Q_UNUSED(data); Q_UNUSED(undoable) }
+    virtual void encode(AJsonObject &data) const { Q_UNUSED(data); }
 
-    virtual QJsonObject encoded(void)   const;
+    virtual AJsonObject encoded(void)   const;
     virtual QByteArray encodedRaw(void) const;
     virtual QString encodedString(void) const;
 };

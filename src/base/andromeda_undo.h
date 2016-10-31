@@ -4,6 +4,7 @@
 #include <QUndoCommand>
 #include <QJsonObject>
 
+#include "object_encoding.h"
 #include "undoable_object_base.h"
 
 /**
@@ -27,7 +28,7 @@
 class AndromedaJsonUndoAction : public QUndoCommand
 {
 public:
-    AndromedaJsonUndoAction(QString text, AUndoableObject* object, QJsonObject jBefore, QJsonObject jAfter);
+    AndromedaJsonUndoAction(QString text, AUndoableObject* object, AJsonObject aBefore, AJsonObject aAfter);
 
     virtual void undo(void);
     virtual void redo(void);
@@ -36,16 +37,16 @@ public:
 
     // Getters
     AUndoableObject* object(void) const { return object_; }
-    QJsonObject before(void) const { return before_; }
-    QJsonObject after(void) const  { return after_; }
+    AJsonObject before(void) const { return before_; }
+    AJsonObject after(void) const  { return after_; }
 
 protected:
     // Pointer to the object to perform the UNDO / REDO action upon
     AUndoableObject* object_;
 
     // Before and after states
-    QJsonObject before_;
-    QJsonObject after_;
+    AJsonObject before_;
+    AJsonObject after_;
 };
 
 #endif // ANDROMEDA_UNDO_H

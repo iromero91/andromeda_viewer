@@ -24,25 +24,24 @@ APolyline* APolyline::clone()
     return line;
 }
 
-void APolyline::encode(QJsonObject &json) const
+void APolyline::encode(AJsonObject &data) const
 {
-    ADrawablePrimitive::encode(json);
+    ADrawablePrimitive::encode(data);
 
     // Remove 'position' key
-    json.remove(OBJ_KEY::POS);
+    data.remove(OBJ_KEY::POS);
 
     // Points
     QJsonArray jPoints;
+
     QJsonObject jPoint;
+
     LWPolypoint p;
+
     for (int i=0;i<points_.count();i++)
     {
-        jPoint = QJsonObject();
-
         p = points_.at(i);
-
-        jPoint[OBJ_KEY::POS_X] = p.point.x();
-        jPoint[OBJ_KEY::POS_Y] = p.point.y();
+        jPoint = AJsonObject::fromPoint(p.point);
 
         if ((i > 0) && (AGeometry::ArcIsCurved(p.angle)))
             jPoint[OBJ_KEY::ANGLE] = p.angle;
@@ -50,12 +49,12 @@ void APolyline::encode(QJsonObject &json) const
         jPoints.append(jPoint);
     }
 
-    json[OBJ_KEY::POINTS] = jPoints;
+    data[OBJ_KEY::POINTS] = jPoints;
 }
 
-void APolyline::decode(QJsonObject &json, bool undoable)
+void APolyline::decode(AJsonObject &data, bool undoable)
 {
-    ADrawablePrimitive::decode(json, undoable);
+    ADrawablePrimitive::decode(data, undoable);
 }
 
 bool APolyline::allSegmentsAreStraight()

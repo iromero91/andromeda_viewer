@@ -26,8 +26,8 @@ public:
         BOTH = 0x03
     };
 
-    void encode(QJsonObject &json) const;
-    void decode(QJsonObject &json, bool undoable = true);
+    void encode(AJsonObject &data) const;
+    void decode(AJsonObject &data, bool undoable = true);
 
 public slots:
     void setFlip(int flip);

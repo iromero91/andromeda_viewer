@@ -54,8 +54,8 @@ public:
     bool allSegmentsAreStraight(void);
     bool isSelfIntersecting(void);
 
-    virtual void encode(QJsonObject &json) const;
-    virtual void decode(QJsonObject &json, bool undoable = true);
+    virtual void encode(AJsonObject &data) const;
+    virtual void decode(AJsonObject &data, bool undoable = true);
 
 public slots:
     void clear() { points_.clear(); }

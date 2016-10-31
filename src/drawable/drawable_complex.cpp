@@ -5,28 +5,28 @@ ADrawableComplex::ADrawableComplex(QObject *parent) : ADrawableBase(parent)
     setObjectName(OBJECT_NAME::A_DRAWABLE_COMPLEX);
 }
 
-void ADrawableComplex::encode(QJsonObject &json) const
+void ADrawableComplex::encode(AJsonObject &data) const
 {
-    ADrawableBase::encode(json);
+    ADrawableBase::encode(data);
 
     // Flipped nature of this object
     if (flip() != (int) Flip::NONE)
     {
-        json[OBJ_KEY::FLIP] = flip();
+        data[OBJ_KEY::FLIP] = flip();
     }
     else
     {
-        json.remove(OBJ_KEY::FLIP);
+        data.remove(OBJ_KEY::FLIP);
     }
 
 }
 
-void ADrawableComplex::decode(QJsonObject &json, bool undoable)
+void ADrawableComplex::decode(AJsonObject &data, bool undoable)
 {
-    ADrawableBase::decode(json, undoable);
+    ADrawableBase::decode(data, undoable);
 
-    if (json.value(OBJ_KEY::FLIP).isDouble())
-        setFlip(json.value(OBJ_KEY::FLIP).toInt(flip()));
+    if (data.value(OBJ_KEY::FLIP).isDouble())
+        setFlip(data.value(OBJ_KEY::FLIP).toInt(flip()));
 }
 
 void ADrawableComplex::setFlip(int flip)

@@ -10,9 +10,9 @@ AUndoableObject::AUndoableObject(QObject *parent) : QObject(parent)
  * Encode this object to JSON
  * @return a QJsonObject
  */
-QJsonObject AUndoableObject::encoded() const
+AJsonObject AUndoableObject::encoded() const
 {
-    QJsonObject json;
+    AJsonObject json;
 
     encode(json);
 

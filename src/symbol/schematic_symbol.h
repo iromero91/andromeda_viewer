@@ -26,19 +26,22 @@ public:
     int pinCount(void) const { return pins_.count(); }
     QString name(void) const { return name_; }
 
-    virtual void encode(QJsonObject &json) const;
-    virtual void decode(QJsonObject &json, bool undoable = true);
+    virtual void encode(AJsonObject &data) const;
+    virtual void decode(AJsonObject &data, bool undoable = true);
 
 public slots:
     ASymbolPin* addPin(ASymbolPin *pin = nullptr);
     void setName(QString name) { name_ = name; }
 
-
-
 signals:
 
 protected:
     QList<ASymbolPin*> pins_;
+
+    // Reference Designator
+    QString ref_des_;
+
+    // Symbol Name
     QString name_;
 
     void updatePins(void);

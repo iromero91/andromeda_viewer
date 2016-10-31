@@ -42,14 +42,13 @@ const QString ORIENTATION= "orientation";
 const QString LABEL = "label";
 
 // Schematic symbols
-const QString PINS = "pins";
+const QString NAME = "name";    // Symbol name
+const QString REF = "ref";      // Reference designator
+const QString PINS = "pins";    // Pin array
 
 const QString FLIP = "flip";
 
 }
 
-// Convert a point to a QJsonObject
-QJsonObject JsonFromPoint(QPointF point);
-bool JsonToPoint(QJsonObject json, QPointF &point);
 #endif // OBJ_KEYS_H
 

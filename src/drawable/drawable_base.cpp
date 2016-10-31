@@ -39,25 +39,20 @@ void ADrawableBase::drawBoundingBox(QPainter *painter)
     painter->drawRect(boundingRect());
 }
 
-void ADrawableBase::encode(QJsonObject &json) const
+void ADrawableBase::encode(AJsonObject &data) const
 {
-    AndromedaObject::encode(json);
+    AndromedaObject::encode(data);
 
     // Layer
-    json[OBJ_KEY::ITEM_LAYER] = layer();
+    data[OBJ_KEY::ITEM_LAYER] = layer();
 
     // Position
-    QJsonObject jPos;
-
-    jPos[OBJ_KEY::POS_X] = pos().x();
-    jPos[OBJ_KEY::POS_Y] = pos().y();
-
-    json[OBJ_KEY::POS] = jPos;
+    data.addPoint(OBJ_KEY::POS, pos());
 }
 
-void ADrawableBase::decode(QJsonObject &json, bool undoable)
+void ADrawableBase::decode(AJsonObject &data, bool undoable)
 {
-    AndromedaObject::decode(json, undoable);
+    AndromedaObject::decode(data, undoable);
 
     //TODO
 }
@@ -70,8 +65,8 @@ void ADrawableBase::setPos(QPointF point)
     //TODO - remove hard coded action title
     setUndoAction("Move",
                   OBJ_KEY::POS,
-                  JsonFromPoint(pos()),
-                  JsonFromPoint(point));
+                  AJsonObject::fromPoint(pos()),
+                  AJsonObject::fromPoint(point));
 
     QGraphicsItem::setPos(point);
 }
