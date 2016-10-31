@@ -12,6 +12,7 @@ class AEllipse : public ADrawablePrimitive
 
     Q_PROPERTY( double rx READ rx WRITE setRx )
     Q_PROPERTY( double ry READ ry WRITE setRy )
+    Q_PROPERTY( QPointF radius READ radius )
     Q_PROPERTY( bool circular READ isCircular STORED false )
 
 public:

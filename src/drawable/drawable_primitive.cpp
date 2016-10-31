@@ -12,6 +12,8 @@ void ADrawablePrimitive::encode(AJsonObject &data) const
 {
     ADrawableBase::encode(data);
 
+    data.remove(OBJ_KEY::FILLED);
+
     data[OBJ_KEY::THICKNESS] = lineWidth();
     data[OBJ_KEY::FILLED] = isFilled();
 }

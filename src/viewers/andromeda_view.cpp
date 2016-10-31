@@ -6,7 +6,7 @@
 #include "src/grid/grid.h"
 
 #include "andromeda_view.h"
-
+#include "src/drawable/drawable_base.h"
 
 AView::AView(QWidget *parent) : QGraphicsView(parent)
 {
@@ -57,6 +57,21 @@ void AView::deleteSelectedItems()
     if (nullptr == scene_) return;
 
     deleteItems(scene_->selectedItems());
+}
+
+void AView::duplicateItems()
+{
+    QList<QGraphicsItem*> items = scene_->selectedItems();
+
+    foreach (QGraphicsItem *item, items)
+    {
+        // Cast to an AndromedaObject
+        AndromedaObject *obj = qgraphicsitem_cast<ADrawableBase*>(item);
+
+        if (nullptr == obj) continue;
+
+        qDebug() << obj->encodedString();
+    }
 }
 
 /**
@@ -592,7 +607,7 @@ void AView::sendMouseEventToTool(QMouseEvent *event, AToolBase *tool)
     if (nullptr == tool)
         return;
 
-    tool->mouseEvent(event, getCursorPos());
+    tool->mouseEvent(event, cursorPos());
 }
 
 void AView::sendKeyEventToTool(QKeyEvent *event, AToolBase *tool)
@@ -607,7 +622,7 @@ void AView::sendKeyEventToTool(QKeyEvent *event, AToolBase *tool)
     if (nullptr == tool)
         return;
 
-    tool->keyEvent(event, getCursorPos());
+    tool->keyEvent(event, cursorPos());
 }
 
 void AView::addTool(AToolBase *tool)

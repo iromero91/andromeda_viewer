@@ -95,7 +95,7 @@ void MainWindow::selectionChanged()
 
 void MainWindow::cursorPosChanged(QPointF pos)
 {
-    QPointF origin = ui->graphicsView->getCursorOrigin();
+    QPointF origin = ui->graphicsView->cursorOrigin();
     QPointF delta = pos - origin;
 
     QString msg = "Pos (";

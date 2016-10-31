@@ -20,7 +20,7 @@ public:
      * e.g. LEFT means that that connection occurs at the left-most point of the pin
      */
     enum class Orientation : int {
-        LEFT = 0,
+        LEFT = 0,   // Pin connection point on the left
         DOWN,
         RIGHT,
         UP,
@@ -46,6 +46,8 @@ public slots:
     void setLength(double length);
     void setOrientation(int orientation);
     void rotate(bool ccw = true);
+    QPointF endPoint(void) const;
+    QPointF endDelta(void) const;
 
 protected:
     // The pin label

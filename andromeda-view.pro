@@ -53,7 +53,8 @@ HEADERS += \
     src/shapes/object_properties.h \
     src/base/undoable_object_base.h \
     src/base/object_keys.h \
-    src/base/object_encoding.h
+    src/base/object_encoding.h \
+    src/base/action_keys.h
 
 SOURCES += \
     src/base/andromeda_object.cpp \

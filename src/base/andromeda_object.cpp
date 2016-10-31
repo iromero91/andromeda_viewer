@@ -52,6 +52,8 @@ void AndromedaObject::setUndoAction(QString title, QString key, QJsonValue befor
 {
     if (!undo_enabled_) return;
 
+    //TODO
+    /*
     qDebug() << "undo" << title << key;
 
     AJsonObject jBefore, jAfter;
@@ -65,6 +67,7 @@ void AndromedaObject::setUndoAction(QString title, QString key, QJsonValue befor
                                                      jAfter);
 
     pushUndoAction(undo);
+    */
 }
 
 /**
@@ -78,12 +81,18 @@ void AndromedaObject::setUndoAction(QString title, QString key, QJsonValue value
 {
     if (!undo_enabled_) return;
 
+    //TODO
+
+    /*
+
     AJsonObject jData = encoded();
 
     // Exctrac the current value for the provided key
     QJsonValue jValueBefore = jData.value(key);
 
     setUndoAction(title, key, jValueBefore, value);
+
+    */
 }
 
 void AndromedaObject::pushUndoAction(QUndoCommand *action)

@@ -5,6 +5,8 @@
 #include "src/geometry/geometry.h"
 #include "src/shapes/ellipse.h"
 
+#include "src/symbol/symbol_pin.h"
+
 #include "symbol_editor_view.h"
 
 SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
@@ -18,12 +20,17 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
 {
     if (nullptr == event) return;
 
+    ASymbolPin *pin;
+
     bool accepted = true;
 
     switch (event->key())
     {
     case Qt::Key_X: // Delete
         deleteSelectedItems();
+        break;
+    case Qt::Key_D:
+        duplicateItems();
         break;
     case Qt::Key_L:
         startTool(&poly_tool_);
@@ -33,6 +40,12 @@ void SymbolEditorView::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_R:
         startTool(&rect_tool_);
+        break;
+    case Qt::Key_P:
+        pin = new ASymbolPin();
+        scene_->addItem(pin);
+        pin->setPos(cursorPos());
+        pin->update();
         break;
     default:
         accepted = false;

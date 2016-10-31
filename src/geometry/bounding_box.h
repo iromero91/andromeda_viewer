@@ -12,17 +12,15 @@
 class ABoundingBox : public QRectF
 {
 public:
-    ABoundingBox(void) : QRectF() {}
-    ABoundingBox(const QRectF &rect) : QRectF(rect) {}
-    ABoundingBox(const QPointF &topLeft, const QSizeF &size) : QRectF(topLeft, size) {}
-    ABoundingBox(const QPointF &topLeft, const QPointF &bottomRight) : QRectF(topLeft, bottomRight) {}
     ABoundingBox(QPointF point) : QRectF(point, QSizeF(0,0)) {}
-    ABoundingBox(qreal left, qreal top, qreal width, qreal height) : QRectF(left, top, width, height) {}
+    ABoundingBox(qreal x, qreal y) : ABoundingBox(QPointF(x,y)) {}
 
     void start(QPointF point);
 
     void add(QPointF point);
     void add(QLineF line);
+
+    void expand(qreal offset);
 
     //TODO something is wrong here
     //ABoundingBox operator+(const QPointF point);

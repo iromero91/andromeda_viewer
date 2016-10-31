@@ -86,6 +86,11 @@ void AEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 void AEllipse::setRadius(double rx, double ry)
 {
+    // Ignore same values
+    if ((rx == rx_) && (ry == ry_)) return;
+
+    //setUndoAction(OBJ_KEY::RADIUS, );
+
     if (rx != 0)
         rx_ = fabs(rx);
 

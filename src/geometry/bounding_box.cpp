@@ -1,5 +1,10 @@
 #include "bounding_box.h"
 
+/**
+ * @brief ABoundingBox::start
+ * Reset the position of the bounding box, and resize to (0,0)
+ * @param point
+ */
 void ABoundingBox::start(QPointF point)
 {
     setTopLeft(point);
@@ -19,6 +24,14 @@ void ABoundingBox::add(QLineF line)
 {
     add(line.p1());
     add(line.p2());
+}
+
+void ABoundingBox::expand(qreal offset)
+{
+    QRectF::adjust(-offset,
+                   -offset,
+                    offset,
+                    offset);
 }
 
 /*

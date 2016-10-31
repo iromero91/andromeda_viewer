@@ -25,14 +25,16 @@ public:
     void setScene(AScene *scene);
     AScene* getScene(void) { return scene_; }
 
+    //TODO make these slots
+
     // Viewport functions
     QPointF getCenterLocation(void);
     QRectF getViewport(void);
     QPointF unitsPerPixel(void);
 
     // Cursor functions
-    QPointF getCursorPos(void) { return cursor_pos_; }
-    QPointF getCursorOrigin(void) { return cursorOrigin_; }
+    QPointF cursorPos(void) { return cursor_pos_; }
+    QPointF cursorOrigin(void) { return cursorOrigin_; }
     void setCursorPos(QPointF pos, bool panPastEdges = false);
     void moveCursor(QPointF offset, bool panPastEdges = false);
     void moveCursor(double dx, double dy, bool panPastEdges = false);
@@ -51,6 +53,9 @@ public:
     // Item deletion
     void deleteItems(QList<QGraphicsItem*> items);
     void deleteSelectedItems(void);
+
+    //TODO - remove this
+    void duplicateItems(void);
 
     // Tool functions
     void addTool(AToolBase *tool);
