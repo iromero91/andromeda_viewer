@@ -1,4 +1,5 @@
 #include <QJsonArray>
+#include <QDebug>
 
 #include "schematic_symbol.h"
 
@@ -12,6 +13,49 @@ ASchematicSymbol::~ASchematicSymbol()
     deletePins();
 }
 
+void ASchematicSymbol::setSymbolCount(unsigned char count)
+{
+    // Ignore invalid values
+    if ((count == 0) || (count == symbol_count_)) return;
+
+    //TODO - Apply undo action
+    symbol_count_ = count;
+}
+
+void ASchematicSymbol::setRef(QString ref)
+{
+    if (ref == ref_des_) return;
+
+    //TODO - apply undo action
+    ref_des_ = ref;
+}
+
+/**
+ * @brief ASchematicSymbol::addPin
+ * Add a new pin from a JSON dataset
+ * @param data
+ * @return
+ */
+ASymbolPin* ASchematicSymbol::addPin(AJsonObject data)
+{
+    // Make a new pin as a child of this symbol
+    //TODO - make this a smart pointer
+    ASymbolPin *pin = new ASymbolPin(this);
+
+    // Decode pin data and prevent undo
+    pin->decode(data, false);
+
+    pins_.append(pin);
+
+    // Add pin as a child of the graphics object
+    pin->setParentItem(this);
+
+    prepareGeometryChange();
+    update();
+
+    return pin;
+}
+
 /**
  * @brief ASchematicSymbol::addPin
  * Attempt to add a new pin to this symbol. A pre-formed pin can be passed as an argument
@@ -21,19 +65,15 @@ ASchematicSymbol::~ASchematicSymbol()
  */
 ASymbolPin* ASchematicSymbol::addPin(ASymbolPin *pin)
 {
-    ASymbolPin *newPin = new ASymbolPin();
+    if (nullptr == pin) return nullptr;
 
-    // A pin model was passed in - perform a COPY of ths pin
-    if (nullptr != pin)
-    {
-        newPin->copyFrom(pin);
-    }
+    // Copy the encoded pin data
+    return addPin(pin->encoded());
+}
 
-    //TODO perform some checks on the pin here
-
-    pins_.append(newPin);
-
-    return newPin;
+ASymbolPin* ASchematicSymbol::addPin()
+{
+    return addPin(new ASymbolPin());
 }
 
 void ASchematicSymbol::encode(AJsonObject &data) const
@@ -43,6 +83,7 @@ void ASchematicSymbol::encode(AJsonObject &data) const
     // Encode the name of the symbol
     data[OBJ_KEY::NAME] = name_;
     data[OBJ_KEY::REF] = ref_des_;
+    data[OBJ_KEY::SYMBOLS] = symbol_count_;
 
     // Encode all the pins
     QJsonArray jPins;
@@ -60,6 +101,14 @@ void ASchematicSymbol::encode(AJsonObject &data) const
 void ASchematicSymbol::decode(AJsonObject &data, bool undoable)
 {
     ADrawableComplex::decode(data, undoable);
+
+    QString string;
+
+    if (data.getString(OBJ_KEY::NAME, string))
+        setName(string);
+
+    if (data.getString(OBJ_KEY::REF, string))
+        setRef(string);
 
     // TODO
 }

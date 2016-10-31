@@ -45,6 +45,7 @@ const QString LABEL = "label";
 const QString NAME = "name";    // Symbol name
 const QString REF = "ref";      // Reference designator
 const QString PINS = "pins";    // Pin array
+const QString SYMBOLS = "symbols";
 
 const QString FLIP = "flip";
 

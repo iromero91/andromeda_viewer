@@ -15,6 +15,8 @@ SymbolEditorView::SymbolEditorView(QWidget *parent) : AView(parent)
     addTool(&rect_tool_);
     addTool(&ellipse_tool_);
     addTool(&pin_tool_);
+
+    scene_->addItem(&symbol_);
 }
 
 void SymbolEditorView::keyPressEvent(QKeyEvent *event)
@@ -110,10 +112,8 @@ void SymbolEditorView::onToolFinished(AToolBase *toolPtr)
     }
     else if (pointer == &pin_tool_)
     {
-        ASymbolPin *pin = pin_tool_.getPin();
-
-        scene_->addItem(pin);
-
-        pin_tool_.reset();
+        symbol_.addPin(pin_tool_.getPin());
     }
+
+    //qDebug() << symbol_.encodedString();
 }
