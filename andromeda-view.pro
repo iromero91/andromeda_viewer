@@ -15,7 +15,8 @@ TEMPLATE = app
 
 
 FORMS    += \
-    ui/mainwindow.ui
+    ui/mainwindow.ui \
+    ui/dialogs/pin_editor.ui
 
 RESOURCES += \
     resources/fonts.qrc
@@ -55,7 +56,9 @@ HEADERS += \
     src/base/object_keys.h \
     src/base/object_encoding.h \
     src/base/action_keys.h \
-    src/tools/pin_drawing_tool.h
+    src/tools/pin_drawing_tool.h \
+    src/dialogs/pin_editor.h \
+    src/dialogs/object_editor.h
 
 SOURCES += \
     src/base/andromeda_object.cpp \
@@ -87,4 +90,6 @@ SOURCES += \
     src/base/undoable_object_base.cpp \
     src/base/object_keys.cpp \
     src/base/object_encoding.cpp \
-    src/tools/pin_drawing_tool.cpp
+    src/tools/pin_drawing_tool.cpp \
+    src/dialogs/pin_editor.cpp \
+    src/dialogs/object_editor.cpp

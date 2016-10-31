@@ -22,6 +22,8 @@ protected:
     virtual void onToolPosChanged(void);
     virtual void onKeyEvent(QKeyEvent *event);
 
+    void openPinEditor(void);
+
     ASymbolPin pin_;
 };
 

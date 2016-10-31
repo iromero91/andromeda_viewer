@@ -1,6 +1,10 @@
+#include <QDebug>
+#include <QDialog>
+
+#include "src/dialogs/pin_editor.h"
+
 #include "pin_drawing_tool.h"
 
-#include <QDebug>
 
 PinDrawingTool::PinDrawingTool(QObject *parent) : AToolBase(parent)
 {
@@ -58,6 +62,23 @@ void PinDrawingTool::onToolPosChanged()
     emit updated();
 }
 
+void PinDrawingTool::openPinEditor()
+{
+    PinEditorDialog dlg;
+
+    // Encode pin settings and pass to the dialog
+    dlg.loadSettings(pin_.encoded());
+
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        // Load the settings from the editor
+        AJsonObject pinSettings = dlg.saveSettings();
+        pin_.decode(pinSettings);
+
+        emit updated();
+    }
+}
+
 void PinDrawingTool::onKeyEvent(QKeyEvent *event)
 {
     if (nullptr == event) return;
@@ -73,6 +94,9 @@ void PinDrawingTool::onKeyEvent(QKeyEvent *event)
         case Qt::Key_R:
             pin_.rotate(mods & Qt::ShiftModifier);
             emit updated();
+            break;
+        case Qt::Key_E:
+            openPinEditor();
             break;
         default:
             break;
