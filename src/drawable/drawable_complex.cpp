@@ -36,3 +36,15 @@ void ADrawableComplex::setFlip(int flip)
         flip_ = flip;
     }
 }
+
+void ADrawableComplex::onChildUpdate()
+{
+    // Recalculate the shape of this object
+    updateShape();
+
+    // Recalculate the bounding rect for this object
+    updateBounds();
+
+    // Signal that we have updated
+    prepareGeometryChange();
+}

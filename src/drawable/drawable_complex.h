@@ -32,8 +32,22 @@ public:
 public slots:
     void setFlip(int flip);
 
+    // Should be called whenever children are updated;
+    virtual void onChildUpdate(void);
+
+    // Implement these in derived classes
+    virtual void updateBounds(void) {}
+    virtual void updateShape(void) {}
+
+
 protected:
     int flip_ = (int) Flip::NONE;
+
+    /* The 'shape' for a complex object could be quite complicated
+     * Only calculate it "as needed" (whenever a child changes)
+     */
+    QPainterPath shape_;
+    QRectF bounding_box_;
 };
 
 

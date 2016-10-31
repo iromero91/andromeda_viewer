@@ -16,6 +16,11 @@ public:
     ASchematicSymbol(QObject *parent = 0);
     virtual ~ASchematicSymbol(void);
 
+    // Paint functions
+    QRectF boundingRect() const Q_DECL_OVERRIDE;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    QPainterPath shape() const;
+
 
     // Property getters
     int pinCount(void) const { return pins_.count(); }
@@ -27,6 +32,8 @@ public:
 public slots:
     ASymbolPin* addPin(ASymbolPin *pin = nullptr);
     void setName(QString name) { name_ = name; }
+
+
 
 signals:
 

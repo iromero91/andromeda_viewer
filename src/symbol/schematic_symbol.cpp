@@ -56,6 +56,8 @@ void ASchematicSymbol::encode(QJsonObject &json) const
 void ASchematicSymbol::decode(QJsonObject &json, bool undoable)
 {
     ADrawableComplex::decode(json, undoable);
+
+    // TODO
 }
 
 /**
@@ -85,4 +87,19 @@ void ASchematicSymbol::deletePins()
 {
     qDeleteAll(pins_.begin(), pins_.end());
     pins_.clear();
+}
+
+QRectF ASchematicSymbol::boundingRect() const
+{
+    return bounding_box_;
+}
+
+void ASchematicSymbol::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    //TODO
+}
+
+QPainterPath ASchematicSymbol::shape() const
+{
+    return shape_;
 }

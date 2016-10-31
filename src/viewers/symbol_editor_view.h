@@ -8,6 +8,8 @@
 #include "src/tools/ellipse_drawing_tool.h"
 #include "src/tools/rect_drawing_tool.h"
 
+#include "src/symbol/schematic_symbol.h"
+
 #include "andromeda_view.h"
 
 class SymbolEditorView : public AView
@@ -23,6 +25,8 @@ public slots:
     void drawEllipse(void)  { startTool(&ellipse_tool_); }
     void drawPolyline(void) { startTool(&poly_tool_); }
 
+    ASchematicSymbol& symbol(void) { return symbol_; }
+
 protected:
     void keyPressEvent(QKeyEvent *event);
 
@@ -33,6 +37,9 @@ protected:
 
     // Tool callbacks
     void onToolFinished(AToolBase *toolPtr);
+
+    // The symbol being edited
+    ASchematicSymbol symbol_;
 };
 
 #endif // SYMBOL_EDITOR_VIEW_H
