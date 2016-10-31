@@ -64,7 +64,7 @@ void ASymbolPin::setLength(double length)
     //TODO - apply inverse action
 
     //TODO better logic here (min / max length, etc)
-    length_ = fabs(length);
+    length_ = qAbs(length);
 
     prepareGeometryChange();
 }

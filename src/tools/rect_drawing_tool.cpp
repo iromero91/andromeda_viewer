@@ -59,7 +59,7 @@ QRectF RectDrawingTool::getRect()
     // Enforce a square
     if (mods & Qt::ControlModifier)
     {
-        double dim = qMax(fabs(x), fabs(y));
+        double dim = qMax(qAbs(x), qAbs(y));
         x = dim * (x > 0 ? 1 : -1);
         y = dim * (y > 0 ? 1 : -1);
     }
